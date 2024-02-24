@@ -11,31 +11,39 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Text(
-            AppStrings.loginTitle,
-            style: AppStyle.textStyleTitle,
-          ),
-          const SizedBox(height: 16),
-          const MyTextField(
-            hintText: AppStrings.loginHint,
-            maxLength: 10,
-            keyboardType: TextInputType.phone,
-          ),
-          const SizedBox(height: 16),
-          MyElevatedButton(
-            text: AppStrings.loginBtnTxt,
-            isFullWidth: false,
-            onPressed: () {
-              AppUtils()
-                  .pageRouteReplacement(context, const OTPVerificationScreen());
-            },
-          )
-        ],
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("assets/images/bg.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Text(
+              AppStrings.loginTitle,
+              style: AppStyle.textStyleTitle,
+            ),
+            const SizedBox(height: 16),
+            const MyTextField(
+              labelText: AppStrings.loginHint,
+              maxLength: 10,
+              keyboardType: TextInputType.phone,
+            ),
+            const SizedBox(height: 16),
+            MyElevatedButton(
+              text: AppStrings.loginBtnTxt,
+              isFullWidth: false,
+              onPressed: () {
+                AppUtils().pageRouteReplacement(
+                    context, const OTPVerificationScreen());
+              },
+            )
+          ],
+        ),
       ),
     );
   }

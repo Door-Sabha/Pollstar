@@ -89,63 +89,6 @@ class MyTextField extends StatelessWidget {
   }
 }
 
-class MyMultiLineTextField extends StatelessWidget {
-  final TextEditingController? textEditingController;
-  final String hintText;
-  final String labelText;
-  final IconData? prefixIcon;
-  final TextInputAction textInputAction;
-  final int maxLength;
-  final int maxLines;
-
-  const MyMultiLineTextField({
-    Key? key,
-    this.textEditingController,
-    this.hintText = "",
-    this.labelText = "",
-    this.prefixIcon,
-    this.textInputAction = TextInputAction.unspecified,
-    this.maxLength = 120,
-    this.maxLines = 5,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-          border: Border.all(
-            color: AppColors.inputBackgroundColor,
-          ),
-          borderRadius: const BorderRadius.all(Radius.circular(8))),
-      child: TextField(
-        controller: textEditingController,
-        style: AppStyle.textStyleInputType,
-        keyboardType: TextInputType.text,
-        textAlign: TextAlign.justify,
-        textCapitalization: TextCapitalization.sentences,
-        textInputAction: textInputAction,
-        maxLength: maxLength,
-        maxLines: maxLines,
-        decoration: InputDecoration(
-            prefixIcon: (prefixIcon != null)
-                ? Icon(
-                    prefixIcon,
-                    color: Colors.grey,
-                  )
-                : null,
-            border: InputBorder.none,
-            filled: true,
-            hintText: hintText,
-            labelText: (labelText.isNotEmpty) ? labelText : null,
-            hintStyle: AppStyle.textStyleHint,
-            fillColor: AppColors.inputBackgroundColor,
-            counterStyle: const TextStyle(color: Colors.white)),
-      ),
-    );
-  }
-}
-
 class MyOtpTextField extends StatelessWidget {
   const MyOtpTextField({
     Key? key,

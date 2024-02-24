@@ -4,19 +4,13 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
+import 'package:pollstar/utils/theme/styles.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-    statusBarBrightness: Brightness.dark, //iOS top bar color
-    statusBarColor: Colors.transparent, //Android top bar color
-    statusBarIconBrightness: Brightness.dark, //Android top bar icons
-    systemNavigationBarColor: AppColors.greenColor, //Android bottom bar color
-    systemNavigationBarIconBrightness:
-        Brightness.light, //Android bottom bar icons
-  ));
+  SystemChrome.setSystemUIOverlayStyle(AppStyle().systemUiOverlayStyle);
 
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -37,6 +31,10 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orangeColor),
         useMaterial3: true,
+        appBarTheme: AppBarTheme(
+          foregroundColor: Colors.white,
+          systemOverlayStyle: AppStyle().systemUiOverlayStyle,
+        ),
       ),
       debugShowCheckedModeBanner: false,
       home: const LoginScreen(),

@@ -72,6 +72,8 @@ class AppUtils {
     //getIt<SecureStorageManager>().deleteAll();
   }
 
+  void makeCall(String number) {}
+
   String getTransactionDate(String date) {
     final DateFormat dateFormat = DateFormat('dd MMM, yyyy');
     var dateTime = DateFormat('dd-MM-yyyy hh:mm:ss').parse(date);

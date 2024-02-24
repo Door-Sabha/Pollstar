@@ -32,6 +32,15 @@ class AppStrings {
   static const inbox = "INBOX";
   static const outbox = "OUTBOX";
 
+  /// Help Screen
+  static const reportProblem = "Report a problem";
+  static const emergencyMsg = "In case of emergency call";
+  static const orWriteToUs = "or write to us";
+  static const natureOfProblem = "Nature of problem";
+  static const additionalInformation = "Additional information";
+  static const additionalInformationHint = "Text here...";
+  static const submit = "SUBMIT";
+
   /// Common Error messages
   static const error = "ERROR";
   static const okay = "OKAY";

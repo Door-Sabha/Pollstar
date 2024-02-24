@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:pollstar/ui/others/help_screen.dart';
+import 'package:pollstar/ui/help/help_screen.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';

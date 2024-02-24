@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pollstar/ui/help/help_screen.dart';
 import 'package:pollstar/ui/widgets/images.dart';
 import 'package:pollstar/utils/theme/styles.dart';
+import 'package:pollstar/utils/utils.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget({super.key});
@@ -10,23 +11,22 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: const MyImage(
+      title: const MySvgImage(
         image: "ec_logo",
       ),
-      iconTheme: const IconThemeData(color: Colors.white),
       actions: [
         IconButton(
           icon: const Icon(
-            Icons.perm_phone_msg_outlined,
-            color: Colors.white,
+            Icons.perm_phone_msg_rounded,
           ),
-          onPressed: () {},
+          onPressed: () {
+            AppUtils().pageRoute(context, const HelpScreen());
+          },
         ),
       ],
       flexibleSpace: Container(
         decoration: AppStyle.bgGradient,
       ),
-      systemOverlayStyle: SystemUiOverlayStyle.light,
     );
   }
 

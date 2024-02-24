@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'colors.dart';
 
 class AppStyle {
+  get systemUiOverlayStyle => const SystemUiOverlayStyle(
+        statusBarBrightness: Brightness.dark, //iOS top bar color
+        statusBarColor: Colors.transparent, //Android top bar color
+        statusBarIconBrightness: Brightness.light, //Android top bar icons
+        systemNavigationBarColor:
+            AppColors.greenColor, //Android bottom bar color
+        systemNavigationBarIconBrightness:
+            Brightness.light, //Android bottom bar icons
+      );
+
   static const textStyleToolbarTitle = TextStyle(
     color: AppColors.textPrimaryColor,
     fontSize: 18,

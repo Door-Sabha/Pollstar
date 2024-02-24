@@ -36,13 +36,14 @@ dependencies:
   get_it: ^7.6.7
   dio: ^5.4.1  
   intl: ^0.18.0
-  google_fonts: ^6.1.0
-  flutter_native_splash: ^2.3.13
+  google_fonts: ^6.1.0  
   timeago: ^3.6.1
   local_auth: ^2.1.8
   package_info_plus: ^5.0.1
   device_info_plus: ^9.1.2
   sprintf: ^7.0.0
+  flutter_svg: ^2.0.10+1
+  flutter_native_splash: ^2.3.13  
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -60,7 +61,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.1
-  flutter_launcher_icons: ^0.13.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -101,14 +101,9 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
 
 # dart run flutter_native_splash:create
-flutter_native_splash:
-  color: "#FFFFFF"
+flutter_native_splash:  
+  background_image : assets/images/bg.png
   image: assets/images/app_logo.png
-  #branding: assets/images/talam_logo.png
-  #branding_mode: bottom
   android_12:
-    image: assets/images/app_logo.png
     color: "#FFFFFF"
-    icon_background_color: "#FFFFFF"
-    # branding: assets/images/talam_logo.png
-    # branding_mode: bottom
+    image: assets/images/app_logo_android12.png
