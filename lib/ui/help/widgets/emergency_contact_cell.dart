@@ -26,7 +26,7 @@ class EmergencyContactCellWidget extends StatelessWidget {
         ],
       ),
       dense: true,
-      onTap: () => AppUtils().makeCall(""),
+      onTap: () => AppUtils().openPhoneCall(""),
     );
   }
 }

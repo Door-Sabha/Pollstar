@@ -118,7 +118,7 @@ class MyOtpTextField extends StatelessWidget {
         keyboardType: TextInputType.number,
         textInputAction: TextInputAction.next,
         textAlign: TextAlign.center,
-        obscureText: true,
+        obscureText: false,
         onChanged: (value) {
           if (value.length == 1) {
             onForward?.call();

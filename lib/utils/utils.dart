@@ -4,7 +4,10 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/theme/colors.dart';
+import 'package:pollstar/utils/theme/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import 'package:url_launcher/url_launcher.dart';
 
 import 'strings.dart';
 
@@ -43,13 +46,6 @@ class AppUtils {
     );
   }
 
-  void pageRoute1(BuildContext context, dynamic page) {
-    Navigator.push(
-      context,
-      CupertinoPageRoute(builder: (context) => page),
-    );
-  }
-
   void showLogoutDialog(BuildContext context) {
     AppUtils().showAlertDialog(
       context,
@@ -72,7 +68,27 @@ class AppUtils {
     //getIt<SecureStorageManager>().deleteAll();
   }
 
-  void makeCall(String number) {}
+  Future<void> openUrl(String url) async {
+    var browserUrl = Uri.parse(url);
+    if (await canLaunchUrl(browserUrl)) {
+      await launchUrl(browserUrl);
+    } else {
+      _handleError("Sorry, Could not launch $url at the moment.");
+    }
+  }
+
+  Future<void> openPhoneCall(String number) async {
+    var telephoneUrl = Uri.parse("tel:$number");
+    if (await canLaunchUrl(telephoneUrl)) {
+      await launchUrl(telephoneUrl);
+    } else {
+      _handleError("Sorry, Could not call $number at the moment.");
+    }
+  }
+
+  void _handleError(String msg) {
+    throw msg;
+  }
 
   String getTransactionDate(String date) {
     final DateFormat dateFormat = DateFormat('dd MMM, yyyy');
@@ -125,6 +141,21 @@ class AppUtils {
     if (_isDubugMode) {
       log("$data");
     }
+  }
+
+  void showSnackBar(BuildContext context, String msg) {
+    var snackdemo = SnackBar(
+      content: Text(
+        msg,
+        style: AppStyle.textStyleMedium.copyWith(
+          color: Colors.white,
+          fontSize: 16,
+        ),
+      ),
+      backgroundColor: AppColors.greenColor,
+      behavior: SnackBarBehavior.fixed,
+    );
+    ScaffoldMessenger.of(context).showSnackBar(snackdemo);
   }
 
   void showAlertDialog(

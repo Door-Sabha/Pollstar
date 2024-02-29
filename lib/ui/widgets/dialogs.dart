@@ -26,7 +26,7 @@ class MyAlertDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.0)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4.0)),
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -35,7 +35,8 @@ class MyAlertDialog extends StatelessWidget {
             if (title != null)
               Padding(
                 padding: const EdgeInsets.only(bottom: 16),
-                child: Text(title!, style: AppStyle.textStyleTitle),
+                child: Text(title!,
+                    style: AppStyle.textStyleTitle.copyWith(fontSize: 16)),
               ),
             if (content != null)
               Padding(
@@ -47,7 +48,7 @@ class MyAlertDialog extends StatelessWidget {
                 ),
               ),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 if (cancelBtn != null)
                   MyTextButton(

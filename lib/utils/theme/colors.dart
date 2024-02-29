@@ -26,7 +26,7 @@ class AppColors {
   // Text Color
   //static textPrimaryColor() => textColorDark;
   static const textPrimaryColor = textColorDark;
-  static const textColorDark = Color(0XFF494949);
+  static const textColorDark = Colors.black;
   static const textColorLight = Colors.white;
   static const textColorDisabled = Color(0xFFACACAC);
   static const textHintColor = Color(0xFFACACAC);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pollstar/data/models/emergency_reason.dart';
-import 'package:pollstar/ui/home/widgets/dropdowns.dart';
+import 'package:pollstar/ui/widgets/dropdowns.dart';
 import 'package:pollstar/ui/widgets/buttons.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -28,21 +28,9 @@ class ContactUsWidget extends StatelessWidget {
           const SizedBox(height: 16),
           const TextField(
             keyboardType: TextInputType.multiline,
+            textCapitalization: TextCapitalization.sentences,
             decoration: InputDecoration(
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppColors.greenColor,
-                  width: 2,
-                ),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: AppColors.greenColor,
-                  width: 2,
-                ),
-              ),
               labelText: AppStrings.additionalInformation,
-              labelStyle: TextStyle(color: AppColors.textColorDark),
               alignLabelWithHint: true,
             ),
             minLines: 5,
