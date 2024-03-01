@@ -4,8 +4,6 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/network/api/pollstar_api.dart';
-import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
-import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 
 class PollStarRepository {
   late final PollStarApi _api;

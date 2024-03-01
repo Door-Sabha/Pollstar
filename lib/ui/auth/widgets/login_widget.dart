@@ -133,7 +133,8 @@ class LoginWidget extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
                 recognizer: TapGestureRecognizer()
-                  ..onTap = () => AppUtils().openUrl(""),
+                  ..onTap =
+                      () => AppUtils().openUrl(AppStrings.urlPrivacyPolicy),
               )
             ]),
       ),

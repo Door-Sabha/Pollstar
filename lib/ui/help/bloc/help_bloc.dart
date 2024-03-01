@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
@@ -10,7 +10,7 @@ part 'help_event.dart';
 part 'help_state.dart';
 
 class HelpBloc extends Bloc<HelpEvent, HelpState> {
-  PollStarRepository _repository;
+  final PollStarRepository _repository;
 
   HelpBloc(this._repository) : super(HelpInitial()) {
     on<ReportProblem>(_reportProblem);
@@ -19,12 +19,10 @@ class HelpBloc extends Bloc<HelpEvent, HelpState> {
   Future<void> _reportProblem(ReportProblem event, emit) async {
     if (event.type.trim().isEmpty) {
       emit(HelpInitial());
-      emit(const HelpErrorState(
-          error: "Please choose the ${AppStrings.natureOfProblem}"));
+      emit(const HelpErrorState(error: AppStrings.errProplemReportingNoTitle));
     } else if (event.message.trim().isEmpty) {
       emit(HelpInitial());
-      emit(const HelpErrorState(
-          error: "Please add additional information of the problem}"));
+      emit(const HelpErrorState(error: AppStrings.errProplemReportingNoMsg));
     } else {
       emit(ProblemReportingLoading());
       String userId = getIt<AppConstants>().userId;

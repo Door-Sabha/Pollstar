@@ -1,9 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:pollstar/data/di/service_locator.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/models/api_response.dart';
-import 'package:pollstar/data/models/user.dart';
-import 'package:pollstar/data/network/api/pollstar_api.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/strings.dart';
 
@@ -21,7 +18,7 @@ class OtpRequestBloc extends Bloc<OtpRequestEvent, OtpRequestState> {
     phone = phone.replaceAll(" ", "");
     if (phone.trim().length < 10) {
       emit(OtpRequestInitialState());
-      emit(const OtpRequestErrorState(error: "Enter a valid mobile number."));
+      emit(const OtpRequestErrorState(error: AppStrings.errValidPhoneNumber));
     } else {
       emit(OtpRequestLoadingState());
       ApiResponse? data = await _repository.requestOtp(phone: phone);

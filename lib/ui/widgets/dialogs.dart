@@ -13,7 +13,7 @@ class MyAlertDialog extends StatelessWidget {
   final bool isCancellable;
 
   const MyAlertDialog({
-    Key? key,
+    super.key,
     this.title,
     this.content,
     this.okayBtn,
@@ -21,7 +21,7 @@ class MyAlertDialog extends StatelessWidget {
     this.onOkayPressed,
     this.onCancelPressed,
     this.isCancellable = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,6 @@ class MyAlertDialog extends StatelessWidget {
                     },
                     isFullWidth: false,
                     text: cancelBtn!.toUpperCase(),
-                    //textColor: AppColors.textColorDark,
                   ),
                 MyTextButton(
                   onPressed: () {
@@ -67,7 +66,6 @@ class MyAlertDialog extends StatelessWidget {
                   },
                   isFullWidth: false,
                   text: okayBtn ?? "Okay".toUpperCase(),
-                  //textColor: AppColors.textColorDark,
                 ),
               ],
             ),

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
@@ -10,8 +9,6 @@ import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/ui/widgets/otp_field/otp_field.dart';
 import 'package:pollstar/ui/widgets/otp_field/otp_field_style.dart';
 import 'package:pollstar/ui/widgets/otp_field/style.dart';
-import 'package:pollstar/utils/app_constants.dart';
-import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -181,7 +178,6 @@ class OTPVerificationScreen extends StatelessWidget {
       textColor: Colors.white,
       isFullWidth: false,
       onPressed: () => context.read<OtpRequestBloc>().add(
-            //ResendOtp(phone: phone),
             RequestOtp(phone: phone),
           ),
     );

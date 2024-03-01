@@ -4,14 +4,13 @@ class AppStrings {
   static const appStoreUrl = '';
   static const playStoreUrl = '';
 
-  final String feedbackEmail = "talam@auroville.org.in";
+  final String feedbackEmail = "";
   final String feedbackSubject = "$appName - Feedback";
 
   final String supportEmail = "";
   final String supportSubject = "$appName - Support";
 
-  final String prefSession = "user_session";
-  final String prefUseLocalAuth = "use_local_auth";
+  static const String urlPrivacyPolicy = "https://dsnl.in";
 
   /// Login Screen
   static const loginTitle = "Sign in";
@@ -24,6 +23,7 @@ class AppStrings {
   static const privacyPolicy = "Privacy Policy";
   static const errNumberNotRegistered =
       "The mobile number you entered is not registered with us";
+  static const errValidPhoneNumber = "Enter a valid mobile number.";
 
   /// OTP Verification Screen
   static const otpVerificationTitle = "Verification Code";
@@ -38,6 +38,11 @@ class AppStrings {
   static const inbox = "INBOX";
   static const outbox = "OUTBOX";
 
+  static const logoutMsg = "Are you sure want to logout?";
+  static const logout = "LOGOUT";
+  static const cancel = "CANCEL";
+  static const endSession = "END SESSION";
+
   /// Help Screen
   static const reportProblem = "Report a problem";
   static const emergencyMsg = "In case of emergency call";
@@ -47,8 +52,10 @@ class AppStrings {
   static const additionalInformationHint = "Text here...";
   static const submit = "SUBMIT";
   static const help = "Help";
-  static const logout = "LOGOUT";
-  static const endSession = "END SESSION";
+  static const errProplemReportingNoTitle =
+      "Please choose the $natureOfProblem";
+  static const errProplemReportingNoMsg =
+      "Please add additional information of the problem";
 
   /// Common Error messages
   static const yes = "YES";

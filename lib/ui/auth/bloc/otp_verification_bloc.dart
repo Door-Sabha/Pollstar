@@ -1,11 +1,9 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
-import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
-import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
 part 'otp_verification_event.dart';
@@ -25,7 +23,7 @@ class OtpVerificationBloc
     if (phone.trim().length != 10) {
       emit(OtpVerificationInitial());
       emit(const OtpVerificationErrorState(
-          error: "Enter a valid mobile number."));
+          error: AppStrings.errValidPhoneNumber));
       return;
     } else {
       emit(OtpVerificationLoadingState());

@@ -1,26 +1,23 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pollstar/data/di/service_locator.dart';
-import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
 import 'package:pollstar/utils/app_constants.dart';
-import 'package:pollstar/utils/secure_storage_manager.dart';
+import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
-import 'package:timeago/timeago.dart' as timeago;
 import 'package:url_launcher/url_launcher.dart';
-
-import 'strings.dart';
 
 class AppUtils {
   static final AppUtils _instance = AppUtils._internal();
 
   factory AppUtils() => _instance;
 
-  final bool _isDubugMode = true;
+  final bool _isDubugMode = kDebugMode;
 
   AppUtils._internal();
 
@@ -53,9 +50,9 @@ class AppUtils {
   void showLogoutDialog(BuildContext context) {
     AppUtils().showAlertDialog(
       context,
-      content: "Are you sure want to logout?",
-      okayBtn: "Logout".toUpperCase(),
-      cancelBtn: "Cancel".toUpperCase(),
+      content: AppStrings.logoutMsg,
+      okayBtn: AppStrings.logout,
+      cancelBtn: AppStrings.cancel,
       onOkayPressed: () {
         _logout(context);
       },
@@ -70,7 +67,6 @@ class AppUtils {
 
   void clearData() {
     getIt<AppConstants>().clear();
-    getIt<SecureStorageManager>().deleteAll();
   }
 
   void hideKeyboard() {
@@ -119,31 +115,6 @@ class AppUtils {
     return dateFormat.format(date);
   }
 
-  String getDateFormated_ddMMyyy(DateTime date) {
-    final DateFormat dateFormat = DateFormat('dd-MM-yyyy');
-    return dateFormat.format(date);
-  }
-
-  String getTimeAgo(String? date) {
-    if (date == null) return "";
-    var dateTime = DateFormat('dd-MM-yyyy hh:mm:ss').parse(date);
-    return timeago.format(dateTime);
-  }
-
-  bool isValidNumber(String amount) => double.tryParse(amount) != null;
-  bool isValidInt(String amount) => int.tryParse(amount) != null;
-
-  // void sendFeedback() {
-  //   ShareManager().openMail(AppStrings().feedbackEmail,
-  //       AppStrings().feedbackSubject, getSupportBody());
-  // }
-
-  // void support() {
-  //   getSupportBody();
-  //   ShareManager().openMail(AppStrings().supportEmail,
-  //       AppStrings().supportSubject, getSupportBody());
-  // }
-
   void log(String? data) {
     if (_isDubugMode) {
       log("$data");
@@ -189,21 +160,5 @@ class AppUtils {
             onCancelPressed: onCancelPressed,
           );
         });
-  }
-
-  String getVersionNumber() {
-    //return "Version ${getIt<AppConstants>().version} (${getIt<AppConstants>().buildNumber})";
-    return "";
-  }
-
-  String getSupportBody() {
-    String body = "";
-    // body += "\n\n\n\n\n";
-    // body += "--------------------\n";
-    // body +=
-    //     "App Version : ${getIt<AppConstants>().version} (${getIt<AppConstants>().buildNumber})";
-    // body += "\nDevice info : ${getIt<AppConstants>().deviceData} ";
-    // body += "\n--------------------";
-    return body;
   }
 }

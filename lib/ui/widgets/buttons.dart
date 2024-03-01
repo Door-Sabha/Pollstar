@@ -12,13 +12,13 @@ class MyElevatedButton extends StatelessWidget {
   final Color textColor;
 
   const MyElevatedButton({
-    Key? key,
+    super.key,
     this.text = "",
     this.isFullWidth = true,
     required this.onPressed,
     this.backgroundColor,
     this.textColor = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -57,13 +57,13 @@ class MyTextButton extends StatelessWidget {
   final Color textColor;
 
   const MyTextButton({
-    Key? key,
+    super.key,
     this.text = "",
     this.isFullWidth = true,
     required this.onPressed,
     this.backgroundColor,
     this.textColor = AppColors.themeColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -154,7 +154,7 @@ class MyOutlinedButton extends StatelessWidget {
   final Color? borderColor;
 
   const MyOutlinedButton({
-    Key? key,
+    super.key,
     this.text = "",
     this.isFullWidth = true,
     this.textColor = AppColors.textColorDark,
@@ -166,7 +166,7 @@ class MyOutlinedButton extends StatelessWidget {
     required this.onPressed,
     this.backgroundColor,
     this.borderColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -217,12 +217,12 @@ class MyElevatedIconButton extends StatelessWidget {
   final Color iconColor;
 
   const MyElevatedIconButton({
-    Key? key,
+    super.key,
     required this.onPressed,
     required this.icon,
     this.backgroundColor = AppColors.greenColor,
     this.iconColor = Colors.white,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -263,7 +263,7 @@ class LocalAuthButton extends StatelessWidget {
   final Color? borderColor;
 
   const LocalAuthButton({
-    Key? key,
+    super.key,
     this.text = "",
     this.isFullWidth = true,
     this.textColor = AppColors.textColorDark,
@@ -275,7 +275,7 @@ class LocalAuthButton extends StatelessWidget {
     required this.onPressed,
     this.backgroundColor,
     this.borderColor,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

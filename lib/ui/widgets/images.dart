@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:pollstar/utils/theme/colors.dart';
 
 class MyImage extends StatelessWidget {
   const MyImage({
