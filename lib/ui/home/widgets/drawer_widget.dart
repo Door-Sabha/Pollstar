@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/ui/help/help_screen.dart';
 import 'package:pollstar/ui/widgets/buttons.dart';
+import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';
 
 class DrawerWidget extends StatelessWidget {
-  const DrawerWidget({super.key});
+  final User user;
+  const DrawerWidget({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +29,18 @@ class DrawerWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "9994216702",
+                    user.userParams != null ? user.userParams!.boothName! : "",
                     textAlign: TextAlign.center,
                     style:
                         AppStyle.textStyleTitle.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    user.userParams != null
+                        ? user.userParams!.phoneNumber!
+                        : "",
+                    textAlign: TextAlign.center,
+                    style:
+                        AppStyle.textStyleMedium.copyWith(color: Colors.white),
                   ),
                 ],
               ),
@@ -44,7 +56,7 @@ class DrawerWidget extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
-            onTap: () => _helpClicked(),
+            onTap: () => _helpClicked(context),
           ),
           ListTile(
             leading: const Icon(
@@ -59,15 +71,15 @@ class DrawerWidget extends StatelessWidget {
             onTap: () => _reportProblemClicked(context),
           ),
           const Spacer(),
-          const Text(
-            'v1.00',
-            style: AppStyle.textStyleMedium,
+          Text(
+            getIt<AppConstants>().versionInfo,
+            style: AppStyle.textStyleSmall,
           ),
           MyElevatedButton(
             text: AppStrings.logout,
             isFullWidth: false,
             backgroundColor: AppColors.redColor,
-            onPressed: () => _logout(),
+            onPressed: () => _logout(context),
           ),
           const SizedBox(height: 32),
         ],
@@ -75,12 +87,19 @@ class DrawerWidget extends StatelessWidget {
     );
   }
 
-  _helpClicked() {}
+  _helpClicked(BuildContext context) {
+    Navigator.pop(context);
+    if (user.stateInfo != null && user.stateInfo!.helpUrl != null) {
+      AppUtils().openUrl(user.stateInfo!.helpUrl!);
+    }
+  }
 
   _reportProblemClicked(BuildContext context) {
     Navigator.pop(context);
-    AppUtils().pageRoute(context, const HelpScreen());
+    AppUtils().pageRoute(context, HelpScreen(user: user));
   }
 
-  _logout() {}
+  _logout(BuildContext context) {
+    AppUtils().showLogoutDialog(context);
+  }
 }

@@ -9,11 +9,14 @@ class AppConstants {
   late DeviceInfoPlugin _deviceInfo;
 
   late String _session;
+  late String _userId;
+  late String _stateId;
 
   late String _appName;
   late String _packageName;
   late String _version;
   late String _buildNumber;
+  late String _versionInfo;
 
   late String _deviceData;
 
@@ -23,6 +26,7 @@ class AppConstants {
     _packageName = _packageInfo.packageName;
     _version = _packageInfo.version;
     _buildNumber = _packageInfo.buildNumber;
+    _versionInfo = "Version - $_version ($_buildNumber)";
 
     _deviceInfo = DeviceInfoPlugin();
     if (Platform.isIOS) {
@@ -42,15 +46,23 @@ class AppConstants {
 
   clear() {
     _session = "";
+    _userId = "";
+    _stateId = "";
   }
 
   get session => _session;
-
   set session(value) => _session = value;
+
+  get userId => _userId;
+  set userId(value) => _userId = value;
+
+  get stateId => _stateId;
+  set stateId(value) => _stateId = value;
 
   get appName => _appName;
   get packageName => _packageName;
   get version => _version;
   get buildNumber => _buildNumber;
   get deviceData => _deviceData;
+  get versionInfo => _versionInfo;
 }

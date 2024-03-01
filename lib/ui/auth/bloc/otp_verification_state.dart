@@ -20,17 +20,10 @@ class OtpVerificationErrorState extends OtpVerificationState {
   List<Object> get props => [error];
 }
 
-class OtpResendSuccessState extends OtpVerificationState {
-  final User user;
-  const OtpResendSuccessState({required this.user});
-
-  @override
-  List<Object> get props => [user];
-}
-
 class OtpVerificationSuccessState extends OtpVerificationState {
-  const OtpVerificationSuccessState();
+  final ApiResponse data;
+  const OtpVerificationSuccessState({required this.data});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [data];
 }

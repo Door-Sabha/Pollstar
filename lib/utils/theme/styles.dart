@@ -95,6 +95,16 @@ class AppStyle {
     ),
   );
 
+  static const questionBox = BoxDecoration(
+    color: AppColors.blueColor,
+    borderRadius: BorderRadius.all(Radius.circular(16)),
+  );
+
+  static const answerBox = BoxDecoration(
+    color: AppColors.greenColorLight,
+    borderRadius: BorderRadius.all(Radius.circular(16)),
+  );
+
   static const bgRoundCornerWhite = BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.all(Radius.circular(8)),

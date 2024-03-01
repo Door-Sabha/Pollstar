@@ -21,9 +21,9 @@ class OtpRequestErrorState extends OtpRequestState {
 }
 
 class OtpRequestSuccessState extends OtpRequestState {
-  final User user;
-  const OtpRequestSuccessState({required this.user});
+  final ApiResponse data;
+  const OtpRequestSuccessState({required this.data});
 
   @override
-  List<Object> get props => [user];
+  List<Object> get props => [data];
 }

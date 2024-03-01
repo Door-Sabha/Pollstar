@@ -5,6 +5,7 @@ import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/network/api/pollstar_api.dart';
 import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
+import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 
 class PollStarRepository {
   late final PollStarApi _api;
@@ -13,12 +14,12 @@ class PollStarRepository {
     _api = getIt.get<PollStarApi>();
   }
 
-  Future<User?> requestOtp({required String phone}) async {
+  Future<ApiResponse?> requestOtp({required String phone}) async {
     try {
       final response = await _api.requestOTP(phone);
       if (response.statusCode == HttpStatus.ok) {
-        User user = User.fromJson(response.data);
-        return user;
+        ApiResponse data = ApiResponse.fromJson(response.data);
+        return data;
       } else {
         return null;
       }
@@ -34,6 +35,52 @@ class PollStarRepository {
       if (response.statusCode == HttpStatus.ok) {
         ApiResponse res = ApiResponse.fromJson(response.data);
         return res;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<User?> getUserInfo({required String session}) async {
+    try {
+      final response = await _api.getUserInfo(session);
+      if (response.statusCode == HttpStatus.ok) {
+        User data = User.fromJson(response.data);
+        return data;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<ApiResponse?> logoutUser({required String id}) async {
+    try {
+      final response = await _api.logoutUser(id);
+      if (response.statusCode == HttpStatus.ok) {
+        ApiResponse data = ApiResponse.fromJson(response.data);
+        return data;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<ApiResponse?> reportProblem(
+      {required String userId,
+      required String stateId,
+      required String type,
+      required String message}) async {
+    try {
+      final response = await _api.reportProblem(userId, stateId, type, message);
+      if (response.statusCode == HttpStatus.ok) {
+        ApiResponse data = ApiResponse.fromJson(response.data);
+        return data;
       } else {
         return null;
       }

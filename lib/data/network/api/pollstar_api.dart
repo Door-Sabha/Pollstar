@@ -47,6 +47,44 @@ class PollStarApi {
     }
   }
 
+  Future<Response> getUserInfo(String session) async {
+    var data = {
+      "session": session,
+    };
+
+    try {
+      final Response response = await dioClient.post(
+        APIConstants.userInfo,
+        data: data,
+      );
+      return response;
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          statusMessage: AppStrings.errorApiUnknown);
+    }
+  }
+
+  Future<Response> logoutUser(String id) async {
+    var data = {
+      "id": id,
+    };
+
+    try {
+      final Response response = await dioClient.post(
+        APIConstants.userLogout,
+        data: data,
+      );
+      return response;
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          statusMessage: AppStrings.errorApiUnknown);
+    }
+  }
+
   Future<Response> getQuestions(String phone, String datetime) async {
     var data = {
       "phone": phone,
@@ -97,6 +135,29 @@ class PollStarApi {
     try {
       final Response response = await dioClient.post(
         APIConstants.updateUser,
+        data: data,
+      );
+      return response;
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          statusMessage: AppStrings.errorApiUnknown);
+    }
+  }
+
+  Future<Response> reportProblem(
+      String userId, String stateId, String type, String message) async {
+    var data = {
+      "type": type,
+      "info": message,
+      "user": userId,
+      "state": stateId,
+    };
+
+    try {
+      final Response response = await dioClient.post(
+        APIConstants.reportProblem,
         data: data,
       );
       return response;

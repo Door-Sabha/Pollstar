@@ -13,11 +13,14 @@ class APIConstants {
 
   static const String requestOtp = 'users/login';
   static const String validateOtp = 'users/validate_otp';
-  static const String profile = 'users/login';
+  static const String userInfo = 'users/info';
+  static const String userLogout = 'users/logout';
   static const String updateUser = 'users/update';
 
   static const String questionList = 'questions/list';
   static const String updateAnswer = 'questions/update_answer';
+
+  static const String reportProblem = 'users/report_problem';
 }
 
 enum AppType {

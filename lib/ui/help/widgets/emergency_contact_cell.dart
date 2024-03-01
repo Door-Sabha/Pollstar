@@ -4,7 +4,8 @@ import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';
 
 class EmergencyContactCellWidget extends StatelessWidget {
-  const EmergencyContactCellWidget({super.key});
+  final String phone;
+  const EmergencyContactCellWidget({super.key, required this.phone});
 
   @override
   Widget build(BuildContext context) {
@@ -18,7 +19,7 @@ class EmergencyContactCellWidget extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Text(
-            "9994216702",
+            phone,
             style: AppStyle.textStyleTitle.copyWith(
               color: AppColors.greenColor,
             ),
@@ -26,7 +27,7 @@ class EmergencyContactCellWidget extends StatelessWidget {
         ],
       ),
       dense: true,
-      onTap: () => AppUtils().openPhoneCall(""),
+      onTap: () => AppUtils().openPhoneCall(phone),
     );
   }
 }

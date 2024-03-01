@@ -16,7 +16,10 @@ class LoginScreen extends StatelessWidget {
     return Scaffold(
       body: BlocListener<OtpRequestBloc, OtpRequestState>(
         listener: (context, state) {
+          if (!ModalRoute.of(context)!.isCurrent) return;
+
           if (state is OtpRequestLoadingState) {
+            AppUtils().hideKeyboard();
             loadingOverlay.show(context);
           } else if (state is OtpRequestErrorState) {
             loadingOverlay.hide();
@@ -30,7 +33,7 @@ class LoginScreen extends StatelessWidget {
             AppUtils().pageRoute(
                 context,
                 OTPVerificationScreen(
-                  user: state.user,
+                  phone: state.data.phone ?? "",
                 ));
           }
         },

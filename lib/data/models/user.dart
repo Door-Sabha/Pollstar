@@ -3,20 +3,16 @@ class User {
   String? id;
   String? stateId;
   StateInfo? stateInfo;
-  UserParams? params;
-  String? code;
+  UserParams? userParams;
   String? message;
-  String? phone;
 
   User(
       {this.state,
       this.id,
       this.stateId,
       this.stateInfo,
-      this.params,
-      this.code,
-      this.message,
-      this.phone});
+      this.userParams,
+      this.message});
 
   User.fromJson(Map<String, dynamic> json) {
     state = json['state'];
@@ -25,11 +21,9 @@ class User {
     stateInfo = json['state_info'] != null
         ? StateInfo.fromJson(json['state_info'])
         : null;
-    params =
+    userParams =
         json['params'] != null ? UserParams.fromJson(json['params']) : null;
-    code = json['code'];
     message = json['message'];
-    phone = json['phone'];
   }
 
   Map<String, dynamic> toJson() {
@@ -40,12 +34,10 @@ class User {
     if (stateInfo != null) {
       data['state_info'] = stateInfo!.toJson();
     }
-    if (params != null) {
-      data['params'] = params!.toJson();
+    if (userParams != null) {
+      data['params'] = userParams!.toJson();
     }
-    data['code'] = code;
     data['message'] = message;
-    data['phone'] = phone;
     return data;
   }
 }
@@ -57,7 +49,9 @@ class StateInfo {
   String? emaId;
   int? active;
   String? tCreated;
-  UpdatedTime? t;
+  Db? db;
+  T? t;
+  Ema? ema;
   String? aGENT;
   String? iP;
   String? emergencyNumbers;
@@ -72,7 +66,9 @@ class StateInfo {
       this.emaId,
       this.active,
       this.tCreated,
+      this.db,
       this.t,
+      this.ema,
       this.aGENT,
       this.iP,
       this.emergencyNumbers,
@@ -87,7 +83,9 @@ class StateInfo {
     emaId = json['ema_id'];
     active = json['active'];
     tCreated = json['t_created'];
-    t = json['t'] != null ? UpdatedTime.fromJson(json['t']) : null;
+    db = json['db'] != null ? Db.fromJson(json['db']) : null;
+    t = json['t'] != null ? T.fromJson(json['t']) : null;
+    ema = json['ema'] != null ? Ema.fromJson(json['ema']) : null;
     aGENT = json['AGENT'];
     iP = json['IP'];
     emergencyNumbers = json['emergency_numbers'];
@@ -104,8 +102,14 @@ class StateInfo {
     data['ema_id'] = emaId;
     data['active'] = active;
     data['t_created'] = tCreated;
+    if (db != null) {
+      data['db'] = db!.toJson();
+    }
     if (t != null) {
       data['t'] = t!.toJson();
+    }
+    if (ema != null) {
+      data['ema'] = ema!.toJson();
     }
     data['AGENT'] = aGENT;
     data['IP'] = iP;
@@ -117,13 +121,50 @@ class StateInfo {
   }
 }
 
-class UpdatedTime {
+class Db {
+  String? hostname;
+  String? database;
+  String? questionUpdateTime;
+  String? boothUpdateTime;
+  String? username;
+  String? password;
+
+  Db(
+      {this.hostname,
+      this.database,
+      this.questionUpdateTime,
+      this.boothUpdateTime,
+      this.username,
+      this.password});
+
+  Db.fromJson(Map<String, dynamic> json) {
+    hostname = json['hostname'];
+    database = json['database'];
+    questionUpdateTime = json['question_update_time'];
+    boothUpdateTime = json['booth_update_time'];
+    username = json['username'];
+    password = json['password'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['hostname'] = hostname;
+    data['database'] = database;
+    data['question_update_time'] = questionUpdateTime;
+    data['booth_update_time'] = boothUpdateTime;
+    data['username'] = username;
+    data['password'] = password;
+    return data;
+  }
+}
+
+class T {
   String? updated;
   String? mysqlPull;
 
-  UpdatedTime({this.updated, this.mysqlPull});
+  T({this.updated, this.mysqlPull});
 
-  UpdatedTime.fromJson(Map<String, dynamic> json) {
+  T.fromJson(Map<String, dynamic> json) {
     updated = json['updated'];
     mysqlPull = json['mysql_pull'];
   }
@@ -132,6 +173,25 @@ class UpdatedTime {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['updated'] = updated;
     data['mysql_pull'] = mysqlPull;
+    return data;
+  }
+}
+
+class Ema {
+  String? hostname;
+  int? port;
+
+  Ema({this.hostname, this.port});
+
+  Ema.fromJson(Map<String, dynamic> json) {
+    hostname = json['hostname'];
+    port = json['port'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['hostname'] = hostname;
+    data['port'] = port;
     return data;
   }
 }

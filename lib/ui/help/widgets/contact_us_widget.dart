@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/models/emergency_reason.dart';
+import 'package:pollstar/ui/help/bloc/help_bloc.dart';
 import 'package:pollstar/ui/widgets/dropdowns.dart';
 import 'package:pollstar/ui/widgets/buttons.dart';
+import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
-import 'package:pollstar/utils/theme/colors.dart';
 
 class ContactUsWidget extends StatelessWidget {
-  const ContactUsWidget({super.key});
+  final List<String>? reasons;
+  List<EmergencyReason> list = [];
+  MyDropDownButtonItem reasonItem = MyDropDownButtonItem();
+  final TextEditingController textEditingController = TextEditingController();
+  ContactUsWidget({super.key, required this.reasons});
 
   @override
   Widget build(BuildContext context) {
-    var list = [
-      EmergencyReason(reason: "Booth not setup"),
-      EmergencyReason(reason: "Power failuare"),
-      EmergencyReason(reason: "Law and Order"),
-      EmergencyReason(reason: "Violation"),
-      EmergencyReason(reason: "Others"),
-    ];
+    if (reasons != null && reasons!.isNotEmpty) {
+      for (int i = 0; i < reasons!.length; i++) {
+        var e = reasons![i];
+        if (!e.isNullOrEmpty()) {
+          list.add(
+              EmergencyReason(reason: e, type: (list.length + 1).toString()));
+        }
+      }
+    }
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 32),
       child: Column(
@@ -24,12 +33,17 @@ class ContactUsWidget extends StatelessWidget {
           MyDropDownButton(
             hint: AppStrings.natureOfProblem,
             list: list,
+            selectedItem: reasonItem,
+            onChanged: (value) {
+              reasonItem = value;
+            },
           ),
           const SizedBox(height: 16),
-          const TextField(
+          TextField(
+            controller: textEditingController,
             keyboardType: TextInputType.multiline,
             textCapitalization: TextCapitalization.sentences,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: AppStrings.additionalInformation,
               alignLabelWithHint: true,
             ),
@@ -39,11 +53,19 @@ class ContactUsWidget extends StatelessWidget {
           const SizedBox(height: 32),
           MyElevatedButton(
             text: AppStrings.submit,
-            onPressed: () {},
+            onPressed: () => _submitEmergencyReason(context),
           ),
           const SizedBox(height: 32),
         ],
       ),
     );
+  }
+
+  _submitEmergencyReason(BuildContext context) {
+    context.read<HelpBloc>().add(
+          ReportProblem(
+              type: reasonItem.getType(),
+              message: textEditingController.text.trim()),
+        );
   }
 }

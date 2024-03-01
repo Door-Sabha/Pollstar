@@ -1,12 +1,18 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/firebase_options.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
+import 'package:pollstar/ui/help/bloc/help_bloc.dart';
+import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
+import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -14,7 +20,9 @@ import 'package:pollstar/utils/theme/styles.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setSystemUIOverlayStyle(AppStyle().systemUiOverlayStyle);
 
   await SystemChrome.setPreferredOrientations([
@@ -32,6 +40,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
+    getIt<AppConstants>().init(context);
     return RepositoryProvider(
       create: (context) => getIt<PollStarRepository>(),
       child: MultiBlocProvider(
@@ -46,12 +55,24 @@ class MyApp extends StatelessWidget {
               RepositoryProvider.of<PollStarRepository>(context),
             ),
           ),
+          BlocProvider(
+            create: (context) => UserInfoBloc(
+              RepositoryProvider.of<PollStarRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => HelpBloc(
+              RepositoryProvider.of<PollStarRepository>(context),
+            ),
+          ),
         ],
         child: MaterialApp(
           title: AppStrings.appName,
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: AppColors.orangeColor),
             useMaterial3: true,
+            //textTheme:
+            //    GoogleFonts.firaSansTextTheme(ThemeData.light().textTheme),
             appBarTheme: AppBarTheme(
               foregroundColor: Colors.white,
               systemOverlayStyle: AppStyle().systemUiOverlayStyle,

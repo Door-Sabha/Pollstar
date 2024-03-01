@@ -209,6 +209,46 @@ class MyOutlinedButton extends StatelessWidget {
   }
 }
 
+class MyElevatedIconButton extends StatelessWidget {
+  //final double _buttonHeight = 48.h;
+  final Function onPressed;
+  final Color backgroundColor;
+  final IconData icon;
+  final Color iconColor;
+
+  const MyElevatedIconButton({
+    Key? key,
+    required this.onPressed,
+    required this.icon,
+    this.backgroundColor = AppColors.greenColor,
+    this.iconColor = Colors.white,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      child: ElevatedButton.icon(
+        onPressed: () => onPressed(),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+        ),
+        icon: Icon(
+          icon,
+          color: iconColor,
+        ),
+        label: Text(
+          "Reply",
+          style: AppStyle.textStyleMedium.copyWith(
+              fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
+        ),
+      ),
+    );
+  }
+}
+
 class LocalAuthButton extends StatelessWidget {
   final String text;
   final bool isFullWidth;

@@ -28,12 +28,14 @@ class AppColors {
   static const textPrimaryColor = textColorDark;
   static const textColorDark = Colors.black;
   static const textColorLight = Colors.white;
-  static const textColorDisabled = Color(0xFFACACAC);
+  static const textColorDisabled = Color(0xFFE9E9E9);
   static const textHintColor = Color(0xFFACACAC);
 
   //Others
-  static const orangeColor = Color(0xFFF09240);
-  static const greenColor = Color(0xFF3F8627);
+  static const orangeColor = Color(0xFFe99538);
+  static const greenColor = Color(0xFF37970d);
+  static const greenColorLight = Color(0xFFD7EDCA);
+
   static const redColor = Color(0xFFCB444A);
   static const blueColor = Color(0xFF000082);
   static const shadowColor = Color(0xFF9E9E9E);

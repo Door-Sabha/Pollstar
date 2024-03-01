@@ -51,6 +51,8 @@ class AppStrings {
   static const endSession = "END SESSION";
 
   /// Common Error messages
+  static const yes = "YES";
+  static const no = "NO";
   static const error = "ERROR";
   static const okay = "OKAY";
   static const errUnknown =

@@ -16,19 +16,22 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("assets/images/bg.png"),
-          fit: BoxFit.cover,
+    return GestureDetector(
+      onTap: () => AppUtils().hideKeyboard(),
+      child: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage("assets/images/bg.png"),
+            fit: BoxFit.cover,
+          ),
         ),
-      ),
-      child: SafeArea(
-        child: Column(
-          children: [
-            _logoWidget(),
-            _phoneNumberWidget(context),
-          ],
+        child: SafeArea(
+          child: Column(
+            children: [
+              _logoWidget(),
+              _phoneNumberWidget(context),
+            ],
+          ),
         ),
       ),
     );

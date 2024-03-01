@@ -2,8 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/ui/auth/login_screen.dart';
+import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:timeago/timeago.dart' as timeago;
@@ -53,19 +57,24 @@ class AppUtils {
       okayBtn: "Logout".toUpperCase(),
       cancelBtn: "Cancel".toUpperCase(),
       onOkayPressed: () {
-        logout(context);
+        _logout(context);
       },
     );
   }
 
-  void logout(BuildContext context) {
-    clearData();
-    //pageRouteUntilClearStack(context, const LandingScreen());
+  void _logout(BuildContext context) {
+    context.read<UserInfoBloc>().add(
+          const LogoutUser(),
+        );
   }
 
   void clearData() {
-    //getIt<AppConstants>().clear();
-    //getIt<SecureStorageManager>().deleteAll();
+    getIt<AppConstants>().clear();
+    getIt<SecureStorageManager>().deleteAll();
+  }
+
+  void hideKeyboard() {
+    FocusManager.instance.primaryFocus?.unfocus();
   }
 
   Future<void> openUrl(String url) async {
@@ -86,9 +95,7 @@ class AppUtils {
     }
   }
 
-  void _handleError(String msg) {
-    throw msg;
-  }
+  void _handleError(String msg) {}
 
   String getTransactionDate(String date) {
     final DateFormat dateFormat = DateFormat('dd MMM, yyyy');

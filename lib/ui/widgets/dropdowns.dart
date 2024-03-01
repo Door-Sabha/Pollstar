@@ -93,4 +93,5 @@ class _MyDropDownButtonState extends State<MyDropDownButton> {
 
 class MyDropDownButtonItem {
   String getDisplayName() => "";
+  String getType() => "";
 }
