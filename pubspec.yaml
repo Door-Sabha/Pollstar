@@ -37,7 +37,6 @@ dependencies:
   dio: ^5.4.1  
   intl: ^0.18.0
   google_fonts: ^6.1.0
-  timeago: ^3.6.1
   local_auth: ^2.1.8
   package_info_plus: ^5.0.1
   device_info_plus: ^9.1.2
@@ -45,10 +44,12 @@ dependencies:
   flutter_native_splash: ^2.3.10
   url_launcher: ^6.2.5
   firebase_core: ^2.25.5
+  firebase_messaging: ^14.7.17
   firebase_crashlytics: ^3.4.16
   firebase_analytics: ^10.8.7
-  flutter_secure_storage: ^9.0.0
   awesome_ripple_animation: ^2.0.0
+  timer_count_down: ^2.2.2
+  sprintf: ^7.0.0
 
 
   # The following adds the Cupertino Icons font to your application.

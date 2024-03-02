@@ -13,11 +13,16 @@ import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';
+import 'package:sprintf/sprintf.dart';
+import 'package:timer_count_down/timer_controller.dart';
+import 'package:timer_count_down/timer_count_down.dart';
 
 class OTPVerificationScreen extends StatelessWidget {
   OTPVerificationScreen({super.key, required this.phone});
   final String phone;
   final OtpFieldController otpController = OtpFieldController();
+  final CountdownController countdownController =
+      CountdownController(autoStart: true);
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +46,8 @@ class OTPVerificationScreen extends StatelessWidget {
               loadingOverlay.hide();
               AppUtils().showSnackBar(
                   context, state.data.message ?? AppStrings.errorApiUnknown);
+              countdownController.restart();
+              context.read<OtpVerificationBloc>().add(const UpdateCountdown());
             }
           },
         ),
@@ -173,13 +180,39 @@ class OTPVerificationScreen extends StatelessWidget {
   }
 
   Widget _resendCodeWidget(BuildContext context) {
-    return MyTextButton(
-      text: AppStrings.otpResendBtn,
-      textColor: Colors.white,
-      isFullWidth: false,
-      onPressed: () => context.read<OtpRequestBloc>().add(
-            RequestOtp(phone: phone),
-          ),
+    return BlocBuilder<OtpVerificationBloc, OtpVerificationState>(
+      buildWhen: (previous, current) => current is CountdownState,
+      builder: (context, state) {
+        if (countdownController.isCompleted ?? false) {
+          return MyTextButton(
+            text: AppStrings.otpResendBtn,
+            textColor: Colors.white,
+            isFullWidth: false,
+            onPressed: () => context.read<OtpRequestBloc>().add(
+                  RequestOtp(phone: phone),
+                ),
+          );
+        } else {
+          return Countdown(
+            seconds: AppStrings.resendOtpTime,
+            interval: const Duration(seconds: 1),
+            controller: countdownController,
+            build: (BuildContext context, double time) => MyTextButton(
+              textColor: Colors.white,
+              isFullWidth: false,
+              text: sprintf(
+                  (time == 0)
+                      ? AppStrings.otpResendMessage1
+                      : AppStrings.otpResendMessage2,
+                  [time.toInt() + 1]).toString(),
+              onPressed: () {},
+            ),
+            onFinished: () {
+              context.read<OtpVerificationBloc>().add(const UpdateCountdown());
+            },
+          );
+        }
+      },
     );
   }
 

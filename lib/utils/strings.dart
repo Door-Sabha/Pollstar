@@ -12,6 +12,8 @@ class AppStrings {
 
   static const String urlPrivacyPolicy = "https://dsnl.in";
 
+  static const int resendOtpTime = 19;
+
   /// Login Screen
   static const loginTitle = "Sign in";
   static const loginHint = "Registered mobile number";
@@ -31,6 +33,8 @@ class AppStrings {
       "We have sent a verification code via SMS to";
   static const otpVerificationMsg2 = "Please enter the code to continue.";
   static const otpResendBtn = "Resend verification code?";
+  static const otpResendMessage1 = "Wait %s second to resend OTP";
+  static const otpResendMessage2 = "Wait %s seconds to resend OTP";
   static const otpConfirmBtn = "CONTINUE";
   static const otpSuccessMsg = "OTP matched.\nLogging you in...";
 

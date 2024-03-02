@@ -27,3 +27,5 @@ class OtpVerificationSuccessState extends OtpVerificationState {
   @override
   List<Object> get props => [data];
 }
+
+class CountdownState extends OtpVerificationState {}

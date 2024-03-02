@@ -14,7 +14,7 @@ class OtpVerificationBloc
   final PollStarRepository _repository;
   OtpVerificationBloc(this._repository) : super(OtpVerificationInitial()) {
     on<VerifyOtp>(_verifyOtp);
-    on<StartCountdown>(_startCountdown);
+    on<UpdateCountdown>(_updateCountdown);
   }
 
   Future<void> _verifyOtp(VerifyOtp event, emit) async {
@@ -43,5 +43,8 @@ class OtpVerificationBloc
     }
   }
 
-  Future<void> _startCountdown(StartCountdown event, emit) async {}
+  Future<void> _updateCountdown(UpdateCountdown event, emit) async {
+    emit(OtpVerificationInitial());
+    emit(CountdownState());
+  }
 }

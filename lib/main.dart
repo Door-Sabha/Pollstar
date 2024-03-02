@@ -11,6 +11,7 @@ import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/ui/help/bloc/help_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -97,6 +98,9 @@ class MyApp extends StatelessWidget {
             ),
           ),
           debugShowCheckedModeBanner: false,
+          navigatorObservers: [
+            getIt<AnalyticsManager>().getFirebaseAnalyticsObserver()
+          ],
           home: const LoginScreen(),
         ),
       ),

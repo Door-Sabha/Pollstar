@@ -16,8 +16,8 @@ class VerifyOtp extends OtpVerificationEvent {
   List<Object> get props => [phone, otp];
 }
 
-class StartCountdown extends OtpVerificationEvent {
-  const StartCountdown();
+class UpdateCountdown extends OtpVerificationEvent {
+  const UpdateCountdown();
 
   @override
   List<Object> get props => [];
