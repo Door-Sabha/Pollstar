@@ -116,6 +116,7 @@ class LoginWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: RichText(
+        textAlign: TextAlign.center,
         text: TextSpan(
             text: AppStrings.loginPrivacyPolicyHeading,
             style: AppStyle.textStyleSmall,
