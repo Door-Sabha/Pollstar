@@ -30,45 +30,48 @@ class _TabWidgetState extends State<TabWidget>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Column(
-        children: [
-          TabBar(
-            tabs: const [
-              SizedBox(
-                height: 56,
-                child: Tab(
-                  text: AppStrings.inbox,
+    return Container(
+      decoration: AppStyle().bgLogo,
+      child: SafeArea(
+        child: Column(
+          children: [
+            TabBar(
+              tabs: const [
+                SizedBox(
+                  height: 56,
+                  child: Tab(
+                    text: AppStrings.inbox,
+                  ),
                 ),
-              ),
-              SizedBox(
-                height: 56,
-                child: Tab(
-                  text: AppStrings.outbox,
+                SizedBox(
+                  height: 56,
+                  child: Tab(
+                    text: AppStrings.outbox,
+                  ),
                 ),
-              ),
-            ],
-            controller: _tabController,
-            indicatorSize: TabBarIndicatorSize.tab,
-            indicatorColor: AppColors.orangeColor,
-            indicatorWeight: 3,
-            dividerColor: Colors.transparent,
-            labelStyle: AppStyle.textStyleTitle.copyWith(fontSize: 16),
-            unselectedLabelStyle: AppStyle.textStyleTitle.copyWith(
-              fontSize: 16,
-              color: AppColors.textHintColor,
-            ),
-          ),
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: const [
-                InboxScreen(),
-                OutboxScreen(),
               ],
+              controller: _tabController,
+              indicatorSize: TabBarIndicatorSize.tab,
+              indicatorColor: AppColors.orangeColor,
+              indicatorWeight: 3,
+              dividerColor: Colors.transparent,
+              labelStyle: AppStyle.textStyleTitle.copyWith(fontSize: 16),
+              unselectedLabelStyle: AppStyle.textStyleTitle.copyWith(
+                fontSize: 16,
+                color: AppColors.textHintColor,
+              ),
             ),
-          ),
-        ],
+            Expanded(
+              child: TabBarView(
+                controller: _tabController,
+                children: const [
+                  InboxScreen(),
+                  OutboxScreen(),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

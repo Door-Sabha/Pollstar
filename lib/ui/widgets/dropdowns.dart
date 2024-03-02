@@ -43,7 +43,6 @@ class _MyDropDownButtonState extends State<MyDropDownButton> {
         ),
       ),
       decoration: BoxDecoration(
-        color: Colors.white,
         borderRadius: BorderRadius.all(
           Radius.circular(_borderRadius),
         ),

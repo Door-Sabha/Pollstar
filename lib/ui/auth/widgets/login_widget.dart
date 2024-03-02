@@ -19,12 +19,7 @@ class LoginWidget extends StatelessWidget {
     return GestureDetector(
       onTap: () => AppUtils().hideKeyboard(),
       child: Container(
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/bg.png"),
-            fit: BoxFit.cover,
-          ),
-        ),
+        decoration: AppStyle.bgFlag,
         child: SafeArea(
           child: Column(
             children: [

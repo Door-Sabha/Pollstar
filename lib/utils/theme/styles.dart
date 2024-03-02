@@ -69,4 +69,21 @@ class AppStyle {
       end: Alignment.bottomLeft,
     ),
   );
+
+  static const bgFlag = BoxDecoration(
+    image: DecorationImage(
+      image: AssetImage("assets/images/bg.png"),
+      fit: BoxFit.cover,
+    ),
+  );
+
+  final bgLogo = BoxDecoration(
+    image: DecorationImage(
+      opacity: .2,
+      scale: 3,
+      image: Image.asset(
+        "assets/images/app_logo.png",
+      ).image,
+    ),
+  );
 }

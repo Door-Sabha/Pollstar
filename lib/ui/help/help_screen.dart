@@ -56,35 +56,38 @@ class HelpScreen extends StatelessWidget {
   Widget _contentWidget() {
     return GestureDetector(
       onTap: () => AppUtils().hideKeyboard(),
-      child: SingleChildScrollView(
-        child: SizedBox(
-          width: double.infinity,
-          child: Column(
-            children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(vertical: 16),
-                child: Icon(
-                  Icons.perm_phone_msg_rounded,
-                  color: AppColors.greenColor,
-                  size: 56,
+      child: Container(
+        decoration: AppStyle().bgLogo,
+        child: SingleChildScrollView(
+          child: SizedBox(
+            width: double.infinity,
+            child: Column(
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(vertical: 16),
+                  child: Icon(
+                    Icons.perm_phone_msg_rounded,
+                    color: AppColors.greenColor,
+                    size: 56,
+                  ),
                 ),
-              ),
-              const MyUnderlineText(
-                text: AppStrings.emergencyMsg,
-                style: AppStyle.textStyleTitle,
-                underlineColor: AppColors.orangeColor,
-              ),
-              EmergencyContactListWidget(
-                  emergencyNumbers: user.stateInfo?.emergencyNumbers),
-              const SizedBox(height: 16),
-              const MyUnderlineText(
-                text: AppStrings.orWriteToUs,
-                style: AppStyle.textStyleTitle,
-                underlineColor: AppColors.orangeColor,
-              ),
-              const SizedBox(height: 16),
-              ContactUsWidget(reasons: user.stateInfo?.problemReasons),
-            ],
+                const MyUnderlineText(
+                  text: AppStrings.emergencyMsg,
+                  style: AppStyle.textStyleTitle,
+                  underlineColor: AppColors.orangeColor,
+                ),
+                EmergencyContactListWidget(
+                    emergencyNumbers: user.stateInfo?.emergencyNumbers),
+                const SizedBox(height: 16),
+                const MyUnderlineText(
+                  text: AppStrings.orWriteToUs,
+                  style: AppStyle.textStyleTitle,
+                  underlineColor: AppColors.orangeColor,
+                ),
+                const SizedBox(height: 16),
+                ContactUsWidget(reasons: user.stateInfo?.problemReasons),
+              ],
+            ),
           ),
         ),
       ),

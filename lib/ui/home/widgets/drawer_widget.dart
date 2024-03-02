@@ -27,6 +27,7 @@ class DrawerWidget extends StatelessWidget {
               width: double.infinity,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     user.userParams != null ? user.userParams!.boothName! : "",
@@ -38,6 +39,12 @@ class DrawerWidget extends StatelessWidget {
                     user.userParams != null
                         ? user.userParams!.phoneNumber!
                         : "",
+                    textAlign: TextAlign.center,
+                    style:
+                        AppStyle.textStyleMedium.copyWith(color: Colors.white),
+                  ),
+                  Text(
+                    user.userParams != null ? user.stateInfo!.name! : "",
                     textAlign: TextAlign.center,
                     style:
                         AppStyle.textStyleMedium.copyWith(color: Colors.white),
