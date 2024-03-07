@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
@@ -15,6 +16,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
   UserInfoBloc(this._repository) : super(UserInfoInitial()) {
     on<GetUserInfo>(_getUserInfo);
     on<LogoutUser>(_logout);
+    on<UpdateFcmToken>(_updateFcmToken);
   }
 
   Future<void> _getUserInfo(GetUserInfo event, emit) async {
@@ -53,6 +55,17 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
       emit(UserInfoError(error: data.message ?? AppStrings.errorApiUnknown));
     } else {
       emit(const UserInfoError(error: AppStrings.errorApiUnknown));
+    }
+  }
+
+  Future<void> _updateFcmToken(UpdateFcmToken event, emit) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    String userId = getIt<AppConstants>().userId;
+
+    ApiResponse? data =
+        await _repository.updateFcmToken(id: userId, token: fcmToken ?? "");
+    if (data != null && data.state == 1) {
+      emit(UserFcmUpdateSuccess());
     }
   }
 }

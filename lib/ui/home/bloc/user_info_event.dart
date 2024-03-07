@@ -20,3 +20,10 @@ class LogoutUser extends UserInfoEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateFcmToken extends UserInfoEvent {
+  const UpdateFcmToken();
+
+  @override
+  List<Object> get props => [];
+}

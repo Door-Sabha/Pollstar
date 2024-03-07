@@ -32,3 +32,5 @@ final class UserInfoSuccess extends UserInfoState {
 final class UserLogoutLoading extends UserInfoState {}
 
 final class UserLogoutSuccess extends UserInfoState {}
+
+final class UserFcmUpdateSuccess extends UserInfoState {}

@@ -48,12 +48,15 @@ class AppStrings {
   static const endSession = "END SESSION";
 
   ///Inbox Screen
-  static const questionEmpty = "No active question at this time.";
+  static const inboxEmptyHint = "No active question at this time.";
   static const lastUpdatedToday = "Last updated today at %s";
   static const qusNextSchedule = "The next scheduled question is at %s on %s.";
   static const reply = "Reply";
   static const answerHint = "Enter your answer";
   static const noResponseSent = "No response sent";
+
+  ///Outbox Screen
+  static const outboxEmptyHint = "No messages in your outbox.";
 
   /// Help Screen
   static const reportProblem = "Report a problem";

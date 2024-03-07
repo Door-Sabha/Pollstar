@@ -50,6 +50,7 @@ dependencies:
   awesome_ripple_animation: ^2.0.0
   timer_count_down: ^2.2.2
   sprintf: ^7.0.0
+  flutter_local_notifications: ^16.3.3
 
 
   # The following adds the Cupertino Icons font to your application.

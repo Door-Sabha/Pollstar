@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
-import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
-import 'package:pollstar/ui/home/inbox/widgets/questions_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/home/outbox/bloc/outbox_bloc.dart';
+import 'package:pollstar/ui/home/outbox/widgets/outbox_empty_widget.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 
 class OutboxScreen extends StatefulWidget {
@@ -34,7 +33,7 @@ class _OutboxScreenState extends State<OutboxScreen>
             if (state is OutboxSuccessState) {
               return QuestionsListWidget(list: state.list, isInbox: false);
             } else if (state is OutboxEmpty) {
-              return const QuestionsEmptyWidget();
+              return const OutboxEmptyWidget();
             } else if (state is OutboxErrorState) {
               return Container();
             } else if (state is OutboxLoading) {

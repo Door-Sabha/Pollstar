@@ -65,7 +65,7 @@ class _TabWidgetState extends State<TabWidget>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: [
+                children: const [
                   InboxScreen(),
                   OutboxScreen(),
                 ],

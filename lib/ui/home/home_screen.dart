@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
 
-    return BlocListener<UserInfoBloc, UserInfoState>(
+    return BlocConsumer<UserInfoBloc, UserInfoState>(
       listener: (context, state) {
         if (state is UserInfoSuccess) {
         } else if (state is UserInfoError) {
@@ -36,11 +36,13 @@ class HomeScreen extends StatelessWidget {
           AppUtils().pageRouteUntilClearStack(context, const LoginScreen());
         }
       },
-      child: Scaffold(
-        appBar: AppBarWidget(user: user),
-        drawer: DrawerWidget(user: user),
-        body: const TabWidget(),
-      ),
+      builder: (BuildContext context, UserInfoState state) {
+        return Scaffold(
+          appBar: AppBarWidget(user: user),
+          drawer: DrawerWidget(user: user),
+          body: const TabWidget(),
+        );
+      },
     );
   }
 }

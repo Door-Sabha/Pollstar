@@ -5,8 +5,8 @@ import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 
-class QuestionsEmptyWidget extends StatelessWidget {
-  const QuestionsEmptyWidget({super.key});
+class InboxEmptyWidget extends StatelessWidget {
+  const InboxEmptyWidget({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +20,7 @@ class QuestionsEmptyWidget extends StatelessWidget {
                 padding:
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
                 child: Text(
-                  AppStrings.questionEmpty,
+                  AppStrings.inboxEmptyHint,
                   style: AppStyle.textStyleMedium.copyWith(
                     color: AppColors.textColorLightDark,
                     fontWeight: FontWeight.bold,

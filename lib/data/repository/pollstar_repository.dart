@@ -71,6 +71,21 @@ class PollStarRepository {
     }
   }
 
+  Future<ApiResponse?> updateFcmToken(
+      {required String id, required String token}) async {
+    try {
+      final response = await _api.updateFcmToken(id, token);
+      if (response.statusCode == HttpStatus.ok) {
+        ApiResponse data = ApiResponse.fromJson(response.data);
+        return data;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<List<Question>?> getInboxQuestions(
       {required String session,
       required String state,

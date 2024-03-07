@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
-import 'package:pollstar/ui/home/inbox/widgets/questions_empty_widget.dart';
+import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -56,7 +57,7 @@ class _InboxScreenState extends State<InboxScreen>
             if (state is InboxSuccessState) {
               return QuestionsListWidget(list: state.list);
             } else if (state is InboxEmpty) {
-              return const QuestionsEmptyWidget();
+              return const InboxEmptyWidget();
             } else if (state is InboxErrorState) {
               return Container();
             } else if (state is InboxLoading) {
