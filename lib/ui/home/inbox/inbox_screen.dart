@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
-import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';

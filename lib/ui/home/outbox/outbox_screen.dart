@@ -4,6 +4,7 @@ import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/home/outbox/bloc/outbox_bloc.dart';
 import 'package:pollstar/ui/home/outbox/widgets/outbox_empty_widget.dart';
+import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 
 class OutboxScreen extends StatefulWidget {
@@ -15,6 +16,7 @@ class OutboxScreen extends StatefulWidget {
 
 class _OutboxScreenState extends State<OutboxScreen>
     with AutomaticKeepAliveClientMixin {
+  final LoadingOverlay loadingOverlay = LoadingOverlay();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -28,7 +30,14 @@ class _OutboxScreenState extends State<OutboxScreen>
         color: Colors.white,
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
         onRefresh: () => _refreshData(context),
-        child: BlocBuilder<OutboxBloc, OutboxState>(
+        child: BlocConsumer<OutboxBloc, OutboxState>(
+          listener: (context, state) {
+            if (state is OutboxLoading) {
+              loadingOverlay.show(context);
+            } else {
+              loadingOverlay.hide();
+            }
+          },
           builder: (context, state) {
             if (state is OutboxSuccessState) {
               return QuestionsListWidget(list: state.list, isInbox: false);
