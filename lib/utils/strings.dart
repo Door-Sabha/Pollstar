@@ -47,6 +47,14 @@ class AppStrings {
   static const cancel = "CANCEL";
   static const endSession = "END SESSION";
 
+  ///Inbox Screen
+  static const questionEmpty = "No active question at this time.";
+  static const lastUpdatedToday = "Last updated today at %s";
+  static const qusNextSchedule = "The next scheduled question is at %s on %s.";
+  static const reply = "Reply";
+  static const answerHint = "Enter your answer";
+  static const noResponseSent = "No response sent";
+
   /// Help Screen
   static const reportProblem = "Report a problem";
   static const emergencyMsg = "In case of emergency call";
@@ -66,6 +74,8 @@ class AppStrings {
   static const no = "NO";
   static const error = "ERROR";
   static const okay = "OKAY";
+  static const errorSession =
+      "Your sessin has been expired. please login again.";
   static const errUnknown =
       "We couldn't process further in this app. Please try again later.";
 

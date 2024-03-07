@@ -211,6 +211,7 @@ class MyOutlinedButton extends StatelessWidget {
 
 class MyElevatedIconButton extends StatelessWidget {
   //final double _buttonHeight = 48.h;
+  final String text;
   final Function onPressed;
   final Color backgroundColor;
   final IconData icon;
@@ -218,6 +219,7 @@ class MyElevatedIconButton extends StatelessWidget {
 
   const MyElevatedIconButton({
     super.key,
+    required this.text,
     required this.onPressed,
     required this.icon,
     this.backgroundColor = AppColors.greenColor,
@@ -240,11 +242,46 @@ class MyElevatedIconButton extends StatelessWidget {
           color: iconColor,
         ),
         label: Text(
-          "Reply",
+          text,
           style: AppStyle.textStyleMedium.copyWith(
               fontSize: 16, color: Colors.white, fontWeight: FontWeight.bold),
         ),
       ),
+    );
+  }
+}
+
+class MySquareIconButton extends StatelessWidget {
+  //final double _buttonHeight = 48.h;
+  final Function onPressed;
+  final Color backgroundColor;
+  final IconData icon;
+  final Color iconColor;
+
+  const MySquareIconButton({
+    super.key,
+    required this.onPressed,
+    required this.icon,
+    this.backgroundColor = AppColors.greenColor,
+    this.iconColor = Colors.white,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      //height: _buttonHeight,
+      child: ElevatedButton(
+          onPressed: () => onPressed(),
+          style: ElevatedButton.styleFrom(
+            backgroundColor: backgroundColor,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+          ),
+          child: Icon(
+            icon,
+            color: iconColor,
+          )),
     );
   }
 }

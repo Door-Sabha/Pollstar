@@ -17,7 +17,8 @@ class APIConstants {
   static const String userLogout = 'users/logout';
   static const String updateUser = 'users/update';
 
-  static const String questionList = 'questions/list';
+  static const String inboxQuestionList = 'questions/list';
+  static const String outboxQuestionList = 'questions/update';
   static const String updateAnswer = 'questions/update_answer';
 
   static const String reportProblem = 'users/report_problem';

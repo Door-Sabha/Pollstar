@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
+import 'package:pollstar/ui/widgets/answer_dialogs.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -93,6 +96,13 @@ class AppUtils {
 
   void _handleError(String msg) {}
 
+  String getTimeFromDate(String? date) {
+    if (date.isNullOrEmpty()) return "";
+    final DateFormat dateFormat = DateFormat('h:mm a');
+    var dateTime = DateFormat('yyyy-MM-ddThh:mm:ss').parse(date!);
+    return dateFormat.format(dateTime).toLowerCase();
+  }
+
   String getTransactionDate(String date) {
     final DateFormat dateFormat = DateFormat('dd MMM, yyyy');
     var dateTime = DateFormat('dd-MM-yyyy hh:mm:ss').parse(date);
@@ -158,6 +168,21 @@ class AppUtils {
             isCancellable: isCancellable,
             onOkayPressed: onOkayPressed,
             onCancelPressed: onCancelPressed,
+          );
+        });
+  }
+
+  void showAnswerDialog(
+    BuildContext context, {
+    required Question question,
+    required QuestionType questionType,
+  }) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AnswerDialog(
+            question: question,
+            questionType: questionType,
           );
         });
   }

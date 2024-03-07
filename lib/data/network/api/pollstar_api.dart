@@ -85,15 +85,59 @@ class PollStarApi {
     }
   }
 
-  Future<Response> getQuestions(String phone, String datetime) async {
+  Future<Response> updateFcmToken(String id, String token) async {
     var data = {
-      "phone": phone,
-      "last": datetime,
+      "id": id,
+      "fcm": token,
     };
 
     try {
       final Response response = await dioClient.post(
-        APIConstants.questionList,
+        APIConstants.updateUser,
+        data: data,
+      );
+      return response;
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          statusMessage: AppStrings.errorApiUnknown);
+    }
+  }
+
+  Future<Response> getInboxQuestions(
+      String session, String state, String last) async {
+    var data = {
+      "state": state,
+      "last": last,
+      "session": session,
+    };
+
+    try {
+      final Response response = await dioClient.post(
+        APIConstants.inboxQuestionList,
+        data: data,
+      );
+      return response;
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          statusMessage: AppStrings.errorApiUnknown);
+    }
+  }
+
+  Future<Response> getOutboxQuestions(
+      String session, String state, String last) async {
+    var data = {
+      "state": state,
+      "last": last,
+      "session": session,
+    };
+
+    try {
+      final Response response = await dioClient.post(
+        APIConstants.outboxQuestionList,
         data: data,
       );
       return response;
@@ -115,26 +159,6 @@ class PollStarApi {
     try {
       final Response response = await dioClient.post(
         APIConstants.updateAnswer,
-        data: data,
-      );
-      return response;
-    } catch (e) {
-      return Response(
-          requestOptions: RequestOptions(path: ''),
-          statusCode: 401,
-          statusMessage: AppStrings.errorApiUnknown);
-    }
-  }
-
-  Future<Response> updateFcmToken(String id, String token) async {
-    var data = {
-      "id": id,
-      "fcm": token,
-    };
-
-    try {
-      final Response response = await dioClient.post(
-        APIConstants.updateUser,
         data: data,
       );
       return response;

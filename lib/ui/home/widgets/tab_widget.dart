@@ -30,6 +30,7 @@ class _TabWidgetState extends State<TabWidget>
 
   @override
   Widget build(BuildContext context) {
+    print("tab widget called");
     return Container(
       decoration: AppStyle().bgLogo,
       child: SafeArea(
@@ -64,7 +65,7 @@ class _TabWidgetState extends State<TabWidget>
             Expanded(
               child: TabBarView(
                 controller: _tabController,
-                children: const [
+                children: [
                   InboxScreen(),
                   OutboxScreen(),
                 ],

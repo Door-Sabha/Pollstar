@@ -10,7 +10,9 @@ import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/ui/help/bloc/help_bloc.dart';
+import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
+import 'package:pollstar/ui/home/outbox/bloc/outbox_bloc.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
@@ -62,6 +64,16 @@ class MyApp extends StatelessWidget {
           ),
           BlocProvider(
             create: (context) => HelpBloc(
+              RepositoryProvider.of<PollStarRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => InboxBloc(
+              RepositoryProvider.of<PollStarRepository>(context),
+            ),
+          ),
+          BlocProvider(
+            create: (context) => OutboxBloc(
               RepositoryProvider.of<PollStarRepository>(context),
             ),
           ),
