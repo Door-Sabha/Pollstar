@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
@@ -13,14 +14,15 @@ class InboxBloc extends Bloc<InboxEvent, InboxState> {
   final PollStarRepository _repository;
   InboxBloc(this._repository) : super(InboxInitial()) {
     on<GetInboxQuestions>(_getInboxQuestions);
-    on<OpenAnswerDialog>(_openAnswerDialog);
+    on<OpenAnswerScreen>(_openAnswerDialog);
     on<AnswerInboxQuestion>(_answerInboxQuestions);
   }
 
   Future<void> _getInboxQuestions(GetInboxQuestions event, emit) async {
     String session = getIt<AppConstants>().session;
     String state = getIt<AppConstants>().stateId;
-    String last = DateTime.now().millisecondsSinceEpoch.toString();
+    //String last = DateTime.now().millisecondsSinceEpoch.toString();
+    String last = "1709317800000";
 
     emit(const InboxLoading());
     List<Question>? data = await _repository.getInboxQuestions(
@@ -31,17 +33,30 @@ class InboxBloc extends Bloc<InboxEvent, InboxState> {
     } else if (data != null && data.isEmpty) {
       emit(InboxEmpty());
     } else {
-      emit(const InboxErrorState(error: AppStrings.errorSession));
+      emit(const InboxErrorState(error: AppStrings.errorApiUnknown));
     }
   }
 
-  Future<void> _openAnswerDialog(OpenAnswerDialog event, emit) async {
+  Future<void> _openAnswerDialog(OpenAnswerScreen event, emit) async {
     emit(InboxInitial());
-    emit(InboxAnswerDialogState(
-        question: event.question, questionType: event.questionType));
+    emit(AnswerScreenState(
+        question: event.question, yesnoAnswer: event.yesnoAnswer));
   }
 
   Future<void> _answerInboxQuestions(AnswerInboxQuestion event, emit) async {
-    emit(const InboxAnswerSuccessState());
+    String user = getIt<AppConstants>().userId;
+
+    emit(InboxInitial());
+    emit(const InboxLoading());
+    ApiResponse? data = await _repository.updateAnswer(
+        user: user, id: event.id, answer: event.answer);
+
+    if (data != null && data.state == 1) {
+      emit(const InboxAnswerSuccessState());
+    } else if (data != null && data.state == 0) {
+      emit(InboxErrorState(error: data.message ?? AppStrings.errorSession));
+    } else {
+      emit(const InboxErrorState(error: AppStrings.errorSession));
+    }
   }
 }

@@ -20,7 +20,7 @@ class OutboxBloc extends Bloc<OutboxEvent, OutboxState> {
     String last = DateTime.now().millisecondsSinceEpoch.toString();
 
     emit(OutboxLoading());
-    List<Question>? data = await _repository.getOutQuestions(
+    List<Question>? data = await _repository.getOutboxQuestions(
         session: session, state: state, last: last);
 
     if (data != null && data.isNotEmpty) {

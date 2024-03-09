@@ -47,6 +47,7 @@ dependencies:
   firebase_messaging: ^14.7.17
   firebase_crashlytics: ^3.4.16
   firebase_analytics: ^10.8.7
+  flutter_secure_storage: ^9.0.0
   awesome_ripple_animation: ^2.0.0
   timer_count_down: ^2.2.2
   sprintf: ^7.0.0

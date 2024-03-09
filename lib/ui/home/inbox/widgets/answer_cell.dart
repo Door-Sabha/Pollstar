@@ -27,32 +27,28 @@ class AnswerWidget extends StatelessWidget {
 
   Widget _logoWidget() {
     const double radius = 24;
-    return Container(
-      //color: Colors.amber,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          CircleAvatar(
-            backgroundColor: (hasAnswer)
-                ? AppColors.greenColorLight
-                : AppColors.textColorDisabled,
-            radius: radius,
-            child: Icon(
-              Icons.people_alt_outlined,
-              color:
-                  (hasAnswer) ? AppColors.greenColor : AppColors.textColorDark,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        CircleAvatar(
+          backgroundColor: (hasAnswer)
+              ? AppColors.greenColorLight
+              : AppColors.textColorDisabled,
+          radius: radius,
+          child: Icon(
+            Icons.people_alt_outlined,
+            color: (hasAnswer) ? AppColors.greenColor : AppColors.textColorDark,
           ),
-          const SizedBox(height: 4),
-          Text(
-            AppUtils().getTimeFromDate(question.questionTime?.updated),
-            style: AppStyle.textStyleMedium.copyWith(
-              color: Colors.grey,
-              fontWeight: FontWeight.w500,
-            ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          AppUtils().getTimeFromDate(question.questionTime?.updated),
+          style: AppStyle.textStyleMedium.copyWith(
+            color: Colors.grey,
+            fontWeight: FontWeight.w500,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

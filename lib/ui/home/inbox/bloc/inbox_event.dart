@@ -14,13 +14,13 @@ class GetInboxQuestions extends InboxEvent {
   List<Object> get props => [];
 }
 
-class OpenAnswerDialog extends InboxEvent {
+class OpenAnswerScreen extends InboxEvent {
   final Question question;
-  final QuestionType questionType;
-  const OpenAnswerDialog({required this.question, required this.questionType});
+  final bool yesnoAnswer;
+  const OpenAnswerScreen({required this.question, required this.yesnoAnswer});
 
   @override
-  List<Object> get props => [question, questionType];
+  List<Object> get props => [question, yesnoAnswer];
 }
 
 class AnswerInboxQuestion extends InboxEvent {

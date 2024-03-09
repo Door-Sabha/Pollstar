@@ -38,15 +38,14 @@ class InboxSuccessState extends InboxState {
   List<Object> get props => [list];
 }
 
-class InboxAnswerDialogState extends InboxState {
+class AnswerScreenState extends InboxState {
   final Question question;
-  final QuestionType questionType;
+  final bool yesnoAnswer;
 
-  const InboxAnswerDialogState(
-      {required this.question, required this.questionType});
+  const AnswerScreenState({required this.question, required this.yesnoAnswer});
 
   @override
-  List<Object> get props => [question, questionType];
+  List<Object> get props => [question, yesnoAnswer];
 }
 
 class InboxAnswerSuccessState extends InboxState {

@@ -6,10 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
+import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
 import 'package:pollstar/ui/widgets/answer_dialogs.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/extensions.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -28,6 +30,17 @@ class AppUtils {
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => page),
+    );
+  }
+
+  void pageRouteDialog(BuildContext context, dynamic page) {
+    Navigator.of(context).push(
+      CupertinoPageRoute(
+        fullscreenDialog: true,
+        builder: (context) {
+          return page;
+        },
+      ),
     );
   }
 
@@ -70,6 +83,7 @@ class AppUtils {
 
   void clearData() {
     getIt<AppConstants>().clear();
+    getIt<SecureStorageManager>().deleteAll();
   }
 
   void hideKeyboard() {
@@ -77,6 +91,9 @@ class AppUtils {
   }
 
   Future<void> openUrl(String url) async {
+    if (url.contains("http:")) {
+      url = url.replaceAll("http:", "https:");
+    }
     var browserUrl = Uri.parse(url);
     if (await canLaunchUrl(browserUrl)) {
       await launchUrl(browserUrl);
@@ -103,10 +120,14 @@ class AppUtils {
     return dateFormat.format(dateTime).toLowerCase();
   }
 
-  String getTransactionDate(String date) {
-    final DateFormat dateFormat = DateFormat('dd MMM, yyyy');
-    var dateTime = DateFormat('dd-MM-yyyy hh:mm:ss').parse(date);
-    return dateFormat.format(dateTime);
+  String getDateFromMilliseconds(int milliSeconds) {
+    final DateFormat dateFormat = DateFormat('dd-MM-yyyy hh:mm:ss');
+    return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(milliSeconds));
+  }
+
+  String getTimeFromMilliseconds(int milliSeconds) {
+    final DateFormat dateFormat = DateFormat('hh:mm a');
+    return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(milliSeconds));
   }
 
   String toReadableDateFormat(String date) {
@@ -175,15 +196,46 @@ class AppUtils {
   void showAnswerDialog(
     BuildContext context, {
     required Question question,
-    required QuestionType questionType,
+    required bool yesnoAnswer,
   }) {
     showDialog(
         context: context,
         builder: (BuildContext context) {
           return AnswerDialog(
             question: question,
-            questionType: questionType,
+            yesnoAnswer: yesnoAnswer,
           );
-        });
+        }).then((value) {
+      if (value != null) {
+        if (question.questionType == QuestionType.yesno) {
+          context.read<InboxBloc>().add(AnswerInboxQuestion(
+              id: question.id?.toString() ?? "",
+              answer: yesnoAnswer ? "1" : "2"));
+        } else if (question.questionType == QuestionType.number) {
+          AppUtils().showAnswerDialogForNumber(context,
+              question: question, answer: value);
+        }
+      }
+    });
+  }
+
+  void showAnswerDialogForNumber(
+    BuildContext context, {
+    required Question question,
+    required String answer,
+  }) {
+    showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AnswerConfirmationDialog(
+            question: question,
+            answer: answer,
+          );
+        }).then((value) {
+      if (value != null) {
+        context.read<InboxBloc>().add(AnswerInboxQuestion(
+            id: question.id?.toString() ?? "", answer: answer));
+      }
+    });
   }
 }

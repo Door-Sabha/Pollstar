@@ -66,7 +66,8 @@ class OTPVerificationScreen extends StatelessWidget {
               otpController.clear();
             } else if (state is OtpVerificationSuccessState) {
               //loadingOverlay.hide();
-              print(state.data.session);
+              // AppUtils().showSnackBar(
+              //     context, state.data.message ?? AppStrings.errorApiUnknown);
               context.read<UserInfoBloc>().add(const GetUserInfo());
             }
           },

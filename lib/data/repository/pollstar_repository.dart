@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/services.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/question.dart';
@@ -95,11 +94,9 @@ class PollStarRepository {
       if (response.statusCode == HttpStatus.ok) {
         if (response.data["state"] == 1) {
           var data = response.data["updates"] as List;
-          //var data = await rootBundle.loadString('assets/after.json') as List;
-
           return data.map((e) => Question.fromJson(e)).toList();
         } else {
-          return null;
+          return [];
         }
       } else {
         return null;
@@ -109,7 +106,7 @@ class PollStarRepository {
     }
   }
 
-  Future<List<Question>?> getOutQuestions(
+  Future<List<Question>?> getOutboxQuestions(
       {required String session,
       required String state,
       required String last}) async {
@@ -122,6 +119,23 @@ class PollStarRepository {
         } else {
           return null;
         }
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  Future<ApiResponse?> updateAnswer(
+      {required String user,
+      required String id,
+      required String answer}) async {
+    try {
+      final response = await _api.updateAnswer(user, id, answer);
+      if (response.statusCode == HttpStatus.ok) {
+        ApiResponse data = ApiResponse.fromJson(response.data);
+        return data;
       } else {
         return null;
       }

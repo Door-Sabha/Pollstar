@@ -95,8 +95,9 @@ class QuestionWidget extends StatelessWidget {
       child: MyElevatedIconButton(
         text: AppStrings.reply,
         icon: Icons.reply_rounded,
-        onPressed: () => context.read<InboxBloc>().add(OpenAnswerDialog(
-            question: question, questionType: QuestionType.number)),
+        onPressed: () => context
+            .read<InboxBloc>()
+            .add(OpenAnswerScreen(question: question, yesnoAnswer: false)),
       ),
     );
   }
@@ -111,16 +112,18 @@ class QuestionWidget extends StatelessWidget {
           MyElevatedButton(
             isFullWidth: false,
             text: AppStrings.yes,
-            onPressed: () => context.read<InboxBloc>().add(OpenAnswerDialog(
-                question: question, questionType: QuestionType.yesno)),
+            onPressed: () => context
+                .read<InboxBloc>()
+                .add(OpenAnswerScreen(question: question, yesnoAnswer: true)),
           ),
           const SizedBox(width: 16),
           MyElevatedButton(
             isFullWidth: false,
             text: AppStrings.no,
             backgroundColor: AppColors.redColor,
-            onPressed: () => context.read<InboxBloc>().add(OpenAnswerDialog(
-                question: question, questionType: QuestionType.yesno)),
+            onPressed: () => context
+                .read<InboxBloc>()
+                .add(OpenAnswerScreen(question: question, yesnoAnswer: false)),
           ),
         ],
       ),

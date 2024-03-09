@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/models/user.dart';
+import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/widgets/appbar_widget.dart';
@@ -18,31 +19,34 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
 
-    return BlocConsumer<UserInfoBloc, UserInfoState>(
-      listener: (context, state) {
-        if (state is UserInfoSuccess) {
-        } else if (state is UserInfoError) {
-          AppUtils().showAlertDialog(
-            context,
-            title: AppStrings.error,
-            content: state.error,
-          );
-        } else if (state is UserLogoutLoading) {
-          loadingOverlay.show(context);
-        } else if (state is UserLogoutSuccess) {
-          loadingOverlay.hide();
-          Navigator.pop(context);
-          AppUtils().clearData();
-          AppUtils().pageRouteUntilClearStack(context, const LoginScreen());
-        }
-      },
-      builder: (BuildContext context, UserInfoState state) {
-        return Scaffold(
+    return BlocProvider(
+      create: (context) => UserInfoBloc(
+        RepositoryProvider.of<PollStarRepository>(context),
+      )..add(const UpdateFcmToken()),
+      child: BlocListener<UserInfoBloc, UserInfoState>(
+        listener: (context, state) {
+          if (state is UserInfoSuccess) {
+          } else if (state is UserInfoError) {
+            AppUtils().showAlertDialog(
+              context,
+              title: AppStrings.error,
+              content: state.error,
+            );
+          } else if (state is UserLogoutLoading) {
+            loadingOverlay.show(context);
+          } else if (state is UserLogoutSuccess) {
+            loadingOverlay.hide();
+            Navigator.pop(context);
+            AppUtils().clearData();
+            AppUtils().pageRouteUntilClearStack(context, const LoginScreen());
+          }
+        },
+        child: Scaffold(
           appBar: AppBarWidget(user: user),
           drawer: DrawerWidget(user: user),
           body: const TabWidget(),
-        );
-      },
+        ),
+      ),
     );
   }
 }

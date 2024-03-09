@@ -11,6 +11,7 @@ class AppConstants {
   late String _session;
   late String _userId;
   late String _stateId;
+  late String _fcmToken;
 
   late String _appName;
   late String _packageName;
@@ -48,6 +49,7 @@ class AppConstants {
     _session = "";
     _userId = "";
     _stateId = "";
+    _fcmToken = "";
   }
 
   get session => _session;
@@ -58,6 +60,9 @@ class AppConstants {
 
   get stateId => _stateId;
   set stateId(value) => _stateId = value;
+
+  get fcmToken => _fcmToken;
+  set fcmToken(value) => _fcmToken = value;
 
   get appName => _appName;
   get packageName => _packageName;

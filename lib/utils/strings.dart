@@ -58,6 +58,13 @@ class AppStrings {
   ///Outbox Screen
   static const outboxEmptyHint = "No messages in your outbox.";
 
+  ///Answer Confirmation Screen
+  static const yennoMsg = "You selected %s is this correct?";
+  static const answerEmpty = "Enter a valid answer";
+  static const numberMsg1 = "You have entered";
+  static const numberMsg2 = "Can you confirm is this correct?";
+  static const answerSubmit = "yes. I confirm.";
+
   /// Help Screen
   static const reportProblem = "Report a problem";
   static const emergencyMsg = "In case of emergency call";
@@ -75,6 +82,7 @@ class AppStrings {
   /// Common Error messages
   static const yes = "YES";
   static const no = "NO";
+  static const done = "DONE";
   static const error = "ERROR";
   static const okay = "OKAY";
   static const errorSession =

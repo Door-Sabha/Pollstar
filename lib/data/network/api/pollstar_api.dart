@@ -93,7 +93,7 @@ class PollStarApi {
 
     try {
       final Response response = await dioClient.post(
-        APIConstants.updateUser,
+        APIConstants.updateFcm,
         data: data,
       );
       return response;
@@ -149,10 +149,10 @@ class PollStarApi {
     }
   }
 
-  Future<Response> updateAnswer(String phone, String sNo, String answer) async {
+  Future<Response> updateAnswer(String user, String id, String answer) async {
     var data = {
-      "phone": phone,
-      "s_no": sNo,
+      "user": user,
+      "id": id,
       "answer": answer,
     };
 

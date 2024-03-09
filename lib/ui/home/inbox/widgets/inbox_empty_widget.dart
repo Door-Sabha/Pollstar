@@ -4,6 +4,8 @@ import 'package:flutter/widgets.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
+import 'package:pollstar/utils/utils.dart';
+import 'package:sprintf/sprintf.dart';
 
 class InboxEmptyWidget extends StatelessWidget {
   const InboxEmptyWidget({super.key});
@@ -32,7 +34,10 @@ class InboxEmptyWidget extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
                 child: Text(
-                  AppStrings.lastUpdatedToday,
+                  sprintf(AppStrings.lastUpdatedToday, [
+                    AppUtils().getTimeFromMilliseconds(
+                        DateTime.now().millisecondsSinceEpoch)
+                  ]),
                   style: AppStyle.textStyleMedium.copyWith(
                     color: AppColors.textHintColor,
                     fontWeight: FontWeight.bold,

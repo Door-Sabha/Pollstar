@@ -1,4 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/utils/app_constants.dart';
 
 class FCMManager {
   FCMManager() {
@@ -7,8 +9,7 @@ class FCMManager {
   }
 
   _setup() async {
-    NotificationSettings settings =
-        await FirebaseMessaging.instance.requestPermission(
+    await FirebaseMessaging.instance.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -19,7 +20,7 @@ class FCMManager {
     );
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
     final fcmToken = await FirebaseMessaging.instance.getToken();
-    print("FCM Token: $fcmToken");
+    getIt<AppConstants>().fcmToken = fcmToken;
   }
 
   _registerListener() {

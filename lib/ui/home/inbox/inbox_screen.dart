@@ -36,15 +36,23 @@ class _InboxScreenState extends State<InboxScreen>
           listener: (BuildContext context, InboxState state) {
             if (state is InboxLoading) {
               loadingOverlay.show(context);
-            } else if (state is InboxAnswerDialogState) {
+            } else if (state is AnswerScreenState) {
               loadingOverlay.hide();
               AppUtils().showAnswerDialog(context,
-                  question: state.question, questionType: state.questionType);
+                  question: state.question, yesnoAnswer: state.yesnoAnswer);
+              // AppUtils().pageRouteDialog(
+              //   context,
+              //   AnswerConfirmationScreen(
+              //     question: state.question,
+              //     yesnoAnswer: state.yesnoAnswer,
+              //   ),
+              //);
             } else if (state is InboxAnswerSuccessState) {
               loadingOverlay.hide();
               context.read<InboxBloc>().add(const GetInboxQuestions());
             } else if (state is InboxErrorState) {
               loadingOverlay.hide();
+              AppUtils().showAlertDialog(context, content: state.error);
             } else {
               loadingOverlay.hide();
             }
@@ -57,6 +65,7 @@ class _InboxScreenState extends State<InboxScreen>
               return QuestionsListWidget(list: state.list);
             } else if (state is InboxEmpty) {
               return const InboxEmptyWidget();
+              //return const QuestionsListWidget(list: []);
             } else if (state is InboxErrorState) {
               return Container();
             } else if (state is InboxLoading) {

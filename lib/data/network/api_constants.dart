@@ -16,6 +16,7 @@ class APIConstants {
   static const String userInfo = 'users/info';
   static const String userLogout = 'users/logout';
   static const String updateUser = 'users/update';
+  static const String updateFcm = 'users/update_fcm';
 
   static const String inboxQuestionList = 'questions/list';
   static const String outboxQuestionList = 'questions/list';
