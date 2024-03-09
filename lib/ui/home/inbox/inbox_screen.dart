@@ -4,6 +4,7 @@ import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
+import 'package:pollstar/ui/home/inbox/widgets/session_end_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/utils.dart';
@@ -34,6 +35,7 @@ class _InboxScreenState extends State<InboxScreen>
         onRefresh: () => _refreshData(context),
         child: BlocConsumer<InboxBloc, InboxState>(
           listener: (BuildContext context, InboxState state) {
+            print("Lis $state");
             if (state is InboxLoading) {
               loadingOverlay.show(context);
             } else if (state is AnswerScreenState) {
@@ -58,14 +60,18 @@ class _InboxScreenState extends State<InboxScreen>
             }
           },
           buildWhen: (previous, current) {
-            return current is InboxSuccessState || current is InboxEmpty;
+            return current is InboxSuccessState ||
+                current is InboxEmpty ||
+                current is SessionEndState;
           },
           builder: (context, state) {
+            print(state);
             if (state is InboxSuccessState) {
               return QuestionsListWidget(list: state.list);
             } else if (state is InboxEmpty) {
               return const InboxEmptyWidget();
-              //return const QuestionsListWidget(list: []);
+            } else if (state is SessionEndState) {
+              return const SessionEndWidget();
             } else if (state is InboxErrorState) {
               return Container();
             } else if (state is InboxLoading) {

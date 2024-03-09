@@ -85,8 +85,10 @@ class AppStrings {
   static const done = "DONE";
   static const error = "ERROR";
   static const okay = "OKAY";
+  static const goToLogin = "Go to login";
+
   static const errorSession =
-      "Your sessin has been expired. please login again.";
+      "Your sessin has been expired. please login again to proceed further.";
   static const errUnknown =
       "We couldn't process further in this app. Please try again later.";
 

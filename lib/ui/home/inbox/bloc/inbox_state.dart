@@ -38,6 +38,8 @@ class InboxSuccessState extends InboxState {
   List<Object> get props => [list];
 }
 
+final class SessionEndState extends InboxState {}
+
 class AnswerScreenState extends InboxState {
   final Question question;
   final bool yesnoAnswer;

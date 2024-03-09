@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/question.dart';
+import 'package:pollstar/data/models/questions_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
@@ -25,13 +26,21 @@ class InboxBloc extends Bloc<InboxEvent, InboxState> {
     String last = "1709317800000";
 
     emit(const InboxLoading());
-    List<Question>? data = await _repository.getInboxQuestions(
+    QuestionsResponse? data = await _repository.getInboxQuestions(
         session: session, state: state, last: last);
 
-    if (data != null && data.isNotEmpty) {
-      emit(InboxSuccessState(list: data));
-    } else if (data != null && data.isEmpty) {
+    if (data != null &&
+        data.state == 1 &&
+        data.questions != null &&
+        data.questions!.isNotEmpty) {
+      emit(InboxSuccessState(list: data.questions!));
+    } else if (data != null &&
+        data.state == 1 &&
+        data.questions != null &&
+        data.questions!.isEmpty) {
       emit(InboxEmpty());
+    } else if (data != null && data.state == 0) {
+      emit(SessionEndState());
     } else {
       emit(const InboxErrorState(error: AppStrings.errorApiUnknown));
     }
