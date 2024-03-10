@@ -141,6 +141,21 @@ class PollStarRepository {
     }
   }
 
+  Future<ApiResponse?> questionsQueued(
+      {required String user, required String id}) async {
+    try {
+      final response = await _api.questionsQueued(user, id);
+      if (response.statusCode == HttpStatus.ok) {
+        ApiResponse data = ApiResponse.fromJson(response.data);
+        return data;
+      } else {
+        return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
   Future<ApiResponse?> reportProblem(
       {required String userId,
       required String stateId,

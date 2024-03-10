@@ -209,7 +209,7 @@ class AppUtils {
       if (value != null) {
         if (question.questionType == QuestionType.yesno) {
           context.read<InboxBloc>().add(AnswerInboxQuestion(
-              id: question.id?.toString() ?? "",
+              id: question.sId?.toString() ?? "",
               answer: yesnoAnswer ? "1" : "2"));
         } else if (question.questionType == QuestionType.number) {
           AppUtils().showAnswerDialogForNumber(context,
@@ -234,7 +234,7 @@ class AppUtils {
         }).then((value) {
       if (value != null) {
         context.read<InboxBloc>().add(AnswerInboxQuestion(
-            id: question.id?.toString() ?? "", answer: answer));
+            id: question.sId?.toString() ?? "", answer: answer));
       }
     });
   }

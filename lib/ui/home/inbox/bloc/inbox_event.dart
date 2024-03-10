@@ -31,3 +31,11 @@ class AnswerInboxQuestion extends InboxEvent {
   @override
   List<Object> get props => [id, answer];
 }
+
+class UpdateQuestionsQueued extends InboxEvent {
+  final String id;
+  const UpdateQuestionsQueued({required this.id});
+
+  @override
+  List<Object> get props => [id];
+}

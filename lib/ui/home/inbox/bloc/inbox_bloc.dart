@@ -17,6 +17,7 @@ class InboxBloc extends Bloc<InboxEvent, InboxState> {
     on<GetInboxQuestions>(_getInboxQuestions);
     on<OpenAnswerScreen>(_openAnswerDialog);
     on<AnswerInboxQuestion>(_answerInboxQuestions);
+    on<UpdateQuestionsQueued>(_updateQuestionsQueued);
   }
 
   Future<void> _getInboxQuestions(GetInboxQuestions event, emit) async {
@@ -66,6 +67,17 @@ class InboxBloc extends Bloc<InboxEvent, InboxState> {
       emit(InboxErrorState(error: data.message ?? AppStrings.errorSession));
     } else {
       emit(const InboxErrorState(error: AppStrings.errorSession));
+    }
+  }
+
+  Future<void> _updateQuestionsQueued(UpdateQuestionsQueued event, emit) async {
+    String user = getIt<AppConstants>().userId;
+
+    ApiResponse? data =
+        await _repository.questionsQueued(user: user, id: event.id);
+
+    if (data != null && data.state == 1) {
+      emit(const UpdatedQuestionsQueued());
     }
   }
 }

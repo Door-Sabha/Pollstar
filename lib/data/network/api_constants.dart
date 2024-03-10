@@ -21,6 +21,7 @@ class APIConstants {
   static const String inboxQuestionList = 'questions/list';
   static const String outboxQuestionList = 'questions/list';
   static const String updateAnswer = 'questions/update_answer';
+  static const String questionsQueued = 'questions/queued';
 
   static const String reportProblem = 'users/report_problem';
 }

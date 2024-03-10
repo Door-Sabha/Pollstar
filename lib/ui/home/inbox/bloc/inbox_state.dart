@@ -56,3 +56,10 @@ class InboxAnswerSuccessState extends InboxState {
   @override
   List<Object> get props => [];
 }
+
+class UpdatedQuestionsQueued extends InboxState {
+  const UpdatedQuestionsQueued();
+
+  @override
+  List<Object> get props => [];
+}
