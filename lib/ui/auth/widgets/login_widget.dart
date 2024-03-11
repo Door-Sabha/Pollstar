@@ -33,6 +33,7 @@ class LoginWidget extends StatelessWidget {
   }
 
   Widget _logoWidget() {
+    print("going to call");
     return const Flexible(
       flex: 3,
       child: MyImage(
@@ -90,7 +91,7 @@ class LoginWidget extends StatelessWidget {
                   required isFocused,
                   required maxLength}) =>
               Container(),
-          keyboardType: TextInputType.phone,
+          keyboardType: TextInputType.number,
           decoration: const InputDecoration(
             labelText: AppStrings.loginHint,
           ),

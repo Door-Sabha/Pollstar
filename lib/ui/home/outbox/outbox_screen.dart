@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
-import 'package:pollstar/ui/home/outbox/bloc/outbox_bloc.dart';
 import 'package:pollstar/ui/home/outbox/widgets/outbox_empty_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -21,31 +21,33 @@ class _OutboxScreenState extends State<OutboxScreen>
   Widget build(BuildContext context) {
     super.build(context);
     return BlocProvider(
-      create: (context) => OutboxBloc(
+      create: (context) => QuestionListBloc(
         RepositoryProvider.of<PollStarRepository>(context),
-      )..add(const GetOutboxQuestions()),
+      )..add(const GetQuestionsList()),
       child: RefreshIndicator(
         displacement: 32,
         backgroundColor: AppColors.greenColor,
         color: Colors.white,
         triggerMode: RefreshIndicatorTriggerMode.onEdge,
         onRefresh: () => _refreshData(context),
-        child: BlocConsumer<OutboxBloc, OutboxState>(
+        child: BlocConsumer<QuestionListBloc, QuestionListState>(
           listener: (context, state) {
-            if (state is OutboxLoading) {
+            print("Outbox listener state: $state");
+            if (state is QuestionListLoading) {
               loadingOverlay.show(context);
             } else {
               loadingOverlay.hide();
             }
           },
           builder: (context, state) {
-            if (state is OutboxSuccessState) {
+            print("Outbox builder state: $state");
+            if (state is OutboxListSuccessState) {
               return QuestionsListWidget(list: state.list, isInbox: false);
-            } else if (state is OutboxEmpty) {
+            } else if (state is QuestionListEmpty) {
               return const OutboxEmptyWidget();
-            } else if (state is OutboxErrorState) {
+            } else if (state is QuestionListErrorState) {
               return Container();
-            } else if (state is OutboxLoading) {
+            } else if (state is QuestionListLoading) {
               return const Center(
                 child: CircularProgressIndicator(
                   valueColor: AlwaysStoppedAnimation(AppColors.orangeColor),
@@ -62,7 +64,7 @@ class _OutboxScreenState extends State<OutboxScreen>
   }
 
   Future _refreshData(BuildContext context) async {
-    context.read<OutboxBloc>().add(const GetOutboxQuestions());
+    context.read<QuestionListBloc>().add(const GetQuestionsList());
   }
 
   @override

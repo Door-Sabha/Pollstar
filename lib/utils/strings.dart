@@ -14,6 +14,8 @@ class AppStrings {
 
   static const int resendOtpTime = 19;
 
+  static const hiveBox = 'answers_box';
+
   /// Login Screen
   static const loginTitle = "Sign in";
   static const loginHint = "Registered mobile number";
@@ -94,4 +96,9 @@ class AppStrings {
 
   static const errorApiUnknown =
       "We couldn't able to process right now. Please try again later.";
+
+  /// SecureStorage
+  static const ssmSession = "session";
+  static const ssmStateId = "stateId";
+  static const ssmUserId = "userId";
 }

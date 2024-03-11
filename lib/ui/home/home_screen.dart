@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/widgets/appbar_widget.dart';
 import 'package:pollstar/ui/home/widgets/drawer_widget.dart';
@@ -19,10 +20,19 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
 
-    return BlocProvider(
-      create: (context) => UserInfoBloc(
-        RepositoryProvider.of<PollStarRepository>(context),
-      )..add(const UpdateFcmToken()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => UserInfoBloc(
+            RepositoryProvider.of<PollStarRepository>(context),
+          )..add(const UpdateFcmToken()),
+        ),
+        BlocProvider(
+          create: (context) => QuestionListBloc(
+            RepositoryProvider.of<PollStarRepository>(context),
+          ),
+        ),
+      ],
       child: BlocListener<UserInfoBloc, UserInfoState>(
         listener: (context, state) {
           if (state is UserInfoSuccess) {

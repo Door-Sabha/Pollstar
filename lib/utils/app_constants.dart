@@ -12,6 +12,7 @@ class AppConstants {
   late String _userId;
   late String _stateId;
   late String _fcmToken;
+  int? _lastRefreshTime;
 
   late String _appName;
   late String _packageName;
@@ -50,6 +51,7 @@ class AppConstants {
     _userId = "";
     _stateId = "";
     _fcmToken = "";
+    _lastRefreshTime = null;
   }
 
   get session => _session;
@@ -63,6 +65,10 @@ class AppConstants {
 
   get fcmToken => _fcmToken;
   set fcmToken(value) => _fcmToken = value;
+
+  get lastRefreshTime =>
+      _lastRefreshTime ?? DateTime.now().millisecondsSinceEpoch;
+  set lastRefreshTime(value) => _lastRefreshTime = value;
 
   get appName => _appName;
   get packageName => _packageName;

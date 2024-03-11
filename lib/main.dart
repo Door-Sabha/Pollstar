@@ -3,18 +3,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/answer.dart';
+import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/firebase_options.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/ui/help/bloc/help_bloc.dart';
-import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
-import 'package:pollstar/ui/home/outbox/bloc/outbox_bloc.dart';
+import 'package:pollstar/ui/home/home_screen.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -25,6 +29,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   SystemChrome.setSystemUIOverlayStyle(AppStyle().systemUiOverlayStyle);
 
   await SystemChrome.setPreferredOrientations([
@@ -63,17 +68,12 @@ class MyApp extends StatelessWidget {
             ),
           ),
           BlocProvider(
+            create: (context) => QuestionListBloc(
+              RepositoryProvider.of<PollStarRepository>(context),
+            ),
+          ),
+          BlocProvider(
             create: (context) => HelpBloc(
-              RepositoryProvider.of<PollStarRepository>(context),
-            ),
-          ),
-          BlocProvider(
-            create: (context) => InboxBloc(
-              RepositoryProvider.of<PollStarRepository>(context),
-            ),
-          ),
-          BlocProvider(
-            create: (context) => OutboxBloc(
               RepositoryProvider.of<PollStarRepository>(context),
             ),
           ),

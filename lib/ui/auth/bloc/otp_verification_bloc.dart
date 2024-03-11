@@ -4,6 +4,7 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
 part 'otp_verification_event.dart';
@@ -31,6 +32,8 @@ class OtpVerificationBloc
           await _repository.verifyOtp(phone: phone, otp: event.otp);
       if (response != null && response.state == 1) {
         getIt<AppConstants>().session = response.session;
+        getIt<SecureStorageManager>()
+            .updateValue(AppStrings.ssmSession, response.session);
         emit(OtpVerificationSuccessState(data: response));
       } else if (response != null && response.state == 0) {
         emit(OtpVerificationInitial());

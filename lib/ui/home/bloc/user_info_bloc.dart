@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
@@ -58,7 +59,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
   }
 
   Future<void> _updateFcmToken(UpdateFcmToken event, emit) async {
-    final fcmToken = getIt<AppConstants>().fcmToken;
+    final fcmToken = await FirebaseMessaging.instance.getToken();
     String userId = getIt<AppConstants>().userId;
 
     ApiResponse? data =

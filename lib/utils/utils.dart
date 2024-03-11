@@ -6,11 +6,12 @@ import 'package:intl/intl.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
-import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/widgets/answer_dialogs.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/extensions.dart';
+import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -84,6 +85,7 @@ class AppUtils {
   void clearData() {
     getIt<AppConstants>().clear();
     getIt<SecureStorageManager>().deleteAll();
+    getIt<HiveManager>().deleteAll();
   }
 
   void hideKeyboard() {
@@ -113,15 +115,26 @@ class AppUtils {
 
   void _handleError(String msg) {}
 
+  DateTime getDateTimeFromString(String datetime) {
+    return DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(datetime, true);
+  }
+
+  int getMillisecondFromDateString(String datetime) {
+    return DateFormat('yyyy-MM-ddThh:mm:ssZ')
+        .parse(datetime, true)
+        .millisecondsSinceEpoch;
+  }
+
   String getTimeFromDate(String? date) {
     if (date.isNullOrEmpty()) return "";
-    final DateFormat dateFormat = DateFormat('h:mm a');
-    var dateTime = DateFormat('yyyy-MM-ddThh:mm:ss').parse(date!);
+    //final DateFormat dateFormat = DateFormat('h:mm a');
+    final DateFormat dateFormat = DateFormat('HH:mm');
+    var dateTime = DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(date!, true);
     return dateFormat.format(dateTime).toLowerCase();
   }
 
   String getDateFromMilliseconds(int milliSeconds) {
-    final DateFormat dateFormat = DateFormat('dd-MM-yyyy hh:mm:ss');
+    final DateFormat dateFormat = DateFormat('dd-MM-yyyy hh:mm:ssZ');
     return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(milliSeconds));
   }
 
@@ -208,7 +221,7 @@ class AppUtils {
         }).then((value) {
       if (value != null) {
         if (question.questionType == QuestionType.yesno) {
-          context.read<InboxBloc>().add(AnswerInboxQuestion(
+          context.read<QuestionListBloc>().add(AnswerQuestion(
               id: question.sId?.toString() ?? "",
               answer: yesnoAnswer ? "1" : "2"));
         } else if (question.questionType == QuestionType.number) {
@@ -233,8 +246,8 @@ class AppUtils {
           );
         }).then((value) {
       if (value != null) {
-        context.read<InboxBloc>().add(AnswerInboxQuestion(
-            id: question.sId?.toString() ?? "", answer: answer));
+        context.read<QuestionListBloc>().add(
+            AnswerQuestion(id: question.sId?.toString() ?? "", answer: answer));
       }
     });
   }

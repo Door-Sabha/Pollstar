@@ -190,6 +190,26 @@ class PollStarApi {
     }
   }
 
+  Future<Response> questionsTriggered(String user, String id) async {
+    var data = {
+      "user": user,
+      "id": id,
+    };
+
+    try {
+      final Response response = await dioClient.post(
+        APIConstants.questionsTriggered,
+        data: data,
+      );
+      return response;
+    } catch (e) {
+      return Response(
+          requestOptions: RequestOptions(path: ''),
+          statusCode: 401,
+          statusMessage: AppStrings.errorApiUnknown);
+    }
+  }
+
   Future<Response> reportProblem(
       String userId, String stateId, String type, String message) async {
     var data = {

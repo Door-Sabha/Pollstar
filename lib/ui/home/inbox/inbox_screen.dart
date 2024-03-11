@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pollstar/data/repository/pollstar_repository.dart';
-import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/session_end_widget.dart';
@@ -21,77 +20,68 @@ class _InboxScreenState extends State<InboxScreen>
   final LoadingOverlay loadingOverlay = LoadingOverlay();
 
   @override
+  void initState() {
+    super.initState();
+    context.read<QuestionListBloc>().add(const GetQuestionsList());
+  }
+
+  @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocProvider(
-      create: (context) => InboxBloc(
-        RepositoryProvider.of<PollStarRepository>(context),
-      )..add(const GetInboxQuestions()),
-      child: RefreshIndicator(
-        displacement: 32,
-        backgroundColor: AppColors.greenColor,
-        color: Colors.white,
-        triggerMode: RefreshIndicatorTriggerMode.onEdge,
-        onRefresh: () => _refreshData(context),
-        child: BlocConsumer<InboxBloc, InboxState>(
-          listener: (BuildContext context, InboxState state) {
-            print("Lis $state");
-            if (state is InboxLoading) {
-              loadingOverlay.show(context);
-            } else if (state is AnswerScreenState) {
-              loadingOverlay.hide();
-              AppUtils().showAnswerDialog(context,
-                  question: state.question, yesnoAnswer: state.yesnoAnswer);
-              // AppUtils().pageRouteDialog(
-              //   context,
-              //   AnswerConfirmationScreen(
-              //     question: state.question,
-              //     yesnoAnswer: state.yesnoAnswer,
-              //   ),
-              //);
-            } else if (state is InboxAnswerSuccessState) {
-              loadingOverlay.hide();
-              context.read<InboxBloc>().add(const GetInboxQuestions());
-            } else if (state is InboxErrorState) {
-              loadingOverlay.hide();
-              AppUtils().showAlertDialog(context, content: state.error);
-            } else {
-              loadingOverlay.hide();
-            }
-          },
-          buildWhen: (previous, current) {
-            return current is InboxSuccessState ||
-                current is InboxEmpty ||
-                current is SessionEndState;
-          },
-          builder: (context, state) {
-            print(state);
-            if (state is InboxSuccessState) {
-              return QuestionsListWidget(list: state.list);
-            } else if (state is InboxEmpty) {
-              return const InboxEmptyWidget();
-            } else if (state is SessionEndState) {
-              return const SessionEndWidget();
-            } else if (state is InboxErrorState) {
-              return Container();
-            } else if (state is InboxLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(AppColors.orangeColor),
-                  backgroundColor: AppColors.greenColor,
-                  strokeCap: StrokeCap.round,
-                ),
-              );
-            }
-            return Container();
-          },
-        ),
+    return RefreshIndicator(
+      displacement: 32,
+      backgroundColor: AppColors.greenColor,
+      color: Colors.white,
+      triggerMode: RefreshIndicatorTriggerMode.onEdge,
+      onRefresh: () => _refreshData(context),
+      child: BlocConsumer<QuestionListBloc, QuestionListState>(
+        listener: (BuildContext context, QuestionListState state) {
+          print("Inbox listener state: $state");
+          if (state is QuestionListLoading) {
+            loadingOverlay.show(context);
+          } else if (state is AnswerScreenState) {
+            loadingOverlay.hide();
+            AppUtils().showAnswerDialog(context,
+                question: state.question, yesnoAnswer: state.yesnoAnswer);
+            // AppUtils().pageRouteDialog(
+            //   context,
+            //   AnswerConfirmationScreen(
+            //     question: state.question,
+            //     yesnoAnswer: state.yesnoAnswer,
+            //   ),
+            //);
+          } else if (state is AnswerSuccessState) {
+            loadingOverlay.hide();
+            context.read<QuestionListBloc>().add(const GetQuestionsList());
+          } else if (state is QuestionListErrorState) {
+            loadingOverlay.hide();
+            AppUtils().showAlertDialog(context, content: state.error);
+          } else {
+            loadingOverlay.hide();
+          }
+        },
+        buildWhen: (previous, current) {
+          return current is InboxListSuccessState ||
+              current is QuestionListEmpty ||
+              current is SessionEndState;
+        },
+        builder: (context, state) {
+          print("Inbox builder state: $state");
+          if (state is InboxListSuccessState) {
+            return QuestionsListWidget(list: state.list);
+          } else if (state is QuestionListEmpty) {
+            return const InboxEmptyWidget();
+          } else if (state is SessionEndState) {
+            return const SessionEndWidget();
+          }
+          return const InboxEmptyWidget();
+        },
       ),
     );
   }
 
   Future _refreshData(BuildContext context) async {
-    context.read<InboxBloc>().add(const GetInboxQuestions());
+    context.read<QuestionListBloc>().add(const GetQuestionsList());
   }
 
   @override

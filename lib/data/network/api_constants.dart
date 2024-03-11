@@ -22,6 +22,7 @@ class APIConstants {
   static const String outboxQuestionList = 'questions/list';
   static const String updateAnswer = 'questions/update_answer';
   static const String questionsQueued = 'questions/queued';
+  static const String questionsTriggered = 'questions/triggered';
 
   static const String reportProblem = 'users/report_problem';
 }

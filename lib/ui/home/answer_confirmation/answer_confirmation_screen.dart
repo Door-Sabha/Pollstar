@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/ui/home/answer_confirmation/bloc/answer_confirmation_bloc.dart';
-import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/widgets/buttons.dart';
 import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
@@ -196,8 +196,8 @@ class AnswerConfirmationScreen extends StatelessWidget {
       child: MyElevatedButton(
         onPressed: () {
           Navigator.of(context).pop();
-          context.read<InboxBloc>().add(
-                AnswerInboxQuestion(
+          context.read<QuestionListBloc>().add(
+                AnswerQuestion(
                     id: question.sId?.toString() ?? "",
                     answer: yesnoAnswer ? "1" : "2"),
               );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/models/question.dart';
-import 'package:pollstar/ui/home/inbox/bloc/inbox_bloc.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/answer_cell.dart';
 import 'package:pollstar/ui/widgets/buttons.dart';
 import 'package:pollstar/ui/widgets/images.dart';
@@ -96,8 +97,8 @@ class QuestionWidget extends StatelessWidget {
         text: AppStrings.reply,
         icon: Icons.reply_rounded,
         onPressed: () => context
-            .read<InboxBloc>()
-            .add(OpenAnswerScreen(question: question, yesnoAnswer: false)),
+            .read<QuestionListBloc>()
+            .add(OpenAnswerDialog(question: question, yesnoAnswer: false)),
       ),
     );
   }
@@ -113,8 +114,8 @@ class QuestionWidget extends StatelessWidget {
             isFullWidth: false,
             text: AppStrings.yes,
             onPressed: () => context
-                .read<InboxBloc>()
-                .add(OpenAnswerScreen(question: question, yesnoAnswer: true)),
+                .read<QuestionListBloc>()
+                .add(OpenAnswerDialog(question: question, yesnoAnswer: true)),
           ),
           const SizedBox(width: 16),
           MyElevatedButton(
@@ -122,8 +123,8 @@ class QuestionWidget extends StatelessWidget {
             text: AppStrings.no,
             backgroundColor: AppColors.redColor,
             onPressed: () => context
-                .read<InboxBloc>()
-                .add(OpenAnswerScreen(question: question, yesnoAnswer: false)),
+                .read<QuestionListBloc>()
+                .add(OpenAnswerDialog(question: question, yesnoAnswer: false)),
           ),
         ],
       ),

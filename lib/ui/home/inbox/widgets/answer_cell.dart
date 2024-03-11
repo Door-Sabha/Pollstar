@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/answer.dart';
 import 'package:pollstar/data/models/question.dart';
+import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -7,8 +10,9 @@ import 'package:pollstar/utils/utils.dart';
 
 class AnswerWidget extends StatelessWidget {
   final Question question;
-  const AnswerWidget({super.key, required this.question});
-  final hasAnswer = false;
+  final HiveManager _hive;
+  AnswerWidget({super.key, required this.question})
+      : _hive = getIt<HiveManager>();
 
   @override
   Widget build(BuildContext context) {
@@ -26,6 +30,7 @@ class AnswerWidget extends StatelessWidget {
   }
 
   Widget _logoWidget() {
+    bool hasAnswer = _hive.containsAnswer(question.sId);
     const double radius = 24;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -53,6 +58,8 @@ class AnswerWidget extends StatelessWidget {
   }
 
   Widget _answerWidget() {
+    bool hasAnswer = _hive.containsAnswer(question.sId);
+    Answer? answer = _hive.getAnswers(question.sId);
     return Flexible(
       child: Container(
         decoration: AppStyle.answerBox.copyWith(
@@ -63,7 +70,9 @@ class AnswerWidget extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         margin: const EdgeInsets.only(right: 16),
         child: Text(
-          AppStrings.noResponseSent,
+          (hasAnswer && answer != null)
+              ? answer.answer
+              : AppStrings.noResponseSent,
           style: AppStyle.textStyleMedium.copyWith(
             color: AppColors.textColorDark,
             fontSize: 16,
