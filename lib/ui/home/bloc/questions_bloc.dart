@@ -20,20 +20,20 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   QuestionListBloc(this._repository)
       : _hive = getIt<HiveManager>(),
         super(QuestionListInitial()) {
-    on<GetQuestionsList>(_getQuestions);
+    on<GetQuestionsList>(_getQuestionsList);
     on<OpenAnswerDialog>(_openAnswerDialog);
     on<AnswerQuestion>(_answerInboxQuestions);
     on<UpdateQuestionsQueued>(_updateQuestionsQueued);
     on<UpdateQuestionsTriggered>(_updateQuestionsTriggered);
   }
 
-  Future<void> _getQuestions(GetQuestionsList event, emit) async {
+  Future<void> _getQuestionsList(GetQuestionsList event, emit) async {
     String session = getIt<AppConstants>().session;
     String state = getIt<AppConstants>().stateId;
     String last = getIt<AppConstants>().lastRefreshTime.toString();
 
     emit(const QuestionListLoading());
-    QuestionsResponse? data = await _repository.getInboxQuestions(
+    QuestionsResponse? data = await _repository.getQuestionsList(
         session: session, state: state, last: last);
 
     if (data != null &&

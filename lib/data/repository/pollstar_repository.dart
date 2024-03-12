@@ -86,7 +86,7 @@ class PollStarRepository {
     }
   }
 
-  Future<QuestionsResponse?> getInboxQuestions(
+  Future<QuestionsResponse?> getQuestionsList(
       {required String session,
       required String state,
       required String last}) async {
@@ -95,27 +95,6 @@ class PollStarRepository {
       if (response.statusCode == HttpStatus.ok) {
         QuestionsResponse data = QuestionsResponse.fromJson(response.data);
         return data;
-      } else {
-        return null;
-      }
-    } catch (e) {
-      return null;
-    }
-  }
-
-  Future<List<Question>?> getOutboxQuestions(
-      {required String session,
-      required String state,
-      required String last}) async {
-    try {
-      final response = await _api.getOutboxQuestions(session, state, last);
-      if (response.statusCode == HttpStatus.ok) {
-        if (response.data["state"] == 1) {
-          var data = response.data["updates"] as List;
-          return data.map((e) => Question.fromJson(e)).toList();
-        } else {
-          return null;
-        }
       } else {
         return null;
       }
