@@ -18,6 +18,9 @@ class FCMManager {
       provisional: false,
       sound: true,
     );
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.setForegroundNotificationPresentationOptions(
+        alert: true, badge: true, sound: true);
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
     final fcmToken = await FirebaseMessaging.instance.getToken();
     getIt<AppConstants>().fcmToken = fcmToken;

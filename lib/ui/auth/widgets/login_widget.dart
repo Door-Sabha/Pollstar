@@ -33,7 +33,6 @@ class LoginWidget extends StatelessWidget {
   }
 
   Widget _logoWidget() {
-    print("going to call");
     return const Flexible(
       flex: 3,
       child: MyImage(
