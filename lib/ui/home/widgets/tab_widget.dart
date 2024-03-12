@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/inbox_screen.dart';
 import 'package:pollstar/ui/home/outbox/outbox_screen.dart';
+import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -18,8 +22,23 @@ class _TabWidgetState extends State<TabWidget>
 
   @override
   void initState() {
-    _tabController = TabController(length: 2, vsync: this);
     super.initState();
+    _tabController = TabController(length: 2, vsync: this);
+    _tabController.addListener(() {
+      _refreshQuestionsList();
+    });
+  }
+
+  _refreshQuestionsList() {
+    if (_tabController.index == 0) {
+      final diff = DateTime.now()
+          .difference(DateTime.fromMillisecondsSinceEpoch(
+              getIt<AppConstants>().lastRefreshTime))
+          .inSeconds;
+      if (diff >= 10) {
+        context.read<QuestionListBloc>().add(const GetQuestionsList());
+      }
+    }
   }
 
   @override
@@ -37,17 +56,11 @@ class _TabWidgetState extends State<TabWidget>
           children: [
             TabBar(
               tabs: const [
-                SizedBox(
-                  height: 56,
-                  child: Tab(
-                    text: AppStrings.inbox,
-                  ),
+                Tab(
+                  text: AppStrings.inbox,
                 ),
-                SizedBox(
-                  height: 56,
-                  child: Tab(
-                    text: AppStrings.outbox,
-                  ),
+                Tab(
+                  text: AppStrings.outbox,
                 ),
               ],
               controller: _tabController,

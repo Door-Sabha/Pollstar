@@ -62,8 +62,8 @@ class AppStyle {
   static const bgGradient = BoxDecoration(
     gradient: LinearGradient(
       colors: [
-        AppColors.orangeColor,
         AppColors.greenColor,
+        AppColors.orangeColor,
       ],
       begin: Alignment.topRight,
       end: Alignment.bottomLeft,

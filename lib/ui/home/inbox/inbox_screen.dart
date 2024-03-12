@@ -16,13 +16,20 @@ class InboxScreen extends StatefulWidget {
 }
 
 class _InboxScreenState extends State<InboxScreen>
-    with AutomaticKeepAliveClientMixin {
+    with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final LoadingOverlay loadingOverlay = LoadingOverlay();
 
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     context.read<QuestionListBloc>().add(const GetQuestionsList());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
   }
 
   @override
@@ -36,20 +43,12 @@ class _InboxScreenState extends State<InboxScreen>
       onRefresh: () => _refreshData(context),
       child: BlocConsumer<QuestionListBloc, QuestionListState>(
         listener: (BuildContext context, QuestionListState state) {
-          print("Inbox listener state: $state");
           if (state is QuestionListLoading) {
             loadingOverlay.show(context);
           } else if (state is AnswerScreenState) {
             loadingOverlay.hide();
             AppUtils().showAnswerDialog(context,
                 question: state.question, yesnoAnswer: state.yesnoAnswer);
-            // AppUtils().pageRouteDialog(
-            //   context,
-            //   AnswerConfirmationScreen(
-            //     question: state.question,
-            //     yesnoAnswer: state.yesnoAnswer,
-            //   ),
-            //);
           } else if (state is AnswerSuccessState) {
             loadingOverlay.hide();
             context.read<QuestionListBloc>().add(const GetQuestionsList());
@@ -66,7 +65,7 @@ class _InboxScreenState extends State<InboxScreen>
               current is SessionEndState;
         },
         builder: (context, state) {
-          print("Inbox builder state: $state");
+          print(state);
           if (state is InboxListSuccessState) {
             return QuestionsListWidget(list: state.list);
           } else if (state is QuestionListEmpty) {
@@ -86,4 +85,13 @@ class _InboxScreenState extends State<InboxScreen>
 
   @override
   bool get wantKeepAlive => true;
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed &&
+        ModalRoute.of(context) != null &&
+        ModalRoute.of(context)!.isCurrent) {
+      context.read<QuestionListBloc>().add(const GetQuestionsList());
+    }
+  }
 }

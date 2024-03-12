@@ -20,46 +20,44 @@ class _OutboxScreenState extends State<OutboxScreen>
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return BlocProvider(
-      create: (context) => QuestionListBloc(
-        RepositoryProvider.of<PollStarRepository>(context),
-      )..add(const GetQuestionsList()),
-      child: RefreshIndicator(
-        displacement: 32,
-        backgroundColor: AppColors.greenColor,
-        color: Colors.white,
-        triggerMode: RefreshIndicatorTriggerMode.onEdge,
-        onRefresh: () => _refreshData(context),
-        child: BlocConsumer<QuestionListBloc, QuestionListState>(
-          listener: (context, state) {
-            print("Outbox listener state: $state");
-            if (state is QuestionListLoading) {
-              loadingOverlay.show(context);
-            } else {
-              loadingOverlay.hide();
-            }
-          },
-          builder: (context, state) {
-            print("Outbox builder state: $state");
-
-            if (state is OutboxListSuccessState) {
-              return QuestionsListWidget(list: state.list, isInbox: false);
-            } else if (state is QuestionListEmpty) {
-              return const OutboxEmptyWidget();
-            } else if (state is QuestionListErrorState) {
-              return Container();
-            } else if (state is QuestionListLoading) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  valueColor: AlwaysStoppedAnimation(AppColors.orangeColor),
-                  backgroundColor: AppColors.greenColor,
-                  strokeCap: StrokeCap.round,
-                ),
-              );
-            }
+    return RefreshIndicator(
+      displacement: 32,
+      backgroundColor: AppColors.greenColor,
+      color: Colors.white,
+      triggerMode: RefreshIndicatorTriggerMode.onEdge,
+      onRefresh: () => _refreshData(context),
+      child: BlocConsumer<QuestionListBloc, QuestionListState>(
+        listener: (context, state) {
+          if (state is QuestionListLoading) {
+            loadingOverlay.show(context);
+          } else {
+            loadingOverlay.hide();
+          }
+        },
+        buildWhen: (previous, current) {
+          return current is OutboxListSuccessState ||
+              current is QuestionListEmpty ||
+              current is QuestionListErrorState;
+        },
+        builder: (context, state) {
+          print(state);
+          if (state is OutboxListSuccessState) {
+            return QuestionsListWidget(list: state.list, isInbox: false);
+          } else if (state is QuestionListEmpty) {
+            return const OutboxEmptyWidget();
+          } else if (state is QuestionListErrorState) {
             return Container();
-          },
-        ),
+          } else if (state is QuestionListLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(AppColors.orangeColor),
+                backgroundColor: AppColors.greenColor,
+                strokeCap: StrokeCap.round,
+              ),
+            );
+          }
+          return Container();
+        },
       ),
     );
   }

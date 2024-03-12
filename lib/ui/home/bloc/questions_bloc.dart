@@ -45,27 +45,15 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
           DateTime.now().millisecondsSinceEpoch;
 
       if (inboxList.isNotEmpty) {
-        emit(QuestionListInitial());
         emit(InboxListSuccessState(list: inboxList));
       } else {
         emit(QuestionListEmpty());
       }
       if (outboxList.isNotEmpty) {
-        emit(QuestionListInitial());
         emit(OutboxListSuccessState(list: outboxList));
       } else {
         emit(QuestionListEmpty());
       }
-      print("Answer start");
-      for (var e in _hive.getAnswersList()) {
-        print("${e.questionId} - ${e.answer}");
-      }
-      print("Answer end");
-
-      // print("Inbox Length: ${inboxList.length}");
-      print("Outbox Length: ${outboxList.length}");
-      //print("Queue Length: ${queue.length}");
-
       _handleQueuedAndTriggered(queue, inboxList);
     } else if (data != null &&
         data.state == 1 &&
@@ -93,9 +81,7 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
           q.questionTime!.expiry == null) {
         continue;
       }
-      // print(now);
-      // print(AppUtils().getMillisecondFromDateString(q.questionTime!.trigger!));
-      // print(AppUtils().getMillisecondFromDateString(q.questionTime!.expiry!));
+
       if (now >=
               AppUtils()
                   .getMillisecondFromDateString(q.questionTime!.trigger!) &&

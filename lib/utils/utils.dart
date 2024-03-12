@@ -129,7 +129,7 @@ class AppUtils {
   String getTimeFromDate(String? date) {
     if (date.isNullOrEmpty()) return "";
     //final DateFormat dateFormat = DateFormat('h:mm a');
-    final DateFormat dateFormat = DateFormat('HH:mm');
+    final DateFormat dateFormat = DateFormat('hh:mm a');
     var dateTime =
         DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(date!, true).toLocal();
     return dateFormat.format(dateTime);
