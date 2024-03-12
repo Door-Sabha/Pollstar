@@ -116,12 +116,13 @@ class AppUtils {
   void _handleError(String msg) {}
 
   DateTime getDateTimeFromString(String datetime) {
-    return DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(datetime, true);
+    return DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(datetime, true).toLocal();
   }
 
   int getMillisecondFromDateString(String datetime) {
     return DateFormat('yyyy-MM-ddThh:mm:ssZ')
         .parse(datetime, true)
+        .toLocal()
         .millisecondsSinceEpoch;
   }
 
@@ -129,8 +130,9 @@ class AppUtils {
     if (date.isNullOrEmpty()) return "";
     //final DateFormat dateFormat = DateFormat('h:mm a');
     final DateFormat dateFormat = DateFormat('HH:mm');
-    var dateTime = DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(date!, true);
-    return dateFormat.format(dateTime).toLowerCase();
+    var dateTime =
+        DateFormat('yyyy-MM-ddThh:mm:ssZ').parse(date!, true).toLocal();
+    return dateFormat.format(dateTime);
   }
 
   String getDateFromMilliseconds(int milliSeconds) {

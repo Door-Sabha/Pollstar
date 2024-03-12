@@ -40,19 +40,33 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         data.state == 1 &&
         data.questions != null &&
         data.questions!.isNotEmpty) {
-      var (inboxList, outboxList) = _filterQuestions(data.questions!);
+      var (inboxList, outboxList, queue) = _filterQuestions(data.questions!);
       getIt<AppConstants>().lastRefreshTime =
           DateTime.now().millisecondsSinceEpoch;
+
       if (inboxList.isNotEmpty) {
+        emit(QuestionListInitial());
         emit(InboxListSuccessState(list: inboxList));
       } else {
         emit(QuestionListEmpty());
       }
       if (outboxList.isNotEmpty) {
+        emit(QuestionListInitial());
         emit(OutboxListSuccessState(list: outboxList));
       } else {
         emit(QuestionListEmpty());
       }
+      print("Answer start");
+      for (var e in _hive.getAnswersList()) {
+        print("${e.questionId} - ${e.answer}");
+      }
+      print("Answer end");
+
+      // print("Inbox Length: ${inboxList.length}");
+      print("Outbox Length: ${outboxList.length}");
+      //print("Queue Length: ${queue.length}");
+
+      _handleQueuedAndTriggered(queue, inboxList);
     } else if (data != null &&
         data.state == 1 &&
         data.questions != null &&
@@ -65,9 +79,11 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
     }
   }
 
-  (List<Question>, List<Question>) _filterQuestions(List<Question> questions) {
+  (List<Question>, List<Question>, List<Question>) _filterQuestions(
+      List<Question> questions) {
     List<Question> inbox = [];
     List<Question> outbox = [];
+    List<Question> queue = [];
 
     var now = DateTime.now().millisecondsSinceEpoch;
 
@@ -85,20 +101,38 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
                   .getMillisecondFromDateString(q.questionTime!.trigger!) &&
           now <=
               AppUtils()
-                  .getMillisecondFromDateString(q.questionTime!.expiry!)) {
+                  .getMillisecondFromDateString(q.questionTime!.expiry!) &&
+          !_hive.containsAnswer(q.sId)) {
         inbox.add(q);
       } else if (now <
               AppUtils()
                   .getMillisecondFromDateString(q.questionTime!.trigger!) &&
           now <
               AppUtils()
-                  .getMillisecondFromDateString(q.questionTime!.expiry!)) {
+                  .getMillisecondFromDateString(q.questionTime!.expiry!) &&
+          !_hive.containsAnswer(q.sId)) {
+        queue.add(q);
       } else {
         outbox.add(q);
       }
     }
 
-    return (inbox, outbox);
+    return (inbox, outbox, queue);
+  }
+
+  _handleQueuedAndTriggered(List<Question> q, List<Question> t) async {
+    String user = getIt<AppConstants>().userId;
+    for (var e in q) {
+      ApiResponse? data =
+          await _repository.questionsQueued(user: user, id: e.sId ?? "");
+      if (data != null && data.state == 1) {}
+    }
+
+    for (var e in t) {
+      ApiResponse? data =
+          await _repository.questionsTriggered(user: user, id: e.sId ?? "");
+      if (data != null && data.state == 1) {}
+    }
   }
 
   Future<void> _openAnswerDialog(OpenAnswerDialog event, emit) async {
@@ -148,7 +182,7 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         await _repository.questionsTriggered(user: user, id: event.id);
 
     if (data != null && data.state == 1) {
-      emit(const UpdatedQuestionsQueued());
+      emit(const UpdatedQuestionsTriggered());
     }
   }
 }

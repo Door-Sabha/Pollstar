@@ -41,6 +41,7 @@ class _OutboxScreenState extends State<OutboxScreen>
           },
           builder: (context, state) {
             print("Outbox builder state: $state");
+
             if (state is OutboxListSuccessState) {
               return QuestionsListWidget(list: state.list, isInbox: false);
             } else if (state is QuestionListEmpty) {

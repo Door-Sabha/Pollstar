@@ -71,7 +71,9 @@ class AnswerWidget extends StatelessWidget {
         margin: const EdgeInsets.only(right: 16),
         child: Text(
           (hasAnswer && answer != null)
-              ? answer.answer
+              ? (question.questionType == QuestionType.yesno)
+                  ? (answer.answer == "1" ? "YES" : "NO")
+                  : answer.answer
               : AppStrings.noResponseSent,
           style: AppStyle.textStyleMedium.copyWith(
             color: AppColors.textColorDark,
