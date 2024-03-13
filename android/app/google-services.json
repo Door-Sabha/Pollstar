@@ -7,9 +7,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:462967904471:android:81531c4d3fbee6ff9eb892",
+        "mobilesdk_app_id": "1:462967904471:android:3de603a3a9884eed9eb892",
         "android_client_info": {
-          "package_name": "com.doorsabha.pollstar"
+          "package_name": "com.doorsabha.pollstar.android"
         }
       },
       "oauth_client": [
