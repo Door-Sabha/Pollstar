@@ -4,7 +4,6 @@ import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/utils.dart';
-import 'package:sprintf/sprintf.dart';
 
 import '../../utils/theme/styles.dart';
 import 'buttons.dart';

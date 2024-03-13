@@ -1,4 +1,4 @@
-package com.dsnl.pollstar
+package com.doorsabha.pollstar
 
 import io.flutter.embedding.android.FlutterActivity
 

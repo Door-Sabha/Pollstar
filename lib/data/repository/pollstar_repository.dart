@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
-import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/data/models/questions_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/network/api/pollstar_api.dart';

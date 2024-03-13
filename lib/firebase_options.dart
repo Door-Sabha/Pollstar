@@ -51,7 +51,7 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBg-G1uEnRSPkhtoCveXAnEJopks5RmwTU',
-    appId: '1:462967904471:android:1d15059d2d8886069eb892',
+    appId: '1:462967904471:android:81531c4d3fbee6ff9eb892',
     messagingSenderId: '462967904471',
     projectId: 'pollstar-ef923',
     storageBucket: 'pollstar-ef923.appspot.com',
@@ -59,10 +59,10 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDZEZxBpi6HDxY8QoJshvn7ehtCayh0Gqg',
-    appId: '1:462967904471:ios:fbfe8fea22f1cd609eb892',
+    appId: '1:462967904471:ios:ab7efed1a919ff9a9eb892',
     messagingSenderId: '462967904471',
     projectId: 'pollstar-ef923',
     storageBucket: 'pollstar-ef923.appspot.com',
-    iosBundleId: 'com.dsnl.pollstar',
+    iosBundleId: 'com.doorsabha.pollstar',
   );
 }
