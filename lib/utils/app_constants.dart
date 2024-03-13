@@ -9,7 +9,7 @@ class AppConstants {
   late DeviceInfoPlugin _deviceInfo;
 
   late String _fcmToken;
-  int? _lastRefreshTime;
+  int _lastRefreshTime = DateTime.now().millisecondsSinceEpoch;
 
   late String _appName;
   late String _packageName;
@@ -45,14 +45,12 @@ class AppConstants {
 
   clear() {
     _fcmToken = "";
-    _lastRefreshTime = null;
   }
 
   get fcmToken => _fcmToken;
   set fcmToken(value) => _fcmToken = value;
 
-  get lastRefreshTime =>
-      _lastRefreshTime ?? DateTime.now().millisecondsSinceEpoch;
+  get lastRefreshTime => _lastRefreshTime;
   set lastRefreshTime(value) => _lastRefreshTime = value;
 
   get appName => _appName;

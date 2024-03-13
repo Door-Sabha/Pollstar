@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -36,7 +38,7 @@ class InboxEmptyWidget extends StatelessWidget {
                 child: Text(
                   sprintf(AppStrings.lastUpdatedToday, [
                     AppUtils().getTimeFromMilliseconds(
-                        DateTime.now().millisecondsSinceEpoch)
+                        getIt<AppConstants>().lastRefreshTime)
                   ]),
                   style: AppStyle.textStyleMedium.copyWith(
                     color: AppColors.textHintColor,

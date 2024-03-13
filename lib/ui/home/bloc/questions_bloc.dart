@@ -46,11 +46,11 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         data.questions != null &&
         data.questions!.isNotEmpty) {
       var (inboxList, outboxList, queue) = _filterQuestions(data.questions!);
-      getIt<AppConstants>().lastRefreshTime =
-          DateTime.now().millisecondsSinceEpoch;
 
       if (inboxList.isNotEmpty) {
         emit(InboxListSuccessState(list: inboxList));
+        getIt<AppConstants>().lastRefreshTime =
+            DateTime.now().millisecondsSinceEpoch;
       } else {
         emit(QuestionListEmpty());
       }

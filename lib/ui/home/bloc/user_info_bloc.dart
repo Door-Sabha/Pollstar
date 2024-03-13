@@ -37,9 +37,9 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
       User? data = await _repository.getUserInfo(session: session);
 
       if (data != null && data.state == 1) {
-        getIt<SecureStorageManager>()
+        await getIt<SecureStorageManager>()
             .updateValue(AppStrings.prefUserId, data.id);
-        getIt<SecureStorageManager>()
+        await getIt<SecureStorageManager>()
             .updateValue(AppStrings.prefStateId, data.stateId);
 
         _hive.updateUser(data);
