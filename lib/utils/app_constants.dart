@@ -8,9 +8,6 @@ class AppConstants {
   late PackageInfo _packageInfo;
   late DeviceInfoPlugin _deviceInfo;
 
-  late String _session;
-  late String _userId;
-  late String _stateId;
   late String _fcmToken;
   int? _lastRefreshTime;
 
@@ -47,21 +44,9 @@ class AppConstants {
   }
 
   clear() {
-    _session = "";
-    _userId = "";
-    _stateId = "";
     _fcmToken = "";
     _lastRefreshTime = null;
   }
-
-  get session => _session;
-  set session(value) => _session = value;
-
-  get userId => _userId;
-  set userId(value) => _userId = value;
-
-  get stateId => _stateId;
-  set stateId(value) => _stateId = value;
 
   get fcmToken => _fcmToken;
   set fcmToken(value) => _fcmToken = value;

@@ -15,7 +15,8 @@ class AppStrings {
 
   static const int resendOtpTime = 19;
 
-  static const hiveBox = 'answers_box';
+  static const hiveBoxAnswers = 'answers_box';
+  static const hiveBoxUser = 'user_box';
 
   /// Login Screen
   static const loginTitle = "Sign in";
@@ -99,7 +100,10 @@ class AppStrings {
       "We couldn't able to process right now. Please try again later.";
 
   /// SecureStorage
-  static const ssmSession = "session";
-  static const ssmStateId = "stateId";
-  static const ssmUserId = "userId";
+  static const prefSession = "session";
+  static const prefStateId = "stateId";
+  static const prefUserId = "userId";
+
+  ///Hive Key
+  static const hivePrefUser = "user";
 }

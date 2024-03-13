@@ -18,6 +18,13 @@ final class QuestionListLoading extends QuestionListState {
   List<Object> get props => [isDialog];
 }
 
+final class AnswerLoading extends QuestionListState {
+  const AnswerLoading();
+
+  @override
+  List<Object> get props => [];
+}
+
 final class QuestionListEmpty extends QuestionListState {}
 
 class QuestionListErrorState extends QuestionListState {

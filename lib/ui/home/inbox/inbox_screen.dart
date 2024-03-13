@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
+import 'package:pollstar/ui/home/inbox/widgets/inbox_loading_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/session_end_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -43,7 +44,7 @@ class _InboxScreenState extends State<InboxScreen>
       onRefresh: () => _refreshData(context),
       child: BlocConsumer<QuestionListBloc, QuestionListState>(
         listener: (BuildContext context, QuestionListState state) {
-          if (state is QuestionListLoading) {
+          if (state is AnswerLoading) {
             loadingOverlay.show(context);
           } else if (state is AnswerScreenState) {
             loadingOverlay.hide();
@@ -62,7 +63,8 @@ class _InboxScreenState extends State<InboxScreen>
         buildWhen: (previous, current) {
           return current is InboxListSuccessState ||
               current is QuestionListEmpty ||
-              current is SessionEndState;
+              current is SessionEndState ||
+              current is QuestionListLoading;
         },
         builder: (context, state) {
           print(state);
@@ -72,6 +74,15 @@ class _InboxScreenState extends State<InboxScreen>
             return const InboxEmptyWidget();
           } else if (state is SessionEndState) {
             return const SessionEndWidget();
+          } else if (state is QuestionListLoading) {
+            return const Center(
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation(AppColors.orangeColor),
+                backgroundColor: AppColors.greenColor,
+                strokeCap: StrokeCap.round,
+              ),
+            );
+            //return const InboxLoadingWidget();
           }
           return const InboxEmptyWidget();
         },

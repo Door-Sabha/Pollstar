@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/firebase_options.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
@@ -12,13 +13,18 @@ import 'package:pollstar/ui/auth/login_screen.dart';
 import 'package:pollstar/ui/help/bloc/help_bloc.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
+import 'package:pollstar/ui/home/home_screen.dart';
+import 'package:pollstar/ui/widgets/splash_widget.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/hive_manager.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 
 void main() async {
+  getIt.registerSingleton(HiveManager());
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
@@ -31,8 +37,7 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
-
-  setupServiceLocator();
+  await setupServiceLocator();
   runApp(const MyApp());
 }
 
@@ -108,7 +113,23 @@ class MyApp extends StatelessWidget {
           navigatorObservers: [
             getIt<AnalyticsManager>().getFirebaseAnalyticsObserver()
           ],
-          home: const LoginScreen(),
+          home: FutureBuilder(
+            future:
+                getIt<SecureStorageManager>().hasValue(AppStrings.prefSession),
+            builder: (context, snapshot) {
+              if (snapshot.hasData && snapshot.data == true) {
+                User? user = getIt<HiveManager>().getUser();
+
+                return (user != null)
+                    ? HomeScreen(user: user)
+                    : const LoginScreen();
+              } else if (snapshot.hasData && snapshot.data == false) {
+                return const LoginScreen();
+              } else {
+                return const SplashWidget();
+              }
+            },
+          ),
         ),
       ),
     );

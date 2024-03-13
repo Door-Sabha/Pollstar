@@ -31,9 +31,8 @@ class OtpVerificationBloc
       ApiResponse? response =
           await _repository.verifyOtp(phone: phone, otp: event.otp);
       if (response != null && response.state == 1) {
-        getIt<AppConstants>().session = response.session;
         getIt<SecureStorageManager>()
-            .updateValue(AppStrings.ssmSession, response.session);
+            .updateValue(AppStrings.prefSession, response.session);
         emit(OtpVerificationSuccessState(data: response));
       } else if (response != null && response.state == 0) {
         emit(OtpVerificationInitial());

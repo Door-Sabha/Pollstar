@@ -5,7 +5,8 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
-import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/hive_manager.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
 part 'user_info_event.dart';
@@ -13,25 +14,34 @@ part 'user_info_state.dart';
 
 class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
   final PollStarRepository _repository;
-  UserInfoBloc(this._repository) : super(UserInfoInitial()) {
+  final HiveManager _hive;
+  UserInfoBloc(this._repository)
+      : _hive = getIt<HiveManager>(),
+        super(UserInfoInitial()) {
     on<GetUserInfo>(_getUserInfo);
     on<LogoutUser>(_logout);
     on<UpdateFcmToken>(_updateFcmToken);
   }
 
   Future<void> _getUserInfo(GetUserInfo event, emit) async {
-    String session = getIt<AppConstants>().session;
+    String session =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefSession) ??
+            "";
 
     if (session.trim().isEmpty) {
       emit(UserInfoInitial());
-      emit(const UserInfoError(error: "Enter a valid mobile number."));
+      emit(const UserInfoError(error: AppStrings.errValidPhoneNumber));
     } else {
       emit(UserInfoLoading());
 
       User? data = await _repository.getUserInfo(session: session);
       if (data != null && data.state == 1) {
-        getIt<AppConstants>().userId = data.id;
-        getIt<AppConstants>().stateId = data.stateId;
+        getIt<SecureStorageManager>()
+            .updateValue(AppStrings.prefUserId, data.id);
+        getIt<SecureStorageManager>()
+            .updateValue(AppStrings.prefStateId, data.stateId);
+
+        _hive.updateUser(data);
         emit(UserInfoSuccess(user: data));
       } else if (data != null && data.state == 0) {
         emit(UserInfoInitial());
@@ -43,9 +53,10 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
   }
 
   Future<void> _logout(LogoutUser event, emit) async {
-    String userId = getIt<AppConstants>().userId;
-
     emit(UserLogoutLoading());
+    String userId =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
 
     ApiResponse? data = await _repository.logoutUser(id: userId);
     if (data != null && data.state == 1) {
@@ -60,7 +71,9 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
 
   Future<void> _updateFcmToken(UpdateFcmToken event, emit) async {
     final fcmToken = await FirebaseMessaging.instance.getToken();
-    String userId = getIt<AppConstants>().userId;
+    String userId =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
 
     ApiResponse? data =
         await _repository.updateFcmToken(id: userId, token: fcmToken ?? "");

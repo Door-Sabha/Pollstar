@@ -8,6 +8,7 @@ import 'package:pollstar/data/models/questions_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/hive_manager.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/utils.dart';
 
@@ -28,11 +29,15 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   }
 
   Future<void> _getQuestionsList(GetQuestionsList event, emit) async {
-    String session = getIt<AppConstants>().session;
-    String state = getIt<AppConstants>().stateId;
+    emit(const QuestionListLoading());
+    String session =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefSession) ??
+            "";
+    String state =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefStateId) ??
+            "";
     String last = getIt<AppConstants>().lastRefreshTime.toString();
 
-    emit(const QuestionListLoading());
     QuestionsResponse? data = await _repository.getQuestionsList(
         session: session, state: state, last: last);
 
@@ -107,7 +112,9 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   }
 
   _handleQueuedAndTriggered(List<Question> q, List<Question> t) async {
-    String user = getIt<AppConstants>().userId;
+    String user =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
     for (var e in q) {
       ApiResponse? data =
           await _repository.questionsQueued(user: user, id: e.sId ?? "");
@@ -128,10 +135,12 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   }
 
   Future<void> _answerInboxQuestions(AnswerQuestion event, emit) async {
-    String user = getIt<AppConstants>().userId;
-
     emit(QuestionListInitial());
-    emit(const QuestionListLoading());
+    emit(const AnswerLoading());
+    String user =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
+
     ApiResponse? data = await _repository.updateAnswer(
         user: user, id: event.id, answer: event.answer);
 
@@ -150,7 +159,9 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   }
 
   Future<void> _updateQuestionsQueued(UpdateQuestionsQueued event, emit) async {
-    String user = getIt<AppConstants>().userId;
+    String user =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
 
     ApiResponse? data =
         await _repository.questionsQueued(user: user, id: event.id);
@@ -162,7 +173,9 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
 
   Future<void> _updateQuestionsTriggered(
       UpdateQuestionsTriggered event, emit) async {
-    String user = getIt<AppConstants>().userId;
+    String user =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
 
     ApiResponse? data =
         await _repository.questionsTriggered(user: user, id: event.id);

@@ -4,6 +4,7 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
 part 'help_event.dart';
@@ -25,8 +26,12 @@ class HelpBloc extends Bloc<HelpEvent, HelpState> {
       emit(const HelpErrorState(error: AppStrings.errProplemReportingNoMsg));
     } else {
       emit(ProblemReportingLoading());
-      String userId = getIt<AppConstants>().userId;
-      String stateId = getIt<AppConstants>().stateId;
+      String userId =
+          await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+              "";
+      String stateId = await getIt<SecureStorageManager>()
+              .getValue(AppStrings.prefStateId) ??
+          "";
 
       ApiResponse? data = await _repository.reportProblem(
           userId: userId,

@@ -1,9 +1,25 @@
-class User {
+import 'package:hive_flutter/hive_flutter.dart';
+
+part 'user.g.dart';
+
+@HiveType(typeId: 1, adapterName: "UserAdapter")
+class User extends HiveObject {
+  @HiveField(0)
   int? state;
+
+  @HiveField(1)
   String? id;
+
+  @HiveField(2)
   String? stateId;
+
+  @HiveField(3)
   StateInfo? stateInfo;
+
+  @HiveField(4)
   UserParams? userParams;
+
+  @HiveField(5)
   String? message;
 
   User(
@@ -42,21 +58,42 @@ class User {
   }
 }
 
-class StateInfo {
+@HiveType(typeId: 2, adapterName: "StateInfoAdapter")
+class StateInfo extends HiveObject {
+  @HiveField(0)
   String? sId;
+
+  @HiveField(1)
   String? name;
+
+  @HiveField(2)
   String? code;
+
+  @HiveField(3)
   String? emaId;
+
+  @HiveField(4)
   int? active;
+
+  @HiveField(5)
   String? tCreated;
-  Db? db;
-  T? t;
-  Ema? ema;
+
+  @HiveField(6)
   String? aGENT;
+
+  @HiveField(7)
   String? iP;
+
+  @HiveField(8)
   String? emergencyNumbers;
+
+  @HiveField(9)
   String? headerImage;
+
+  @HiveField(10)
   String? helpUrl;
+
+  @HiveField(11)
   List<String>? problemReasons;
 
   StateInfo(
@@ -66,9 +103,6 @@ class StateInfo {
       this.emaId,
       this.active,
       this.tCreated,
-      this.db,
-      this.t,
-      this.ema,
       this.aGENT,
       this.iP,
       this.emergencyNumbers,
@@ -83,9 +117,6 @@ class StateInfo {
     emaId = json['ema_id'];
     active = json['active'];
     tCreated = json['t_created'];
-    db = json['db'] != null ? Db.fromJson(json['db']) : null;
-    t = json['t'] != null ? T.fromJson(json['t']) : null;
-    ema = json['ema'] != null ? Ema.fromJson(json['ema']) : null;
     aGENT = json['AGENT'];
     iP = json['IP'];
     emergencyNumbers = json['emergency_numbers'];
@@ -102,15 +133,6 @@ class StateInfo {
     data['ema_id'] = emaId;
     data['active'] = active;
     data['t_created'] = tCreated;
-    if (db != null) {
-      data['db'] = db!.toJson();
-    }
-    if (t != null) {
-      data['t'] = t!.toJson();
-    }
-    if (ema != null) {
-      data['ema'] = ema!.toJson();
-    }
     data['AGENT'] = aGENT;
     data['IP'] = iP;
     data['emergency_numbers'] = emergencyNumbers;
@@ -121,95 +143,48 @@ class StateInfo {
   }
 }
 
-class Db {
-  String? hostname;
-  String? database;
-  String? questionUpdateTime;
-  String? boothUpdateTime;
-  String? username;
-  String? password;
-
-  Db(
-      {this.hostname,
-      this.database,
-      this.questionUpdateTime,
-      this.boothUpdateTime,
-      this.username,
-      this.password});
-
-  Db.fromJson(Map<String, dynamic> json) {
-    hostname = json['hostname'];
-    database = json['database'];
-    questionUpdateTime = json['question_update_time'];
-    boothUpdateTime = json['booth_update_time'];
-    username = json['username'];
-    password = json['password'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['hostname'] = hostname;
-    data['database'] = database;
-    data['question_update_time'] = questionUpdateTime;
-    data['booth_update_time'] = boothUpdateTime;
-    data['username'] = username;
-    data['password'] = password;
-    return data;
-  }
-}
-
-class T {
-  String? updated;
-  String? mysqlPull;
-
-  T({this.updated, this.mysqlPull});
-
-  T.fromJson(Map<String, dynamic> json) {
-    updated = json['updated'];
-    mysqlPull = json['mysql_pull'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['updated'] = updated;
-    data['mysql_pull'] = mysqlPull;
-    return data;
-  }
-}
-
-class Ema {
-  String? hostname;
-  int? port;
-
-  Ema({this.hostname, this.port});
-
-  Ema.fromJson(Map<String, dynamic> json) {
-    hostname = json['hostname'];
-    port = json['port'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['hostname'] = hostname;
-    data['port'] = port;
-    return data;
-  }
-}
-
+@HiveType(typeId: 3, adapterName: "UserParamsAdapter")
 class UserParams {
+  @HiveField(0)
   String? sId;
+
+  @HiveField(1)
   int? boothid;
+
+  @HiveField(2)
   String? boothRefno;
+
+  @HiveField(3)
   String? boothName;
+
+  @HiveField(4)
   String? phoneNumber;
+
+  @HiveField(5)
   int? boothStatus;
+
+  @HiveField(6)
   int? totalVotersCount;
+
+  @HiveField(7)
   String? latitude;
+
+  @HiveField(8)
   String? longitude;
+
+  @HiveField(9)
   int? maleVotersCount;
+
+  @HiveField(10)
   int? femaleVotersCount;
+
+  @HiveField(11)
   int? updateId;
+
+  @HiveField(12)
   String? updateTime;
+
+  @HiveField(13)
   int? fetched;
 
   UserParams(

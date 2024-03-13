@@ -4,6 +4,7 @@ import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/home/outbox/widgets/outbox_empty_widget.dart';
+import 'package:pollstar/ui/home/outbox/widgets/outbox_loading_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 
@@ -16,7 +17,7 @@ class OutboxScreen extends StatefulWidget {
 
 class _OutboxScreenState extends State<OutboxScreen>
     with AutomaticKeepAliveClientMixin {
-  final LoadingOverlay loadingOverlay = LoadingOverlay();
+  //final LoadingOverlay loadingOverlay = LoadingOverlay();
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -26,18 +27,12 @@ class _OutboxScreenState extends State<OutboxScreen>
       color: Colors.white,
       triggerMode: RefreshIndicatorTriggerMode.onEdge,
       onRefresh: () => _refreshData(context),
-      child: BlocConsumer<QuestionListBloc, QuestionListState>(
-        listener: (context, state) {
-          if (state is QuestionListLoading) {
-            loadingOverlay.show(context);
-          } else {
-            loadingOverlay.hide();
-          }
-        },
+      child: BlocBuilder<QuestionListBloc, QuestionListState>(
         buildWhen: (previous, current) {
           return current is OutboxListSuccessState ||
               current is QuestionListEmpty ||
-              current is QuestionListErrorState;
+              current is QuestionListErrorState ||
+              current is QuestionListLoading;
         },
         builder: (context, state) {
           print(state);
@@ -55,6 +50,7 @@ class _OutboxScreenState extends State<OutboxScreen>
                 strokeCap: StrokeCap.round,
               ),
             );
+            //return const OutboxLoadingWidget();
           }
           return Container();
         },
