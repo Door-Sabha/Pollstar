@@ -35,6 +35,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
       emit(UserInfoLoading());
 
       User? data = await _repository.getUserInfo(session: session);
+
       if (data != null && data.state == 1) {
         getIt<SecureStorageManager>()
             .updateValue(AppStrings.prefUserId, data.id);
@@ -44,7 +45,6 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
         _hive.updateUser(data);
         emit(UserInfoSuccess(user: data));
       } else if (data != null && data.state == 0) {
-        emit(UserInfoInitial());
         emit(UserInfoError(error: data.message ?? AppStrings.errorApiUnknown));
       } else {
         emit(const UserInfoError(error: AppStrings.errorApiUnknown));

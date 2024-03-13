@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
+import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/utils.dart';
 import 'package:sprintf/sprintf.dart';
 
@@ -54,12 +55,32 @@ class AnswerDialog extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 32, bottom: 32),
-          child: Text(
-            sprintf(AppStrings.yennoMsg, [(yesnoAnswer) ? "YES" : "NO"]),
-            style: AppStyle.textStyleMedium.copyWith(
-              fontSize: 16,
-            ),
+          child: RichText(
             textAlign: TextAlign.center,
+            text: TextSpan(
+              text: AppStrings.yesnoMsg1,
+              style: AppStyle.textStyleMedium.copyWith(
+                fontSize: 16,
+              ),
+              children: [
+                TextSpan(
+                  text: "\n${(yesnoAnswer) ? "YES" : "NO"}\n",
+                  style: AppStyle.textStyleTitle.copyWith(
+                    fontWeight: FontWeight.bold,
+                    height: 1.5,
+                    color: (yesnoAnswer)
+                        ? AppColors.greenColor
+                        : AppColors.redColor,
+                  ),
+                ),
+                TextSpan(
+                  text: AppStrings.yesnoMsg2,
+                  style: AppStyle.textStyleMedium.copyWith(
+                    fontSize: 16,
+                  ),
+                )
+              ],
+            ),
           ),
         ),
         _submitButtonWidget(context),
@@ -85,7 +106,7 @@ class AnswerDialog extends StatelessWidget {
                 Container(),
             keyboardType: TextInputType.number,
             decoration: const InputDecoration(
-              hintText: AppStrings.answerHint,
+              labelText: AppStrings.answerHint,
             ),
           ),
           const SizedBox(height: 32),
@@ -153,24 +174,26 @@ class AnswerConfirmationDialog extends StatelessWidget {
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 32, bottom: 32),
+          padding: const EdgeInsets.only(top: 16, bottom: 16),
           child: RichText(
             textAlign: TextAlign.center,
             text: TextSpan(
               text: AppStrings.numberMsg1,
-              style: AppStyle.textStyleTitle.copyWith(),
+              style: AppStyle.textStyleMedium.copyWith(
+                fontSize: 16,
+              ),
               children: [
                 TextSpan(
                   text: "\n$answer\n",
                   style: AppStyle.textStyleTitle.copyWith(
-                    fontWeight: FontWeight.bold,
-                    height: 1.5,
-                  ),
+                      fontWeight: FontWeight.bold,
+                      height: 1.5,
+                      color: AppColors.greenColor),
                 ),
                 TextSpan(
                   text: AppStrings.numberMsg2,
-                  style: AppStyle.textStyleTitle.copyWith(
-                    fontWeight: FontWeight.bold,
+                  style: AppStyle.textStyleMedium.copyWith(
+                    fontSize: 16,
                   ),
                 )
               ],

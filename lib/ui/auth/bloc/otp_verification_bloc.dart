@@ -35,7 +35,6 @@ class OtpVerificationBloc
             .updateValue(AppStrings.prefSession, response.session);
         emit(OtpVerificationSuccessState(data: response));
       } else if (response != null && response.state == 0) {
-        emit(OtpVerificationInitial());
         emit(OtpVerificationErrorState(
             error: response.message ?? AppStrings.errorApiUnknown));
       } else {

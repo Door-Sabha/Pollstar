@@ -63,11 +63,12 @@ class AppStrings {
   static const outboxEmptyHint = "No messages in your outbox.";
 
   ///Answer Confirmation Screen
-  static const yennoMsg = "You selected %s is this correct?";
   static const answerEmpty = "Enter a valid answer";
+  static const yesnoMsg1 = "You have selected";
+  static const yesnoMsg2 = "Can you confirm is this correct?";
   static const numberMsg1 = "You have entered";
   static const numberMsg2 = "Can you confirm is this correct?";
-  static const answerSubmit = "yes. I confirm.";
+  static const answerSubmit = "YES";
 
   /// Help Screen
   static const reportProblem = "Report a problem";

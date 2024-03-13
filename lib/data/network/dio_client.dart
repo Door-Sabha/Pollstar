@@ -13,7 +13,7 @@ class DioClient {
       ..interceptors.add(LogInterceptor(
         request: false,
         requestHeader: false,
-        requestBody: true,
+        requestBody: false,
         responseHeader: false,
         responseBody: false,
         error: false,

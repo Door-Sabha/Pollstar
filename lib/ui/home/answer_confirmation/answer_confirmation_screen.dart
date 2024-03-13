@@ -94,7 +94,7 @@ class AnswerConfirmationScreen extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(top: 32, bottom: 32),
           child: Text(
-            sprintf(AppStrings.yennoMsg, [(yesnoAnswer) ? "YES" : "NO"]),
+            sprintf(AppStrings.yesnoMsg1, [(yesnoAnswer) ? "YES" : "NO"]),
             style: AppStyle.textStyleMedium.copyWith(
               color: Colors.white,
               fontSize: 16,

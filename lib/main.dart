@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/answer.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/firebase_options.dart';
@@ -24,7 +26,6 @@ import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 
 void main() async {
-  getIt.registerSingleton(HiveManager());
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await Firebase.initializeApp(
@@ -37,6 +38,17 @@ void main() async {
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+
+  getIt.registerSingleton(HiveManager());
+  await Hive.initFlutter();
+  Hive.registerAdapter<User>(UserAdapter());
+  Hive.registerAdapter<StateInfo>(StateInfoAdapter());
+  Hive.registerAdapter<UserParams>(UserParamsAdapter());
+  Hive.registerAdapter<Answer>(AnswerAdapter());
+  getIt<HiveManager>().userBox = await Hive.openBox(AppStrings.hiveBoxUser);
+  getIt<HiveManager>().answerBox =
+      await Hive.openBox(AppStrings.hiveBoxAnswers);
+
   await setupServiceLocator();
   runApp(const MyApp());
 }

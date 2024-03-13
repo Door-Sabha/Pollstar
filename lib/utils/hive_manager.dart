@@ -5,57 +5,47 @@ import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
 
 class HiveManager {
-  late Box<Answer> _answerBox;
-  late Box<User> _userBox;
+  late Box<Answer> answerBox;
+  late Box<User> userBox;
 
   HiveManager() {
-    _init();
-  }
-
-  _init() async {
-    await Hive.initFlutter();
-    Hive.registerAdapter<User>(UserAdapter());
-    Hive.registerAdapter<StateInfo>(StateInfoAdapter());
-    Hive.registerAdapter<UserParams>(UserParamsAdapter());
-    Hive.registerAdapter<Answer>(AnswerAdapter());
-    _userBox = await Hive.openBox(AppStrings.hiveBoxUser);
-    _answerBox = await Hive.openBox(AppStrings.hiveBoxAnswers);
+    //_init();
   }
 
   updateUser(User user) async {
-    await _userBox.put(AppStrings.hivePrefUser, user);
+    await userBox.put(AppStrings.hivePrefUser, user);
   }
 
   User? getUser() {
-    return _userBox.get(AppStrings.hivePrefUser);
+    return userBox.get(AppStrings.hivePrefUser);
   }
 
   addAnswer(Answer answer) async {
-    await _answerBox.put(answer.questionId, answer);
+    await answerBox.put(answer.questionId, answer);
   }
 
   bool containsAnswer(String? id) {
     if (id.isNullOrEmpty()) return false;
 
-    return _answerBox.containsKey(id);
+    return answerBox.containsKey(id);
   }
 
   Answer? getAnswers(String? id) {
     if (id.isNullOrEmpty()) return null;
 
-    return _answerBox.get(id);
+    return answerBox.get(id);
   }
 
   List<Answer> getAnswersList() {
-    return _answerBox.values.toList();
+    return answerBox.values.toList();
   }
 
   deleteAnswer(Answer answer) async {
-    await _answerBox.delete(answer.questionId);
+    await answerBox.delete(answer.questionId);
   }
 
   deleteAll() async {
-    await _answerBox.clear();
-    await _userBox.clear();
+    await answerBox.clear();
+    await userBox.clear();
   }
 }

@@ -31,6 +31,7 @@ class AnswerWidget extends StatelessWidget {
 
   Widget _logoWidget() {
     bool hasAnswer = _hive.containsAnswer(question.sId);
+    Answer? answer = _hive.getAnswers(question.sId);
     const double radius = 24;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -46,13 +47,14 @@ class AnswerWidget extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 4),
-        Text(
-          AppUtils().getTimeFromDate(question.questionTime?.updated),
-          style: AppStyle.textStyleMedium.copyWith(
-            color: Colors.grey,
-            fontWeight: FontWeight.w500,
+        if (hasAnswer && answer != null)
+          Text(
+            AppUtils().getTimeFromMilliseconds(answer.updated),
+            style: AppStyle.textStyleMedium.copyWith(
+              color: Colors.grey,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
       ],
     );
   }
