@@ -30,6 +30,7 @@ class AppStrings {
   static const errNumberNotRegistered =
       "The mobile number you entered is not registered with us";
   static const errValidPhoneNumber = "Enter a valid mobile number.";
+  static const errValidOtp = "Enter your OTP";
 
   /// OTP Verification Screen
   static const otpVerificationTitle = "Verification Code";
@@ -99,6 +100,8 @@ class AppStrings {
 
   static const errorApiUnknown =
       "We couldn't able to process right now. Please try again later.";
+  static const errorNetwork =
+      "Unable to connect to the internet. Please check your network settings.";
 
   /// SecureStorage
   static const prefSession = "session";

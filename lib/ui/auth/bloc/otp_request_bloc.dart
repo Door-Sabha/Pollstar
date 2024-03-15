@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
 part 'otp_request_event.dart';
@@ -14,6 +16,12 @@ class OtpRequestBloc extends Bloc<OtpRequestEvent, OtpRequestState> {
   }
 
   Future<void> _requestOtp(RequestOtp event, emit) async {
+    bool isOnline = await getIt<ConnectivityManager>().hasInternet();
+    if (!isOnline) {
+      emit(OtpRequestInitialState());
+      emit(const OtpRequestErrorState(error: AppStrings.errorNetwork));
+      return;
+    }
     String phone = event.phone.replaceAll("+91", "").trim();
     phone = phone.replaceAll(" ", "");
     if (phone.trim().length < 10) {

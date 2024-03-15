@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
@@ -18,6 +19,19 @@ class OtpVerificationBloc
   }
 
   Future<void> _verifyOtp(VerifyOtp event, emit) async {
+    bool isOnline = await getIt<ConnectivityManager>().hasInternet();
+    if (!isOnline) {
+      emit(OtpVerificationInitial());
+      emit(const OtpVerificationErrorState(error: AppStrings.errorNetwork));
+      return;
+    }
+
+    if (event.otp.length != 4) {
+      emit(OtpVerificationInitial());
+      emit(const OtpVerificationErrorState(error: AppStrings.errValidOtp));
+      return;
+    }
+
     String phone = event.phone.replaceAll("+91", "").trim();
     phone = phone.replaceAll(" ", "");
     if (phone.trim().length != 10) {

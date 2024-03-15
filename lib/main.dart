@@ -50,6 +50,7 @@ void main() async {
       await Hive.openBox(AppStrings.hiveBoxAnswers);
 
   await setupServiceLocator();
+
   runApp(const MyApp());
 }
 

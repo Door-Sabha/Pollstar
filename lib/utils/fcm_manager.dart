@@ -5,7 +5,6 @@ import 'package:pollstar/utils/app_constants.dart';
 class FCMManager {
   FCMManager() {
     _setup();
-    _registerListener();
   }
 
   _setup() async {
@@ -22,11 +21,7 @@ class FCMManager {
     messaging.setForegroundNotificationPresentationOptions(
         alert: true, badge: true, sound: true);
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
-    final fcmToken = await FirebaseMessaging.instance.getToken();
-    getIt<AppConstants>().fcmToken = fcmToken;
-  }
 
-  _registerListener() {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       print('Got a message whilst in the foreground!');
       print('Message data: ${message.data}');

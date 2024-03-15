@@ -9,7 +9,9 @@ class AppConstants {
   late DeviceInfoPlugin _deviceInfo;
 
   late String _fcmToken;
-  int _lastRefreshTime = DateTime.now().millisecondsSinceEpoch;
+  int? _lastRefreshTime;
+  int? _queuedTime;
+  int _lastRefreshOnTabSwitch = DateTime.now().millisecondsSinceEpoch;
 
   late String _appName;
   late String _packageName;
@@ -52,6 +54,12 @@ class AppConstants {
 
   get lastRefreshTime => _lastRefreshTime;
   set lastRefreshTime(value) => _lastRefreshTime = value;
+
+  get queuedTime => _queuedTime;
+  set queuedTime(value) => _queuedTime = value;
+
+  get lastRefreshOnTabSwitch => _lastRefreshOnTabSwitch;
+  set lastRefreshOnTabSwitch(value) => _lastRefreshOnTabSwitch = value;
 
   get appName => _appName;
   get packageName => _packageName;

@@ -1,10 +1,15 @@
+import 'dart:async';
+
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/session_end_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
+import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/utils.dart';
 
@@ -19,16 +24,26 @@ class _InboxScreenState extends State<InboxScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final LoadingOverlay loadingOverlay = LoadingOverlay();
 
+  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  final Connectivity _connectivity = Connectivity();
+  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     context.read<QuestionListBloc>().add(const GetQuestionsList());
+
+    initConnectivity();
+    _connectivitySubscription =
+        _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    _connectivitySubscription.cancel();
+
     super.dispose();
   }
 
@@ -55,6 +70,9 @@ class _InboxScreenState extends State<InboxScreen>
           } else if (state is QuestionListErrorState) {
             loadingOverlay.hide();
             AppUtils().showAlertDialog(context, content: state.error);
+          } else if (state is NoNetworkState) {
+            loadingOverlay.hide();
+            AppUtils().showSnackBar(context, state.error);
           } else {
             loadingOverlay.hide();
           }
@@ -102,6 +120,29 @@ class _InboxScreenState extends State<InboxScreen>
         ModalRoute.of(context) != null &&
         ModalRoute.of(context)!.isCurrent) {
       context.read<QuestionListBloc>().add(const GetQuestionsList());
+    }
+  }
+
+  Future<void> initConnectivity() async {
+    late ConnectivityResult result;
+    try {
+      result = await _connectivity.checkConnectivity();
+    } on PlatformException {
+      return;
+    }
+    if (!mounted) {
+      return Future.value(null);
+    }
+
+    return _updateConnectionStatus(result);
+  }
+
+  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+    print(result);
+    if (result == ConnectivityResult.mobile ||
+        result == ConnectivityResult.wifi) {
+    } else {
+      AppUtils().showSnackBar(context, AppStrings.errorNetwork);
     }
   }
 }

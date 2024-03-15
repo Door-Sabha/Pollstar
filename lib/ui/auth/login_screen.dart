@@ -13,6 +13,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
+    AppUtils().clearData();
     return Scaffold(
       body: BlocListener<OtpRequestBloc, OtpRequestState>(
         listener: (context, state) {

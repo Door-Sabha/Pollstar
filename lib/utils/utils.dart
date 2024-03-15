@@ -136,13 +136,15 @@ class AppUtils {
   }
 
   String getDateFromMilliseconds(int milliSeconds) {
-    final DateFormat dateFormat = DateFormat('dd-MM-yyyy hh:mm:ssZ');
+    final DateFormat dateFormat = DateFormat('d MMMM yyy');
     return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(milliSeconds));
   }
 
   String getTimeFromMilliseconds(int milliSeconds) {
     final DateFormat dateFormat = DateFormat('hh:mm a');
-    return dateFormat.format(DateTime.fromMillisecondsSinceEpoch(milliSeconds));
+    return dateFormat
+        .format(DateTime.fromMillisecondsSinceEpoch(milliSeconds))
+        .toLowerCase();
   }
 
   String toReadableDateFormat(String date) {

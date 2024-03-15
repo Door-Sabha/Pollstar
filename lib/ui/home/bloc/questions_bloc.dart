@@ -7,6 +7,7 @@ import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/data/models/questions_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/app_constants.dart';
+import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
@@ -29,6 +30,13 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   }
 
   Future<void> _getQuestionsList(GetQuestionsList event, emit) async {
+    bool isOnline = await getIt<ConnectivityManager>().hasInternet();
+    if (!isOnline) {
+      emit(QuestionListInitial());
+      emit(const NoNetworkState(error: AppStrings.errorNetwork));
+      return;
+    }
+
     emit(const QuestionListLoading());
     String session =
         await getIt<SecureStorageManager>().getValue(AppStrings.prefSession) ??
@@ -36,7 +44,9 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
     String state =
         await getIt<SecureStorageManager>().getValue(AppStrings.prefStateId) ??
             "";
-    String last = getIt<AppConstants>().lastRefreshTime.toString();
+    String last = (getIt<AppConstants>().lastRefreshTime != null)
+        ? getIt<AppConstants>().lastRefreshTime.toString()
+        : DateTime.now().millisecondsSinceEpoch.toString();
 
     QuestionsResponse? data = await _repository.getQuestionsList(
         session: session, state: state, last: last);
@@ -45,6 +55,7 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         data.state == 1 &&
         data.questions != null &&
         data.questions!.isNotEmpty) {
+      getIt<AppConstants>().queuedTime = null;
       var (inboxList, outboxList, queue) = _filterQuestions(data.questions!);
 
       if (inboxList.isNotEmpty) {
@@ -103,6 +114,12 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
                   .getMillisecondFromDateString(q.questionTime!.expiry!) &&
           !_hive.containsAnswer(q.sId)) {
         queue.add(q);
+
+        ///Update Queued time
+        if (getIt<AppConstants>().queuedTime == null &&
+            q.questionTime != null) {
+          getIt<AppConstants>().queuedTime = q.questionTime!.trigger;
+        }
       } else {
         outbox.add(q);
       }
@@ -135,6 +152,12 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   }
 
   Future<void> _answerInboxQuestions(AnswerQuestion event, emit) async {
+    bool isOnline = await getIt<ConnectivityManager>().hasInternet();
+    if (!isOnline) {
+      emit(QuestionListInitial());
+      emit(const QuestionListErrorState(error: AppStrings.errorNetwork));
+      return;
+    }
     emit(QuestionListInitial());
     emit(const AnswerLoading());
     String user =

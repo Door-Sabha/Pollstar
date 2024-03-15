@@ -36,6 +36,15 @@ class QuestionListErrorState extends QuestionListState {
   List<Object> get props => [error];
 }
 
+class NoNetworkState extends QuestionListState {
+  final String error;
+
+  const NoNetworkState({required this.error});
+
+  @override
+  List<Object> get props => [error];
+}
+
 class InboxListSuccessState extends QuestionListState {
   final List<Question> list;
 

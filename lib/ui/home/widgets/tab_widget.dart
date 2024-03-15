@@ -33,10 +33,12 @@ class _TabWidgetState extends State<TabWidget>
     if (_tabController.index == 0) {
       final diff = DateTime.now()
           .difference(DateTime.fromMillisecondsSinceEpoch(
-              getIt<AppConstants>().lastRefreshTime))
+              getIt<AppConstants>().lastRefreshOnTabSwitch))
           .inSeconds;
       if (diff >= 10) {
         context.read<QuestionListBloc>().add(const GetQuestionsList());
+        getIt<AppConstants>().lastRefreshOnTabSwitch =
+            DateTime.now().millisecondsSinceEpoch;
       }
     }
   }

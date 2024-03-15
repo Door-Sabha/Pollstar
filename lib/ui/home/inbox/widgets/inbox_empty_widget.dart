@@ -22,7 +22,7 @@ class InboxEmptyWidget extends StatelessWidget {
             children: [
               Padding(
                 padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                    const EdgeInsets.symmetric(horizontal: 32, vertical: 32),
                 child: Text(
                   AppStrings.inboxEmptyHint,
                   style: AppStyle.textStyleMedium.copyWith(
@@ -30,23 +30,47 @@ class InboxEmptyWidget extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     fontSize: 16,
                   ),
+                  textAlign: TextAlign.center,
                 ),
               ),
+              (getIt<AppConstants>().queuedTime != null)
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 32),
+                      child: Text(
+                        sprintf(AppStrings.qusNextSchedule, [
+                          AppUtils().getTimeFromMilliseconds(
+                              getIt<AppConstants>().queuedTime),
+                          AppUtils().getDateFromMilliseconds(
+                              getIt<AppConstants>().queuedTime),
+                        ]),
+                        style: AppStyle.textStyleMedium.copyWith(
+                          color: AppColors.textColorLightDark,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                          height: 1.5,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    )
+                  : Container(),
               const Spacer(),
-              Padding(
-                padding: const EdgeInsets.only(bottom: 32, left: 16, right: 16),
-                child: Text(
-                  sprintf(AppStrings.lastUpdatedToday, [
-                    AppUtils().getTimeFromMilliseconds(
-                        getIt<AppConstants>().lastRefreshTime)
-                  ]),
-                  style: AppStyle.textStyleMedium.copyWith(
-                    color: AppColors.textHintColor,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
+              (getIt<AppConstants>().lastRefreshTime != null)
+                  ? Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 32, left: 16, right: 16),
+                      child: Text(
+                        sprintf(AppStrings.lastUpdatedToday, [
+                          AppUtils().getTimeFromMilliseconds(
+                              getIt<AppConstants>().lastRefreshTime)
+                        ]),
+                        style: AppStyle.textStyleMedium.copyWith(
+                          color: AppColors.textHintColor,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 14,
+                        ),
+                      ),
+                    )
+                  : Container(),
             ],
           ),
         )

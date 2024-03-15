@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'api_constants.dart';
 
 class DioClient {
@@ -13,9 +14,9 @@ class DioClient {
       ..interceptors.add(LogInterceptor(
         request: false,
         requestHeader: false,
-        requestBody: false,
+        requestBody: (kReleaseMode) ? false : true,
         responseHeader: false,
-        responseBody: false,
+        responseBody: (kReleaseMode) ? false : true,
         error: false,
       ));
   }

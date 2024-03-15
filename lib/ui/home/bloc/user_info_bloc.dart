@@ -5,6 +5,7 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
@@ -24,6 +25,13 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
   }
 
   Future<void> _getUserInfo(GetUserInfo event, emit) async {
+    bool isOnline = await getIt<ConnectivityManager>().hasInternet();
+    if (!isOnline) {
+      emit(UserInfoInitial());
+      emit(const UserInfoError(error: AppStrings.errorNetwork));
+      return;
+    }
+
     String session =
         await getIt<SecureStorageManager>().getValue(AppStrings.prefSession) ??
             "";
@@ -59,21 +67,27 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
             "";
 
     ApiResponse? data = await _repository.logoutUser(id: userId);
-    if (data != null && data.state == 1) {
-      emit(UserLogoutSuccess());
-    } else if (data != null && data.state == 0) {
-      emit(UserInfoInitial());
-      emit(UserInfoError(error: data.message ?? AppStrings.errorApiUnknown));
-    } else {
-      emit(const UserInfoError(error: AppStrings.errorApiUnknown));
-    }
+    // if (data != null && data.state == 1) {
+    //   emit(UserLogoutSuccess());
+    // } else if (data != null && data.state == 0) {
+    //   emit(UserInfoInitial());
+    //   emit(UserInfoError(error: data.message ?? AppStrings.errorApiUnknown));
+    // } else {
+    //   emit(const UserInfoError(error: AppStrings.errorApiUnknown));
+    // }
+    emit(UserLogoutSuccess());
   }
 
   Future<void> _updateFcmToken(UpdateFcmToken event, emit) async {
+    bool isOnline = await getIt<ConnectivityManager>().hasInternet();
+    if (!isOnline) {
+      return;
+    }
     final fcmToken = await FirebaseMessaging.instance.getToken();
     String userId =
         await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
             "";
+    if (fcmToken == null || userId.isEmpty) return;
 
     ApiResponse? data =
         await _repository.updateFcmToken(id: userId, token: fcmToken ?? "");
