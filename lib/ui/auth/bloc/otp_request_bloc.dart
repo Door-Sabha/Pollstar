@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
@@ -32,6 +33,8 @@ class OtpRequestBloc extends Bloc<OtpRequestEvent, OtpRequestState> {
       ApiResponse? data = await _repository.requestOtp(phone: phone);
       if (data != null && data.state == 1) {
         emit(OtpRequestSuccessState(data: data));
+        getIt<AnalyticsManager>()
+            .logEvent(name: AppStrings().faEventOtpRequest);
       } else if (data != null && data.state == 0) {
         emit(OtpRequestInitialState());
         emit(OtpRequestErrorState(

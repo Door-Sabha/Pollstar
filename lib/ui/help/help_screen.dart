@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/ui/help/bloc/help_bloc.dart';
 import 'package:pollstar/ui/help/widgets/contact_us_widget.dart';
 import 'package:pollstar/ui/help/widgets/emergency_contact_list_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/ui/widgets/texts.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -17,6 +19,7 @@ class HelpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    getIt<AnalyticsManager>().logScreenView(name: AppStrings().faScreenHelp);
     final LoadingOverlay loadingOverlay = LoadingOverlay();
     return BlocListener<HelpBloc, HelpState>(
       listener: (context, state) {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/ui/auth/login_screen.dart';
@@ -9,6 +10,7 @@ import 'package:pollstar/ui/home/widgets/appbar_widget.dart';
 import 'package:pollstar/ui/home/widgets/drawer_widget.dart';
 import 'package:pollstar/ui/home/widgets/tab_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/utils.dart';
 
@@ -19,7 +21,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
-
+    getIt<AnalyticsManager>().logScreenView(name: AppStrings().faScreenInbox);
     return MultiBlocProvider(
       providers: [
         BlocProvider(

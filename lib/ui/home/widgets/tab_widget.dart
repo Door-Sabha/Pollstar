@@ -4,6 +4,7 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/inbox/inbox_screen.dart';
 import 'package:pollstar/ui/home/outbox/outbox_screen.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
@@ -42,6 +43,10 @@ class _TabWidgetState extends State<TabWidget>
         getIt<AppConstants>().lastRefreshOnTabSwitch =
             DateTime.now().millisecondsSinceEpoch;
       }
+      getIt<AnalyticsManager>().logScreenView(name: AppStrings().faScreenInbox);
+    } else if (_tabController.index == 1) {
+      getIt<AnalyticsManager>()
+          .logScreenView(name: AppStrings().faScreenOutbox);
     }
   }
 

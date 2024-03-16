@@ -6,6 +6,7 @@ import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/data/models/questions_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/hive_manager.dart';
@@ -177,6 +178,7 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
           updated: DateTime.now().millisecondsSinceEpoch,
           answer: event.answer));
       emit(const AnswerSuccessState());
+      getIt<AnalyticsManager>().logEvent(name: AppStrings().faEventAnswer);
     } else if (data != null && data.state == 0) {
       emit(QuestionListErrorState(
           error: data.message ?? AppStrings.errorSession));

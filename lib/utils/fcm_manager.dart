@@ -1,6 +1,4 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:pollstar/data/di/service_locator.dart';
-import 'package:pollstar/utils/app_constants.dart';
 
 class FCMManager {
   FCMManager() {

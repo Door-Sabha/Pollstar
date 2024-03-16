@@ -9,6 +9,7 @@ import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/widgets/answer_dialogs.dart';
 import 'package:pollstar/ui/widgets/dialogs.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/hive_manager.dart';
@@ -99,6 +100,8 @@ class AppUtils {
     var browserUrl = Uri.parse(url);
     if (await canLaunchUrl(browserUrl)) {
       await launchUrl(browserUrl);
+      getIt<AnalyticsManager>()
+          .logEvent(name: AppStrings().faEventPrivacyClicked);
     } else {
       _handleError("Sorry, Could not launch $url at the moment.");
     }
@@ -108,6 +111,8 @@ class AppUtils {
     var telephoneUrl = Uri.parse("tel:$number");
     if (await canLaunchUrl(telephoneUrl)) {
       await launchUrl(telephoneUrl);
+      getIt<AnalyticsManager>()
+          .logEvent(name: AppStrings().faEventEmergenyCall);
     } else {
       _handleError("Sorry, Could not call $number at the moment.");
     }

@@ -110,4 +110,20 @@ class AppStrings {
 
   ///Hive Key
   static const hivePrefUser = "user";
+
+  /// Analytics constants
+  final String faEventOtpRequest = "OTP_Request";
+  final String faEventOtpVerify = "OTP_Verify";
+  final String faEventLogin = "Login";
+  final String faEventSignout = "Logout";
+  final String faEventPrivacyClicked = "Privacy_Policy";
+  final String faEventEmergenyCall = "Emergency_Call";
+  final String faEventEmergenyMsg = "Emergency_Message";
+  final String faEventAnswer = "Question_Answered";
+
+  final String faScreenOtpRequest = "OTP_Request_Screen";
+  final String faScreenOtpVerification = "OTP_Verification_Screen";
+  final String faScreenInbox = "Inbox_Screen";
+  final String faScreenOutbox = "Outbox_Screen";
+  final String faScreenHelp = "Help_Screen";
 }

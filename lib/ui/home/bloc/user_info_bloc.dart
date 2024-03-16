@@ -5,6 +5,7 @@ import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
@@ -52,6 +53,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
 
         _hive.updateUser(data);
         emit(UserInfoSuccess(user: data));
+        getIt<AnalyticsManager>().logEvent(name: AppStrings().faEventLogin);
       } else if (data != null && data.state == 0) {
         emit(UserInfoError(error: data.message ?? AppStrings.errorApiUnknown));
       } else {
@@ -75,6 +77,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
     // } else {
     //   emit(const UserInfoError(error: AppStrings.errorApiUnknown));
     // }
+    getIt<AnalyticsManager>().logEvent(name: AppStrings().faEventSignout);
     emit(UserLogoutSuccess());
   }
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/auth/bloc/otp_verification_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
@@ -9,6 +10,7 @@ import 'package:pollstar/ui/widgets/loading_overlay.dart';
 import 'package:pollstar/ui/widgets/otp_field/otp_field.dart';
 import 'package:pollstar/ui/widgets/otp_field/otp_field_style.dart';
 import 'package:pollstar/ui/widgets/otp_field/style.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -27,7 +29,8 @@ class OTPVerificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
-
+    getIt<AnalyticsManager>()
+        .logScreenView(name: AppStrings().faScreenOtpVerification);
     return MultiBlocListener(
       listeners: [
         BlocListener<OtpRequestBloc, OtpRequestState>(
@@ -163,7 +166,7 @@ class OTPVerificationScreen extends StatelessWidget {
       child: OTPTextField(
         controller: otpController,
         length: 4,
-        width: MediaQuery.of(context).size.width,
+        width: double.infinity,
         fieldWidth: 40,
         style: AppStyle.textStyleTitle,
         textFieldAlignment: MainAxisAlignment.spaceEvenly,

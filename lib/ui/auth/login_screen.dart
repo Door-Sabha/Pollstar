@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/auth/otp_verification_screen.dart';
 import 'package:pollstar/ui/auth/widgets/login_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/utils.dart';
 
@@ -14,6 +16,8 @@ class LoginScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final LoadingOverlay loadingOverlay = LoadingOverlay();
     AppUtils().clearData();
+    getIt<AnalyticsManager>()
+        .logScreenView(name: AppStrings().faScreenOtpRequest);
     return Scaffold(
       body: BlocListener<OtpRequestBloc, OtpRequestState>(
         listener: (context, state) {

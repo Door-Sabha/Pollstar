@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 
@@ -39,6 +40,8 @@ class HelpBloc extends Bloc<HelpEvent, HelpState> {
           message: event.message);
       if (data != null && data.state == 1) {
         emit(ProblemReportingSuccess(data: data));
+        getIt<AnalyticsManager>()
+            .logEvent(name: AppStrings().faEventEmergenyMsg);
       } else if (data != null && data.state == 0) {
         emit(HelpInitial());
         emit(HelpErrorState(error: data.message ?? AppStrings.errorApiUnknown));

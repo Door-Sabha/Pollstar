@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
+import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
@@ -47,6 +48,7 @@ class OtpVerificationBloc
         await getIt<SecureStorageManager>()
             .updateValue(AppStrings.prefSession, response.session);
         emit(OtpVerificationSuccessState(data: response));
+        getIt<AnalyticsManager>().logEvent(name: AppStrings().faEventOtpVerify);
       } else if (response != null && response.state == 0) {
         emit(OtpVerificationErrorState(
             error: response.message ?? AppStrings.errorApiUnknown));
