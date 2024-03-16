@@ -36,7 +36,9 @@ class _TabWidgetState extends State<TabWidget>
               getIt<AppConstants>().lastRefreshOnTabSwitch))
           .inSeconds;
       if (diff >= 10) {
-        context.read<QuestionListBloc>().add(const GetQuestionsList());
+        context
+            .read<QuestionListBloc>()
+            .add(const GetQuestionsList(isBackground: true));
         getIt<AppConstants>().lastRefreshOnTabSwitch =
             DateTime.now().millisecondsSinceEpoch;
       }

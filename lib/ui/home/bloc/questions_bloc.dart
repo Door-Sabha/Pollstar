@@ -37,7 +37,11 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
       return;
     }
 
-    emit(const QuestionListLoading());
+    emit(QuestionListInitial());
+    if (!event.isBackground) {
+      emit(const QuestionListLoading());
+    }
+
     String session =
         await getIt<SecureStorageManager>().getValue(AppStrings.prefSession) ??
             "";

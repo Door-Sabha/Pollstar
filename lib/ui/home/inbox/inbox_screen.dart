@@ -24,7 +24,6 @@ class _InboxScreenState extends State<InboxScreen>
     with AutomaticKeepAliveClientMixin, WidgetsBindingObserver {
   final LoadingOverlay loadingOverlay = LoadingOverlay();
 
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
 
@@ -66,7 +65,9 @@ class _InboxScreenState extends State<InboxScreen>
                 question: state.question, yesnoAnswer: state.yesnoAnswer);
           } else if (state is AnswerSuccessState) {
             loadingOverlay.hide();
-            context.read<QuestionListBloc>().add(const GetQuestionsList());
+            context
+                .read<QuestionListBloc>()
+                .add(const GetQuestionsList(isBackground: true));
           } else if (state is QuestionListErrorState) {
             loadingOverlay.hide();
             AppUtils().showAlertDialog(context, content: state.error);
@@ -138,7 +139,6 @@ class _InboxScreenState extends State<InboxScreen>
   }
 
   Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    print(result);
     if (result == ConnectivityResult.mobile ||
         result == ConnectivityResult.wifi) {
     } else {

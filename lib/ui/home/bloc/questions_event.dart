@@ -8,10 +8,11 @@ sealed class QuestionListEvent extends Equatable {
 }
 
 class GetQuestionsList extends QuestionListEvent {
-  const GetQuestionsList();
+  final bool isBackground;
+  const GetQuestionsList({this.isBackground = false});
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [isBackground];
 }
 
 class OpenAnswerDialog extends QuestionListEvent {
