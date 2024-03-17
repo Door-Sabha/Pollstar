@@ -7,6 +7,7 @@ import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/crashlytics_manager.dart';
 import 'package:pollstar/utils/fcm_manager.dart';
+import 'package:pollstar/utils/local_notification_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 
 import '../network/dio_client.dart';
@@ -26,5 +27,6 @@ Future<void> setupServiceLocator() async {
   getIt.registerSingleton(AnalyticsManager());
   getIt.registerSingleton(CrashlyticsManager());
   getIt.registerSingleton(FCMManager());
+  getIt.registerSingleton(LocalNotificationManager());
   getIt.registerSingleton(ConnectivityManager());
 }

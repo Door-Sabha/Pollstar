@@ -1,4 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/utils/local_notification_manager.dart';
 
 class FCMManager {
   FCMManager() {
@@ -21,11 +24,12 @@ class FCMManager {
     await FirebaseMessaging.instance.setAutoInitEnabled(true);
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print('Got a message whilst in the foreground!');
-      print('Message data: ${message.data}');
+      debugPrint('FCM Foreground Message: ${message.notification?.body}');
 
       if (message.notification != null) {
-        print('Message also contained a notification: ${message.notification}');
+        String? title = message.notification?.title;
+        String? body = message.notification?.body;
+        getIt<LocalNotificationManager>().show(title: title, body: body);
       }
     });
     FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
@@ -33,6 +37,10 @@ class FCMManager {
 }
 
 Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  print(
-      "Handling a background message: ${message.notification} ${message.category} ${message.data} ${message.messageType}");
+  debugPrint('FCM Background Message: ${message.notification?.body}');
+  if (message.notification != null) {
+    String? title = message.notification?.title;
+    String? body = message.notification?.body;
+    getIt<LocalNotificationManager>().show(title: title, body: body);
+  }
 }
