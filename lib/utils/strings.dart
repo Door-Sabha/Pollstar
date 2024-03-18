@@ -10,8 +10,7 @@ class AppStrings {
   final String supportEmail = "";
   final String supportSubject = "$appName - Support";
 
-  static const String urlPrivacyPolicy =
-      "http://www.dsnl.co.in/Privacy_Policy.html";
+  static const String urlPrivacyPolicy = "https://dsnl.in/privacy-policy/";
 
   static const int resendOtpTime = 19;
 
