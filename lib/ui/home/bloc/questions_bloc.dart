@@ -5,6 +5,7 @@ import 'package:pollstar/data/models/answer.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/data/models/questions_response.dart';
+import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
@@ -60,6 +61,19 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         data.state == 1 &&
         data.questions != null &&
         data.questions!.isNotEmpty) {
+      data.questions!.sort(
+        (a, b) {
+          if (a.questionTime == null || a.questionTime!.trigger == null) {
+            return -1;
+          } else if (b.questionTime == null ||
+              b.questionTime!.trigger == null) {
+            return 1;
+          } else {
+            return b.questionTime!.trigger!.compareTo(a.questionTime!.trigger!);
+          }
+        },
+      );
+
       getIt<AppConstants>().queuedTime = null;
       var (inboxList, outboxList, queue) = _filterQuestions(data.questions!);
 
@@ -163,14 +177,21 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
       emit(const QuestionListErrorState(error: AppStrings.errorNetwork));
       return;
     }
+
+    User? user = getIt<HiveManager>().getUser();
+    if (user != null &&
+        user.userParams != null &&
+        user.userParams!.totalVotersCount != null &&
+        user.userParams!.totalVotersCount! < 100) {}
+
     emit(QuestionListInitial());
     emit(const AnswerLoading());
-    String user =
+    String userId =
         await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
             "";
 
     ApiResponse? data = await _repository.updateAnswer(
-        user: user, id: event.id, answer: event.answer);
+        user: userId, id: event.id, answer: event.answer);
 
     if (data != null && data.state == 1) {
       _hive.addAnswer(Answer(
