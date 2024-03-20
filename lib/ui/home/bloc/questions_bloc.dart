@@ -136,8 +136,10 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
 
         ///Update Queued time
         if (getIt<AppConstants>().queuedTime == null &&
-            q.questionTime != null) {
-          getIt<AppConstants>().queuedTime = q.questionTime!.trigger;
+            q.questionTime != null &&
+            q.questionTime!.trigger != null) {
+          getIt<AppConstants>().queuedTime =
+              AppUtils().getMillisecondFromDateString(q.questionTime!.trigger!);
         }
       } else {
         outbox.add(q);
