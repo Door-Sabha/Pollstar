@@ -239,3 +239,15 @@ class UserParams {
     return data;
   }
 }
+
+enum QuestionResponseType {
+  boothId("boothid"),
+  boothRefNo("booth_refno"),
+  boothName("booth_name"),
+  totalVotersCount("total_voters_count"),
+  maleVotersCount("male_voters_count"),
+  femaleVotersCount("female_voters_count");
+
+  const QuestionResponseType(this.value);
+  final String value;
+}

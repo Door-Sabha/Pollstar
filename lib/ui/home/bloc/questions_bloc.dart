@@ -15,8 +15,8 @@ import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/utils.dart';
 
-part 'questions_state.dart';
 part 'questions_event.dart';
+part 'questions_state.dart';
 
 class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
   final PollStarRepository _repository;
@@ -76,25 +76,29 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
 
       getIt<AppConstants>().queuedTime = null;
       var (inboxList, outboxList, queue) = _filterQuestions(data.questions!);
-
       if (inboxList.isNotEmpty) {
+        emit(QuestionListInitial());
         emit(InboxListSuccessState(list: inboxList));
         getIt<AppConstants>().lastRefreshTime =
             DateTime.now().millisecondsSinceEpoch;
       } else {
-        emit(QuestionListEmpty());
+        emit(QuestionListInitial());
+        emit(InboxListEmpty());
       }
       if (outboxList.isNotEmpty) {
+        emit(QuestionListInitial());
         emit(OutboxListSuccessState(list: outboxList));
       } else {
-        emit(QuestionListEmpty());
+        emit(QuestionListInitial());
+        emit(OutboxListEmpty());
       }
       _handleQueuedAndTriggered(queue, inboxList);
     } else if (data != null &&
         data.state == 1 &&
         data.questions != null &&
         data.questions!.isEmpty) {
-      emit(QuestionListEmpty());
+      emit(InboxListEmpty());
+      emit(OutboxListEmpty());
     } else if (data != null && data.state == 0) {
       emit(SessionEndState());
     } else {
@@ -180,11 +184,12 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
       return;
     }
 
-    User? user = getIt<HiveManager>().getUser();
-    if (user != null &&
-        user.userParams != null &&
-        user.userParams!.totalVotersCount != null &&
-        user.userParams!.totalVotersCount! < 100) {}
+    if (event.question.questionType == QuestionType.number &&
+        !validateAnswer(event.question, event.answer)) {
+      emit(QuestionListInitial());
+      emit(const QuestionListErrorState(error: AppStrings.errorInvalidAnswer));
+      return;
+    }
 
     emit(QuestionListInitial());
     emit(const AnswerLoading());
@@ -193,11 +198,11 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
             "";
 
     ApiResponse? data = await _repository.updateAnswer(
-        user: userId, id: event.id, answer: event.answer);
+        user: userId, id: event.question.sId ?? "", answer: event.answer);
 
     if (data != null && data.state == 1) {
       _hive.addAnswer(Answer(
-          questionId: event.id,
+          questionId: event.question.sId ?? "",
           updated: DateTime.now().millisecondsSinceEpoch,
           answer: event.answer));
       emit(const AnswerSuccessState());
@@ -208,6 +213,44 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
     } else {
       emit(const QuestionListErrorState(error: AppStrings.errorSession));
     }
+  }
+
+  bool validateAnswer(Question question, String a) {
+    int answer;
+
+    try {
+      answer = int.parse(a);
+    } catch (e) {
+      answer = -1;
+    }
+
+    if (answer == -1) return false;
+
+    User? user = getIt<HiveManager>().getUser();
+    if (user == null || user.userParams == null) return false;
+
+    bool status = false;
+    String? max = question.max;
+
+    if (max == QuestionResponseType.boothId.value) {
+      if (answer == user.userParams?.boothid) status = true;
+    } else if (max == QuestionResponseType.boothRefNo.value) {
+      if (a == user.userParams?.boothRefno) status = true;
+    } else if (max == QuestionResponseType.boothName.value) {
+      if (a == user.userParams?.boothName) status = true;
+    } else if (max == QuestionResponseType.totalVotersCount.value) {
+      int count = user.userParams?.totalVotersCount ?? -1;
+      if (answer <= count) status = true;
+    } else if (max == QuestionResponseType.maleVotersCount.value) {
+      int count = user.userParams?.maleVotersCount ?? -1;
+      if (answer <= count) status = true;
+    } else if (max == QuestionResponseType.femaleVotersCount.value) {
+      int count = user.userParams?.femaleVotersCount ?? -1;
+      if (answer <= count) status = true;
+    } else {
+      return true;
+    }
+    return status;
   }
 
   Future<void> _updateQuestionsQueued(UpdateQuestionsQueued event, emit) async {

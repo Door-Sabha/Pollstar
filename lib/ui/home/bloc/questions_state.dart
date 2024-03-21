@@ -25,7 +25,9 @@ final class AnswerLoading extends QuestionListState {
   List<Object> get props => [];
 }
 
-final class QuestionListEmpty extends QuestionListState {}
+final class InboxListEmpty extends QuestionListState {}
+
+final class OutboxListEmpty extends QuestionListState {}
 
 class QuestionListErrorState extends QuestionListState {
   final String error;

@@ -25,12 +25,12 @@ class OpenAnswerDialog extends QuestionListEvent {
 }
 
 class AnswerQuestion extends QuestionListEvent {
-  final String id;
+  final Question question;
   final String answer;
-  const AnswerQuestion({required this.id, required this.answer});
+  const AnswerQuestion({required this.question, required this.answer});
 
   @override
-  List<Object> get props => [id, answer];
+  List<Object> get props => [question, answer];
 }
 
 class UpdateQuestionsQueued extends QuestionListEvent {

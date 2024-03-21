@@ -92,6 +92,7 @@ class AppStrings {
   static const okay = "OKAY";
   static const goToLogin = "Go to login";
 
+  static const errorInvalidAnswer = "Enter a valid answer!";
   static const errorSession =
       "Your sessin has been expired. please login again to proceed further.";
   static const errUnknown =

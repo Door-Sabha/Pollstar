@@ -231,8 +231,7 @@ class AppUtils {
       if (value != null) {
         if (question.questionType == QuestionType.yesno) {
           context.read<QuestionListBloc>().add(AnswerQuestion(
-              id: question.sId?.toString() ?? "",
-              answer: yesnoAnswer ? "1" : "2"));
+              question: question, answer: yesnoAnswer ? "1" : "2"));
         } else if (question.questionType == QuestionType.number) {
           AppUtils().showAnswerDialogForNumber(context,
               question: question, answer: value);
@@ -255,8 +254,9 @@ class AppUtils {
           );
         }).then((value) {
       if (value != null) {
-        context.read<QuestionListBloc>().add(
-            AnswerQuestion(id: question.sId?.toString() ?? "", answer: answer));
+        context
+            .read<QuestionListBloc>()
+            .add(AnswerQuestion(question: question, answer: answer));
       }
     });
   }

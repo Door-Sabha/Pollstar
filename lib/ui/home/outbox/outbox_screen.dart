@@ -27,15 +27,14 @@ class _OutboxScreenState extends State<OutboxScreen>
       child: BlocBuilder<QuestionListBloc, QuestionListState>(
         buildWhen: (previous, current) {
           return current is OutboxListSuccessState ||
-              current is QuestionListEmpty ||
+              current is OutboxListEmpty ||
               current is QuestionListErrorState ||
               current is QuestionListLoading;
         },
         builder: (context, state) {
-          print(state);
           if (state is OutboxListSuccessState) {
             return QuestionsListWidget(list: state.list, isInbox: false);
-          } else if (state is QuestionListEmpty) {
+          } else if (state is OutboxListEmpty) {
             return const OutboxEmptyWidget();
           } else if (state is QuestionListErrorState) {
             return Container();
@@ -49,7 +48,7 @@ class _OutboxScreenState extends State<OutboxScreen>
             );
             //return const OutboxLoadingWidget();
           }
-          return Container();
+          return const OutboxEmptyWidget();
         },
       ),
     );

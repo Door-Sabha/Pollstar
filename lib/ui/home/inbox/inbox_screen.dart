@@ -80,15 +80,14 @@ class _InboxScreenState extends State<InboxScreen>
         },
         buildWhen: (previous, current) {
           return current is InboxListSuccessState ||
-              current is QuestionListEmpty ||
+              current is InboxListEmpty ||
               current is SessionEndState ||
               current is QuestionListLoading;
         },
         builder: (context, state) {
-          print(state);
           if (state is InboxListSuccessState) {
             return QuestionsListWidget(list: state.list);
-          } else if (state is QuestionListEmpty) {
+          } else if (state is InboxListEmpty) {
             return const InboxEmptyWidget();
           } else if (state is SessionEndState) {
             return const SessionEndWidget();

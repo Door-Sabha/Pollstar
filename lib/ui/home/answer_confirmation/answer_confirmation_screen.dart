@@ -198,8 +198,7 @@ class AnswerConfirmationScreen extends StatelessWidget {
           Navigator.of(context).pop();
           context.read<QuestionListBloc>().add(
                 AnswerQuestion(
-                    id: question.sId?.toString() ?? "",
-                    answer: yesnoAnswer ? "1" : "2"),
+                    question: question, answer: yesnoAnswer ? "1" : "2"),
               );
         },
         isFullWidth: false,

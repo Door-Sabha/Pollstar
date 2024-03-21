@@ -17,6 +17,8 @@ extension StringExtension on String {
       .split(' ')
       .map((str) => str._toCapitalized())
       .join(' ');
+
+  bool isInt() => this is int;
 }
 
 extension StringFormateExtension on String? {

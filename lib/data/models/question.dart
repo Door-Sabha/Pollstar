@@ -78,4 +78,8 @@ class QuestionTime {
   }
 }
 
-enum QuestionType { yesno, number, unknown }
+enum QuestionType {
+  yesno,
+  number,
+  unknown,
+}
