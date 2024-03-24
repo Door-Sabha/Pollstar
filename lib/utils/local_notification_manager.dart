@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:pollstar/data/models/question.dart';
 import 'package:pollstar/utils/strings.dart';
+import 'package:pollstar/utils/utils.dart';
+import 'package:timezone/timezone.dart' as tz;
+import 'package:timezone/data/latest.dart' as tz;
 
 class LocalNotificationManager {
   late final FlutterLocalNotificationsPlugin _notificationsPlugin;
   LocalNotificationManager() {
+    tz.initializeTimeZones();
     _notificationsPlugin = FlutterLocalNotificationsPlugin();
 
     _init();
@@ -76,7 +81,7 @@ class LocalNotificationManager {
         color: Colors.white,
         importance: Importance.max,
         playSound: true,
-        priority: Priority.high,
+        priority: Priority.max,
         icon: "@drawable/ic_logo",
       );
 
@@ -90,11 +95,51 @@ class LocalNotificationManager {
       print(e);
     }
   }
-}
 
-onDidReceiveBackgroundNotificationResponse(NotificationResponse res) {
-  final String? payload = res.payload;
-  if (res.payload != null) {
-    print('onDidReceiveBackgroundNotificationResponse payload: $payload');
+  Future<void> scheduleNotification(Question question,
+      {bool isTest = false}) async {
+    if (isTest == false &&
+        (question.questionTime == null ||
+            question.questionTime!.trigger == null)) {
+      return;
+    }
+
+    await _notificationsPlugin.zonedSchedule(
+      question.id ?? 0,
+      AppStrings.appName,
+      question.text,
+      tz.TZDateTime.from(
+        (isTest)
+            ? DateTime.now().add(const Duration(seconds: 5))
+            : AppUtils().getDateTimeFromString(question.questionTime!.trigger!),
+        tz.local,
+      ),
+      const NotificationDetails(
+        android: AndroidNotificationDetails(
+          "${AppStrings.appName}_id",
+          "${AppStrings.appName}_name",
+          channelDescription: "ashwin",
+          groupKey: AppStrings.appName,
+          color: Colors.white,
+          importance: Importance.max,
+          playSound: true,
+          priority: Priority.max,
+          icon: "@drawable/ic_logo",
+        ),
+        iOS: DarwinNotificationDetails(
+          sound: 'default.wav',
+          presentAlert: true,
+          presentBadge: true,
+          presentSound: true,
+        ),
+      ),
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+    );
+  }
+
+  Future<void> clearScheduledNotification() async {
+    await _notificationsPlugin.cancelAll();
   }
 }

@@ -11,6 +11,7 @@ import 'package:pollstar/utils/analytics_manager.dart';
 import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/connectivity_manager.dart';
 import 'package:pollstar/utils/hive_manager.dart';
+import 'package:pollstar/utils/local_notification_manager.dart';
 import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/utils.dart';
@@ -61,6 +62,7 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         data.state == 1 &&
         data.questions != null &&
         data.questions!.isNotEmpty) {
+      getIt<LocalNotificationManager>().clearScheduledNotification();
       data.questions!.sort(
         (a, b) {
           if (a.questionTime == null || a.questionTime!.trigger == null) {
@@ -145,6 +147,7 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
           getIt<AppConstants>().queuedTime =
               AppUtils().getMillisecondFromDateString(q.questionTime!.trigger!);
         }
+        getIt<LocalNotificationManager>().scheduleNotification(q);
       } else {
         outbox.add(q);
       }
