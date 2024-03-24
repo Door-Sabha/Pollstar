@@ -63,22 +63,24 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         data.questions != null &&
         data.questions!.isNotEmpty) {
       getIt<LocalNotificationManager>().clearScheduledNotification();
-      data.questions!.sort(
-        (a, b) {
-          if (a.questionTime == null || a.questionTime!.trigger == null) {
-            return -1;
-          } else if (b.questionTime == null ||
-              b.questionTime!.trigger == null) {
-            return 1;
-          } else {
-            return b.questionTime!.trigger!.compareTo(a.questionTime!.trigger!);
-          }
-        },
-      );
 
       getIt<AppConstants>().queuedTime = null;
       var (inboxList, outboxList, queue) = _filterQuestions(data.questions!);
       if (inboxList.isNotEmpty) {
+        inboxList.sort(
+          (a, b) {
+            if (a.questionTime == null || a.questionTime!.trigger == null) {
+              return -1;
+            } else if (b.questionTime == null ||
+                b.questionTime!.trigger == null) {
+              return 1;
+            } else {
+              return a.questionTime!.trigger!
+                  .compareTo(b.questionTime!.trigger!);
+            }
+          },
+        );
+
         emit(QuestionListInitial());
         emit(InboxListSuccessState(list: inboxList));
         getIt<AppConstants>().lastRefreshTime =
@@ -88,6 +90,19 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         emit(InboxListEmpty());
       }
       if (outboxList.isNotEmpty) {
+        outboxList.sort(
+          (a, b) {
+            if (a.questionTime == null || a.questionTime!.trigger == null) {
+              return -1;
+            } else if (b.questionTime == null ||
+                b.questionTime!.trigger == null) {
+              return 1;
+            } else {
+              return b.questionTime!.trigger!
+                  .compareTo(a.questionTime!.trigger!);
+            }
+          },
+        );
         emit(QuestionListInitial());
         emit(OutboxListSuccessState(list: outboxList));
       } else {
