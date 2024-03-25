@@ -48,4 +48,8 @@ class HiveManager {
     await answerBox.clear();
     await userBox.clear();
   }
+
+  deleteUserBox() async {
+    await userBox.clear();
+  }
 }

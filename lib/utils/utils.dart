@@ -86,7 +86,7 @@ class AppUtils {
   void clearData() {
     getIt<AppConstants>().clear();
     getIt<SecureStorageManager>().deleteAll();
-    getIt<HiveManager>().deleteAll();
+    getIt<HiveManager>().deleteUserBox();
   }
 
   void hideKeyboard() {

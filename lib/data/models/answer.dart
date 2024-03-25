@@ -13,6 +13,12 @@ class Answer extends HiveObject {
   @HiveField(2)
   String answer;
 
+  @HiveField(3)
+  String userId;
+
   Answer(
-      {required this.questionId, required this.updated, required this.answer});
+      {required this.questionId,
+      required this.updated,
+      required this.answer,
+      required this.userId});
 }

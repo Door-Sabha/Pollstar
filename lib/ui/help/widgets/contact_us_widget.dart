@@ -28,37 +28,51 @@ class ContactUsWidget extends StatelessWidget {
       }
     }
 
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 32),
-      child: Column(
-        children: [
-          MyDropDownButton(
-            hint: AppStrings.natureOfProblem,
-            list: list,
-            selectedItem: reasonItem,
-            onChanged: (value) {
-              reasonItem = value;
-            },
-          ),
-          const SizedBox(height: 16),
-          TextField(
-            controller: textEditingController,
-            keyboardType: TextInputType.multiline,
-            textCapitalization: TextCapitalization.sentences,
-            decoration: const InputDecoration(
-              labelText: AppStrings.additionalInformation,
-              alignLabelWithHint: true,
+    return BlocListener<HelpBloc, HelpState>(
+      listener: (context, state) {
+        if (state is ProblemReportingSuccess) {
+          textEditingController.clear();
+          reasonItem = MyDropDownButtonItem();
+        }
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 32),
+        child: Column(
+          children: [
+            BlocBuilder<HelpBloc, HelpState>(
+              buildWhen: (previous, current) =>
+                  current is ProblemReportingSuccess,
+              builder: (context, state) {
+                return MyDropDownButton(
+                  hint: AppStrings.natureOfProblem,
+                  list: list,
+                  selectedItem: reasonItem,
+                  onChanged: (value) {
+                    reasonItem = value;
+                  },
+                );
+              },
             ),
-            minLines: 5,
-            maxLines: 5,
-          ),
-          const SizedBox(height: 32),
-          MyElevatedButton(
-            text: AppStrings.submit,
-            onPressed: () => _submitEmergencyReason(context),
-          ),
-          const SizedBox(height: 32),
-        ],
+            const SizedBox(height: 16),
+            TextField(
+              controller: textEditingController,
+              keyboardType: TextInputType.multiline,
+              textCapitalization: TextCapitalization.sentences,
+              decoration: const InputDecoration(
+                labelText: AppStrings.additionalInformation,
+                alignLabelWithHint: true,
+              ),
+              minLines: 5,
+              maxLines: 5,
+            ),
+            const SizedBox(height: 32),
+            MyElevatedButton(
+              text: AppStrings.submit,
+              onPressed: () => _submitEmergencyReason(context),
+            ),
+            const SizedBox(height: 32),
+          ],
+        ),
       ),
     );
   }

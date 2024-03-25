@@ -27,3 +27,10 @@ class UpdateFcmToken extends UserInfoEvent {
   @override
   List<Object> get props => [];
 }
+
+class UpdateLocalAnswers extends UserInfoEvent {
+  const UpdateLocalAnswers();
+
+  @override
+  List<Object> get props => [];
+}

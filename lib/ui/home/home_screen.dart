@@ -27,7 +27,9 @@ class HomeScreen extends StatelessWidget {
         BlocProvider(
           create: (context) => UserInfoBloc(
             RepositoryProvider.of<PollStarRepository>(context),
-          )..add(const UpdateFcmToken()),
+          )
+            ..add(const UpdateLocalAnswers())
+            ..add(const UpdateFcmToken()),
         ),
         BlocProvider(
           create: (context) => QuestionListBloc(

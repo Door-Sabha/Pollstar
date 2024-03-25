@@ -57,6 +57,7 @@ dependencies:
   shimmer: ^3.0.0
   connectivity_plus: ^5.0.2
   timezone: ^0.9.2
+  sms_autofill: ^2.3.1
 
 
   # The following adds the Cupertino Icons font to your application.

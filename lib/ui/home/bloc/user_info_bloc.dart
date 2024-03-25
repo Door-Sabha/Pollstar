@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pollstar/data/di/service_locator.dart';
+import 'package:pollstar/data/models/answer.dart';
 import 'package:pollstar/data/models/api_response.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/data/repository/pollstar_repository.dart';
@@ -23,6 +24,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
     on<GetUserInfo>(_getUserInfo);
     on<LogoutUser>(_logout);
     on<UpdateFcmToken>(_updateFcmToken);
+    on<UpdateLocalAnswers>(_updateLocalAnswers);
   }
 
   Future<void> _getUserInfo(GetUserInfo event, emit) async {
@@ -96,6 +98,18 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
         await _repository.updateFcmToken(id: userId, token: fcmToken ?? "");
     if (data != null && data.state == 1) {
       emit(UserFcmUpdateSuccess());
+    }
+  }
+
+  Future<void> _updateLocalAnswers(UpdateLocalAnswers event, emit) async {
+    List<Answer> list = _hive.getAnswersList();
+    String userId =
+        await getIt<SecureStorageManager>().getValue(AppStrings.prefUserId) ??
+            "";
+    for (var e in list) {
+      if (e.userId != userId) {
+        _hive.deleteAnswer(e);
+      }
     }
   }
 }

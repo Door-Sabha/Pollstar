@@ -219,10 +219,14 @@ class QuestionListBloc extends Bloc<QuestionListEvent, QuestionListState> {
         user: userId, id: event.question.sId ?? "", answer: event.answer);
 
     if (data != null && data.state == 1) {
-      _hive.addAnswer(Answer(
+      _hive.addAnswer(
+        Answer(
           questionId: event.question.sId ?? "",
           updated: DateTime.now().millisecondsSinceEpoch,
-          answer: event.answer));
+          answer: event.answer,
+          userId: userId,
+        ),
+      );
       emit(const AnswerSuccessState());
       getIt<AnalyticsManager>().logEvent(name: AppStrings().faEventAnswer);
     } else if (data != null && data.state == 0) {

@@ -11,20 +11,61 @@ import 'package:pollstar/ui/widgets/otp_field/otp_field.dart';
 import 'package:pollstar/ui/widgets/otp_field/otp_field_style.dart';
 import 'package:pollstar/ui/widgets/otp_field/style.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
+import 'package:pollstar/utils/extensions.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'package:sprintf/sprintf.dart';
 import 'package:timer_count_down/timer_controller.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
-class OTPVerificationScreen extends StatelessWidget {
-  OTPVerificationScreen({super.key, required this.phone});
+class OTPVerificationScreen extends StatefulWidget {
+  const OTPVerificationScreen({super.key, required this.phone});
   final String phone;
+
+  @override
+  State<OTPVerificationScreen> createState() => _OTPVerificationScreenState();
+}
+
+class _OTPVerificationScreenState extends State<OTPVerificationScreen>
+    with CodeAutoFill {
   final OtpFieldController otpController = OtpFieldController();
+
   final CountdownController countdownController =
       CountdownController(autoStart: true);
+
+  @override
+  void initState() {
+    _initSmsAutoFill();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _disposeSmsAutoFill();
+    super.dispose();
+  }
+
+  _initSmsAutoFill() async {
+    listenForCode();
+    //SmsAutoFill().getAppSignature.then((value) => print("Signature $value"));
+  }
+
+  _disposeSmsAutoFill() async {
+    cancel();
+    unregisterListener();
+  }
+
+  @override
+  void codeUpdated() {
+    if (code != null) {
+      var pin = code!.iterable();
+      otpController.set(pin.toList());
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -141,7 +182,7 @@ class OTPVerificationScreen extends StatelessWidget {
             ),
             children: [
               TextSpan(
-                text: "\n$phone\n",
+                text: "\n${widget.phone}\n",
                 style: AppStyle.textStyleMedium.copyWith(
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
@@ -179,7 +220,10 @@ class OTPVerificationScreen extends StatelessWidget {
             focusBorderColor: AppColors.greenColor,
             backgroundColor: Colors.white),
         onChanged: (value) {},
-        onCompleted: (pin) {},
+        onCompleted: (pin) {
+          // countdownController.pause();
+          // context.read<OtpVerificationBloc>().add(const UpdateCountdown());
+        },
       ),
     );
   }
@@ -194,7 +238,7 @@ class OTPVerificationScreen extends StatelessWidget {
             textColor: Colors.white,
             isFullWidth: false,
             onPressed: () => context.read<OtpRequestBloc>().add(
-                  RequestOtp(phone: phone),
+                  RequestOtp(phone: widget.phone),
                 ),
           );
         } else {
@@ -213,7 +257,7 @@ class OTPVerificationScreen extends StatelessWidget {
               onPressed: () {},
             ),
             onFinished: () {
-              context.read<OtpVerificationBloc>().add(const UpdateCountdown());
+              //context.read<OtpVerificationBloc>().add(const UpdateCountdown());
             },
           );
         }
@@ -230,7 +274,7 @@ class OTPVerificationScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         textColor: AppColors.greenColor,
         onPressed: () => context.read<OtpVerificationBloc>().add(
-              VerifyOtp(phone: phone, otp: otpController.pin),
+              VerifyOtp(phone: widget.phone, otp: otpController.pin),
             ),
       ),
     );
