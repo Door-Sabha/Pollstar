@@ -98,13 +98,9 @@ class AppUtils {
       url = url.replaceAll("http:", "https:");
     }
     var browserUrl = Uri.parse(url);
-    if (await canLaunchUrl(browserUrl)) {
-      await launchUrl(browserUrl);
-      getIt<AnalyticsManager>()
-          .logEvent(name: AppStrings().faEventPrivacyClicked);
-    } else {
-      _handleError("Sorry, Could not launch $url at the moment.");
-    }
+    await launchUrl(browserUrl);
+    getIt<AnalyticsManager>()
+        .logEvent(name: AppStrings().faEventPrivacyClicked);
   }
 
   Future<void> openPhoneCall(String number) async {
