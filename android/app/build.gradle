@@ -12,9 +12,14 @@ if (localPropertiesFile.exists()) {
     }
 }
 
+def flutterTargetSdkVersion = localProperties.getProperty('flutter.targetSdkVersion')
+if (flutterTargetSdkVersion == null) {
+    flutterTargetSdkVersion = '33'
+}
+
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
 if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
+    flutterVersionCode = flutter.targetSdkVersion
 }
 
 def flutterVersionName = localProperties.getProperty('flutter.versionName')
@@ -50,7 +55,7 @@ android {
     defaultConfig {
         applicationId "com.doorsabha.pollstar.android"
         minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion flutterTargetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
         multiDexEnabled true
