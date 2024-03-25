@@ -9,6 +9,7 @@ import 'package:pollstar/ui/home/inbox/widgets/inbox_empty_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/questions_list_widget.dart';
 import 'package:pollstar/ui/home/inbox/widgets/session_end_widget.dart';
 import 'package:pollstar/ui/widgets/loading_overlay.dart';
+import 'package:pollstar/utils/broadcast_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/utils.dart';
@@ -26,6 +27,7 @@ class _InboxScreenState extends State<InboxScreen>
 
   final Connectivity _connectivity = Connectivity();
   late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late Stream<BroadcastNotification> _notificationsStream;
 
   @override
   void initState() {
@@ -36,13 +38,18 @@ class _InboxScreenState extends State<InboxScreen>
     initConnectivity();
     _connectivitySubscription =
         _connectivity.onConnectivityChanged.listen(_updateConnectionStatus);
+
+    _notificationsStream =
+        BroadcastNotificationBloc.instance.notificationsStream;
+    _notificationsStream.listen((notification) {
+      context.read<QuestionListBloc>().add(const GetQuestionsList());
+    });
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     _connectivitySubscription.cancel();
-
     super.dispose();
   }
 
