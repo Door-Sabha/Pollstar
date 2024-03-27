@@ -257,7 +257,7 @@ class _OTPVerificationScreenState extends State<OTPVerificationScreen>
               onPressed: () {},
             ),
             onFinished: () {
-              //context.read<OtpVerificationBloc>().add(const UpdateCountdown());
+              context.read<OtpVerificationBloc>().add(const UpdateCountdown());
             },
           );
         }

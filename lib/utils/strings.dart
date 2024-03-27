@@ -91,6 +91,7 @@ class AppStrings {
   static const error = "ERROR";
   static const okay = "OKAY";
   static const goToLogin = "Go to login";
+  static const support = "Support";
 
   static const errorInvalidAnswer = "Enter a valid answer!";
   static const errorSession =

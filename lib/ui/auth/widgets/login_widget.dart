@@ -1,9 +1,11 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pollstar/data/di/service_locator.dart';
 import 'package:pollstar/ui/auth/bloc/otp_request_bloc.dart';
 import 'package:pollstar/ui/widgets/buttons.dart';
 import 'package:pollstar/ui/widgets/images.dart';
+import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -54,6 +56,8 @@ class LoginWidget extends StatelessWidget {
             _textFieldWidget(),
             _buttonWidget(context),
             _privacyPolicyWidget(),
+            const Spacer(),
+            _versionWidget(),
           ],
         ),
       ),
@@ -109,6 +113,30 @@ class LoginWidget extends StatelessWidget {
               RequestOtp(phone: phoneNumberController.text),
             );
       },
+    );
+  }
+
+  Widget _versionWidget() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 16),
+      child: Text(
+        getIt<AppConstants>().versionInfo,
+        style: AppStyle.textStyleSmall,
+      ),
+    );
+  }
+
+  Widget _supportWidget() {
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0),
+        child: MyTextButton(
+          text: AppStrings.support,
+          isFullWidth: false,
+          onPressed: () {},
+        ),
+      ),
     );
   }
 
