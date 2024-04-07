@@ -52,8 +52,8 @@ class QuestionWidget extends StatelessWidget {
           backgroundColor: AppColors.textColorDisabled,
           radius: radius,
           child: MyImage(
-            image: "app_logo",
-            size: radius * 2,
+            image: "logo_notext",
+            size: (radius * 2) * .75,
           ),
         ),
         const SizedBox(height: 4),

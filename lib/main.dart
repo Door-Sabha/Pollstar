@@ -16,11 +16,8 @@ import 'package:pollstar/ui/help/bloc/help_bloc.dart';
 import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/home_screen.dart';
-import 'package:pollstar/ui/widgets/splash_widget.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
-import 'package:pollstar/utils/app_constants.dart';
 import 'package:pollstar/utils/hive_manager.dart';
-import 'package:pollstar/utils/secure_storage_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
@@ -59,8 +56,8 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    User? user = getIt<HiveManager>().getUser();
     FlutterNativeSplash.remove();
-    getIt<AppConstants>().init(context);
     return RepositoryProvider(
       create: (context) => getIt<PollStarRepository>(),
       child: MultiBlocProvider(
@@ -126,23 +123,7 @@ class MyApp extends StatelessWidget {
           navigatorObservers: [
             getIt<AnalyticsManager>().getFirebaseAnalyticsObserver()
           ],
-          home: FutureBuilder(
-            future:
-                getIt<SecureStorageManager>().hasValue(AppStrings.prefSession),
-            builder: (context, snapshot) {
-              if (snapshot.hasData && snapshot.data == true) {
-                User? user = getIt<HiveManager>().getUser();
-
-                return (user != null)
-                    ? HomeScreen(user: user)
-                    : const LoginScreen();
-              } else if (snapshot.hasData && snapshot.data == false) {
-                return const LoginScreen();
-              } else {
-                return const SplashWidget();
-              }
-            },
-          ),
+          home: (user != null) ? HomeScreen(user: user) : const LoginScreen(),
         ),
       ),
     );

@@ -15,18 +15,17 @@ import '../network/dio_client.dart';
 final getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
+  getIt.registerSingleton(AppConstants());
+  getIt.registerSingleton(FCMManager());
+  getIt.registerSingleton(LocalNotificationManager());
+  getIt.registerSingleton(SecureStorageManager());
+  getIt.registerSingleton(AnalyticsManager());
+  getIt.registerSingleton(CrashlyticsManager());
+  getIt.registerSingleton(ConnectivityManager());
   getIt.registerSingleton(Dio());
   getIt.registerSingleton(DioClient(getIt<Dio>()));
-
   getIt.registerSingleton(PollStarApi(
     getIt<DioClient>(),
   ));
   getIt.registerSingleton(PollStarRepository());
-  getIt.registerSingleton(SecureStorageManager());
-  getIt.registerSingleton(AppConstants());
-  getIt.registerSingleton(AnalyticsManager());
-  getIt.registerSingleton(CrashlyticsManager());
-  getIt.registerSingleton(FCMManager());
-  getIt.registerSingleton(LocalNotificationManager());
-  getIt.registerSingleton(ConnectivityManager());
 }

@@ -95,7 +95,7 @@ class UserInfoBloc extends Bloc<UserInfoEvent, UserInfoState> {
     if (fcmToken == null || userId.isEmpty) return;
 
     ApiResponse? data =
-        await _repository.updateFcmToken(id: userId, token: fcmToken ?? "");
+        await _repository.updateFcmToken(id: userId, token: fcmToken);
     if (data != null && data.state == 1) {
       emit(UserFcmUpdateSuccess());
     }

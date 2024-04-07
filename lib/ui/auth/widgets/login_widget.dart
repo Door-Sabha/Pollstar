@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -137,7 +135,7 @@ class LoginWidget extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 16),
         child: Text(
-          getIt<AppConstants>().versionInfo,
+          getIt<AppConstants>().versionInfo ?? "",
           style: AppStyle.textStyleSmall,
         ),
       ),

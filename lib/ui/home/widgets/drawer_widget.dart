@@ -78,17 +78,18 @@ class DrawerWidget extends StatelessWidget {
             onTap: () => _reportProblemClicked(context),
           ),
           const Spacer(),
-          Text(
-            getIt<AppConstants>().versionInfo,
-            style: AppStyle.textStyleSmall,
-          ),
           MyElevatedButton(
             text: AppStrings.logout,
             isFullWidth: false,
             backgroundColor: AppColors.redColor,
             onPressed: () => _logout(context),
           ),
-          const SizedBox(height: 32),
+          const SizedBox(height: 8),
+          Text(
+            getIt<AppConstants>().versionInfo ?? "",
+            style: AppStyle.textStyleSmall,
+          ),
+          const SizedBox(height: 16),
         ],
       ),
     );
