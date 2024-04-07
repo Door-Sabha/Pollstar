@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:pollstar/data/di/service_locator.dart';
@@ -93,14 +94,23 @@ class AppUtils {
     FocusManager.instance.primaryFocus?.unfocus();
   }
 
+  void copyToClipboard(String text) async {
+    await Clipboard.setData(ClipboardData(text: text));
+  }
+
   Future<void> openUrl(String url) async {
     if (url.contains("http:")) {
       url = url.replaceAll("http:", "https:");
     }
     var browserUrl = Uri.parse(url);
-    await launchUrl(browserUrl);
-    getIt<AnalyticsManager>()
-        .logEvent(name: AppStrings().faEventPrivacyClicked);
+
+    if (await canLaunchUrl(browserUrl)) {
+      await launchUrl(browserUrl);
+      getIt<AnalyticsManager>()
+          .logEvent(name: AppStrings().faEventPrivacyClicked);
+    } else {
+      _handleError("Sorry, Could not launch $url at the moment.");
+    }
   }
 
   Future<void> openPhoneCall(String number) async {

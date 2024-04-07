@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 class LoginWidget extends StatelessWidget {
   LoginWidget({super.key});
@@ -85,6 +88,14 @@ class LoginWidget extends StatelessWidget {
     return Column(
       children: [
         const SizedBox(height: 16),
+        // if (Platform.isAndroid)
+        //   PhoneFieldHint(
+        //     controller: phoneNumberController,
+        //     decoration: const InputDecoration(
+        //       labelText: AppStrings.loginHint,
+        //     ),
+        //   )
+        // else
         TextField(
           controller: phoneNumberController,
           maxLines: 1,
@@ -117,11 +128,18 @@ class LoginWidget extends StatelessWidget {
   }
 
   Widget _versionWidget() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
-      child: Text(
-        getIt<AppConstants>().versionInfo,
-        style: AppStyle.textStyleSmall,
+    return GestureDetector(
+      onLongPress: () {
+        SmsAutoFill().getAppSignature.then(
+              (value) => AppUtils().copyToClipboard(value),
+            );
+      },
+      child: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 16),
+        child: Text(
+          getIt<AppConstants>().versionInfo,
+          style: AppStyle.textStyleSmall,
+        ),
       ),
     );
   }
