@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pollstar/data/models/user.dart';
 import 'package:pollstar/ui/help/help_screen.dart';
-import 'package:pollstar/ui/widgets/images.dart';
 import 'package:pollstar/utils/theme/styles.dart';
 import 'package:pollstar/utils/utils.dart';
 
@@ -13,8 +12,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return AppBar(
       centerTitle: true,
-      title: const MySvgImage(
-        image: "ec_logo",
+      title: Image.asset(
+        'assets/images/dsnl_logo1.png',
+        height: 36,
       ),
       actions: [
         IconButton(
