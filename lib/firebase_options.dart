@@ -54,6 +54,7 @@ class DefaultFirebaseOptions {
     appId: '1:462967904471:android:3de603a3a9884eed9eb892',
     messagingSenderId: '462967904471',
     projectId: 'pollstar-ef923',
+    databaseURL: 'https://pollstar-ef923-default-rtdb.firebaseio.com',
     storageBucket: 'pollstar-ef923.appspot.com',
   );
 
@@ -62,6 +63,7 @@ class DefaultFirebaseOptions {
     appId: '1:462967904471:ios:ab7efed1a919ff9a9eb892',
     messagingSenderId: '462967904471',
     projectId: 'pollstar-ef923',
+    databaseURL: 'https://pollstar-ef923-default-rtdb.firebaseio.com',
     storageBucket: 'pollstar-ef923.appspot.com',
     iosBundleId: 'com.doorsabha.pollstar',
   );

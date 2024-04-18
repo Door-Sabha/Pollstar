@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -19,6 +21,9 @@ class LoginWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseMessaging.instance.getToken().then((value) {
+      phoneNumberController.text = value ?? "";
+    });
     return GestureDetector(
       onTap: () => AppUtils().hideKeyboard(),
       child: Container(
@@ -97,7 +102,7 @@ class LoginWidget extends StatelessWidget {
         TextField(
           controller: phoneNumberController,
           maxLines: 1,
-          maxLength: 10,
+          //maxLength: 10,
           buildCounter: (context,
                   {required currentLength,
                   required isFocused,

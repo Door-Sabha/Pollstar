@@ -16,7 +16,7 @@ final getIt = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
   getIt.registerSingleton(AppConstants());
-  getIt.registerSingleton(FCMManager());
+  //getIt.registerSingleton(FCMManager());
   getIt.registerSingleton(LocalNotificationManager());
   getIt.registerSingleton(SecureStorageManager());
   getIt.registerSingleton(AnalyticsManager());

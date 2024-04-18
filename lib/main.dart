@@ -1,7 +1,9 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:pollstar/data/di/service_locator.dart';
@@ -17,10 +19,30 @@ import 'package:pollstar/ui/home/bloc/questions_bloc.dart';
 import 'package:pollstar/ui/home/bloc/user_info_bloc.dart';
 import 'package:pollstar/ui/home/home_screen.dart';
 import 'package:pollstar/utils/analytics_manager.dart';
+import 'package:pollstar/utils/broadcast_manager.dart';
 import 'package:pollstar/utils/hive_manager.dart';
 import 'package:pollstar/utils/strings.dart';
 import 'package:pollstar/utils/theme/colors.dart';
 import 'package:pollstar/utils/theme/styles.dart';
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+}
+
+AndroidNotificationChannel? channel;
+FlutterLocalNotificationsPlugin? flutterLocalNotificationsPlugin;
+late FirebaseMessaging messaging;
+void notificationTapBackground(NotificationResponse notificationResponse) {
+  print('notification(${notificationResponse.id}) action tapped: '
+      '${notificationResponse.actionId} with'
+      ' payload: ${notificationResponse.payload}');
+  if (notificationResponse.input?.isNotEmpty ?? false) {
+    print(
+        'notification action tapped with input: ${notificationResponse.input}');
+  }
+}
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -28,6 +50,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  messaging = FirebaseMessaging.instance;
 
   SystemChrome.setSystemUIOverlayStyle(AppStyle().systemUiOverlayStyle);
 
@@ -47,6 +70,58 @@ void main() async {
       await Hive.openBox(AppStrings.hiveBoxAnswers);
 
   await setupServiceLocator();
+
+  /// FCM Integration
+  await messaging.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  await FirebaseMessaging.instance.setAutoInitEnabled(true);
+  final fcmToken = await messaging.getToken();
+  debugPrint(fcmToken);
+
+  channel = const AndroidNotificationChannel(
+    "${AppStrings.appName}_id",
+    "${AppStrings.appName}_name",
+    importance: Importance.high,
+    enableLights: true,
+    enableVibration: true,
+    showBadge: true,
+    playSound: true,
+  );
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  const android = AndroidInitializationSettings('@drawable/ic_logo');
+  const iOS = DarwinInitializationSettings();
+  const initSettings = InitializationSettings(android: android, iOS: iOS);
+
+  await flutterLocalNotificationsPlugin!.initialize(initSettings,
+      onDidReceiveNotificationResponse: notificationTapBackground,
+      onDidReceiveBackgroundNotificationResponse: notificationTapBackground);
+
+  await messaging.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+    if (message.notification != null) {
+      String? title = message.notification?.title;
+      String? body = message.notification?.body;
+
+      showNotification(title: title, body: body, data: "");
+
+      final notification =
+          BroadcastNotification("notification", {"type": "fcm"});
+      BroadcastNotificationBloc.instance.newNotification(notification);
+    }
+  });
 
   runApp(const MyApp());
 }
@@ -128,4 +203,30 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+Future<void> showNotification(
+    {required String? title, required String? body, String? data}) async {
+  final id = DateTime.now().millisecondsSinceEpoch ~/ 1000;
+  String? payload = data;
+  AndroidNotificationDetails androidNotificationDetails =
+      const AndroidNotificationDetails(
+    "${AppStrings.appName}_id",
+    "${AppStrings.appName}_name",
+    groupKey: AppStrings.appName,
+    color: Colors.white,
+    importance: Importance.high,
+    playSound: true,
+    priority: Priority.high,
+    enableLights: true,
+    enableVibration: true,
+    icon: "@drawable/ic_logo",
+  );
+
+  NotificationDetails notificationDetails = NotificationDetails(
+    android: androidNotificationDetails,
+  );
+
+  await flutterLocalNotificationsPlugin!
+      .show(id, title, body, notificationDetails, payload: payload);
 }
